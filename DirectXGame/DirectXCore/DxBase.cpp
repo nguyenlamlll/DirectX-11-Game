@@ -1,158 +1,176 @@
 #include "stdafx.h"
 #include "DxBase.h"
 
-namespace DirectXCore 
+using Microsoft::WRL::ComPtr;
+using namespace DirectXCore;
+
+DxBase::DxBase() noexcept(false)
 {
-	DxBase::DxBase() :
-		driverType_(D3D_DRIVER_TYPE_NULL),
-		featureLevel_(D3D_FEATURE_LEVEL_11_0),
-		d3dDevice_(0),
-		d3dContext_(0),
-		swapChain_(0),
-		backBufferTarget_(0)
-	{
-	}
-
-
-	DxBase::~DxBase()
-	{
-		Shutdown();
-	}
-
-	bool DxBase::Initialize(HINSTANCE hInstance, HWND hwnd)
-	{
-		hInstance_ = hInstance;
-		hwnd_ = hwnd;
-
-		RECT dimensions;
-		GetClientRect(hwnd, &dimensions);
-
-		unsigned int width = dimensions.right - dimensions.left;
-		unsigned int height = dimensions.bottom - dimensions.top;
-
-		D3D_DRIVER_TYPE driverTypes[] =
-		{
-			D3D_DRIVER_TYPE_HARDWARE, D3D_DRIVER_TYPE_WARP,
-			D3D_DRIVER_TYPE_REFERENCE, D3D_DRIVER_TYPE_SOFTWARE
-		};
-
-		unsigned int totalDriverTypes = ARRAYSIZE(driverTypes);
-
-		D3D_FEATURE_LEVEL featureLevels[] =
-		{
-			D3D_FEATURE_LEVEL_11_0,
-			D3D_FEATURE_LEVEL_10_1,
-			D3D_FEATURE_LEVEL_10_0
-		};
-
-		unsigned int totalFeatureLevels = ARRAYSIZE(featureLevels);
-
-		DXGI_SWAP_CHAIN_DESC swapChainDesc;
-		ZeroMemory(&swapChainDesc, sizeof(swapChainDesc));
-		swapChainDesc.BufferCount = 1;
-		swapChainDesc.BufferDesc.Width = width;
-		swapChainDesc.BufferDesc.Height = height;
-		swapChainDesc.BufferDesc.Format = DXGI_FORMAT_R8G8B8A8_UNORM;
-		swapChainDesc.BufferDesc.RefreshRate.Numerator = 60;
-		swapChainDesc.BufferDesc.RefreshRate.Denominator = 1;
-		swapChainDesc.BufferUsage = DXGI_USAGE_RENDER_TARGET_OUTPUT;
-		swapChainDesc.OutputWindow = hwnd;
-		swapChainDesc.Windowed = true;
-		swapChainDesc.SampleDesc.Count = 1;
-		swapChainDesc.SampleDesc.Quality = 0;
-
-		unsigned int creationFlags = 0;
-
-#ifdef _DEBUG
-		creationFlags |= D3D11_CREATE_DEVICE_DEBUG;
-#endif
-
-		HRESULT result;
-		unsigned int driver = 0;
-
-		for (driver = 0; driver < totalDriverTypes; ++driver)
-		{
-			result = D3D11CreateDeviceAndSwapChain(0, driverTypes[driver], 0, creationFlags,
-				featureLevels, totalFeatureLevels,
-				D3D11_SDK_VERSION, &swapChainDesc, &swapChain_,
-				&d3dDevice_, &featureLevel_, &d3dContext_);
-
-			if (SUCCEEDED(result))
-			{
-				driverType_ = driverTypes[driver];
-				break;
-			}
-		}
-
-		if (FAILED(result))
-		{
-			// Failed to create the Direct3D device!
-			return false;
-		}
-
-		ID3D11Texture2D* backBufferTexture;
-
-		result = swapChain_->GetBuffer(0, __uuidof(ID3D11Texture2D), (LPVOID*)&backBufferTexture);
-
-		if (FAILED(result))
-		{
-			// Failed to get the swap chain back buffer!
-			return false;
-		}
-
-		result = d3dDevice_->CreateRenderTargetView(backBufferTexture, 0, &backBufferTarget_);
-
-		if (backBufferTexture)
-			backBufferTexture->Release();
-
-		if (FAILED(result))
-		{
-			// Failed to create the render target view!
-			return false;
-		}
-
-		d3dContext_->OMSetRenderTargets(1, &backBufferTarget_, 0);
-
-		D3D11_VIEWPORT viewport;
-		viewport.Width = static_cast<float>(width);
-		viewport.Height = static_cast<float>(height);
-		viewport.MinDepth = 0.0f;
-		viewport.MaxDepth = 1.0f;
-		viewport.TopLeftX = 0.0f;
-		viewport.TopLeftY = 0.0f;
-
-		d3dContext_->RSSetViewports(1, &viewport);
-
-		return LoadContent();
-	}
-
-
-	bool DxBase::LoadContent()
-	{
-		// Override with demo specifics, if any...
-		return true;
-	}
-
-
-	void DxBase::UnloadContent()
-	{
-		// Override with demo specifics, if any...
-	}
-
-
-	void DxBase::Shutdown()
-	{
-		UnloadContent();
-
-		if (backBufferTarget_) backBufferTarget_->Release();
-		if (swapChain_) swapChain_->Release();
-		if (d3dContext_) d3dContext_->Release();
-		if (d3dDevice_) d3dDevice_->Release();
-
-		backBufferTarget_ = 0;
-		swapChain_ = 0;
-		d3dContext_ = 0;
-		d3dDevice_ = 0;
-	}
-
+	m_deviceResources = std::make_unique<DeviceResources>();
+	m_deviceResources->RegisterDeviceNotify(this);
 }
+
+// Initialize the Direct3D resources required to run.
+void DxBase::Initialize(HWND window, int width, int height)
+{
+	m_deviceResources->SetWindow(window, width, height);
+
+	m_deviceResources->CreateDeviceResources();
+	CreateDeviceDependentResources();
+
+	m_deviceResources->CreateWindowSizeDependentResources();
+	CreateWindowSizeDependentResources();
+
+	// TODO: Change the timer settings if you want something other than the default variable timestep mode.
+	// e.g. for 60 FPS fixed timestep update logic, call:
+	/*
+	m_timer.SetFixedTimeStep(true);
+	m_timer.SetTargetElapsedSeconds(1.0 / 60);
+	*/
+}
+
+#pragma region Frame Update
+// Executes the basic game loop.
+void DxBase::Tick()
+{
+	m_timer.Tick([&]()
+	{
+		Update(m_timer);
+	});
+
+	Render();
+}
+
+// Updates the world.
+void DxBase::Update(StepTimer const& timer)
+{
+	float elapsedTime = float(timer.GetElapsedSeconds());
+
+	// TODO: Add your game logic here.
+	elapsedTime;
+}
+#pragma endregion
+
+#pragma region Frame Render
+// Draws the scene.
+void DxBase::Render()
+{
+	// Don't try to render anything before the first Update.
+	if (m_timer.GetFrameCount() == 0)
+	{
+		return;
+	}
+
+	Clear();
+
+	m_deviceResources->PIXBeginEvent(L"Render");
+	auto context = m_deviceResources->GetD3DDeviceContext();
+
+	// TODO: Add your rendering code here.
+	context;
+
+	m_deviceResources->PIXEndEvent();
+
+	// Show the new frame.
+	m_deviceResources->Present();
+}
+
+// Helper method to clear the back buffers.
+void DxBase::Clear()
+{
+	m_deviceResources->PIXBeginEvent(L"Clear");
+
+	// Clear the views.
+	auto context = m_deviceResources->GetD3DDeviceContext();
+	auto renderTarget = m_deviceResources->GetRenderTargetView();
+	auto depthStencil = m_deviceResources->GetDepthStencilView();
+
+	context->ClearRenderTargetView(renderTarget, DirectX::Colors::CornflowerBlue);
+	context->ClearDepthStencilView(depthStencil, D3D11_CLEAR_DEPTH | D3D11_CLEAR_STENCIL, 1.0f, 0);
+	context->OMSetRenderTargets(1, &renderTarget, depthStencil);
+
+	// Set the viewport.
+	auto viewport = m_deviceResources->GetScreenViewport();
+	context->RSSetViewports(1, &viewport);
+
+	m_deviceResources->PIXEndEvent();
+}
+#pragma endregion
+
+#pragma region Message Handlers
+// Message handlers
+void DxBase::OnActivated()
+{
+	// TODO: Game is becoming active window.
+}
+
+void DxBase::OnDeactivated()
+{
+	// TODO: Game is becoming background window.
+}
+
+void DxBase::OnSuspending()
+{
+	// TODO: Game is being power-suspended (or minimized).
+}
+
+void DxBase::OnResuming()
+{
+	m_timer.ResetElapsedTime();
+
+	// TODO: Game is being power-resumed (or returning from minimize).
+}
+
+void DxBase::OnWindowMoved()
+{
+	auto r = m_deviceResources->GetOutputSize();
+	m_deviceResources->WindowSizeChanged(r.right, r.bottom);
+}
+
+void DxBase::OnWindowSizeChanged(int width, int height)
+{
+	if (!m_deviceResources->WindowSizeChanged(width, height))
+		return;
+
+	CreateWindowSizeDependentResources();
+
+	// TODO: Game window is being resized.
+}
+
+// Properties
+void DxBase::GetDefaultSize(int& width, int& height) const
+{
+	// TODO: Change to desired default window size (note minimum size is 320x200).
+	width = 1024;
+	height = 768;
+}
+#pragma endregion
+
+#pragma region Direct3D Resources
+// These are the resources that depend on the device.
+void DxBase::CreateDeviceDependentResources()
+{
+	auto device = m_deviceResources->GetD3DDevice();
+
+	// TODO: Initialize device dependent objects here (independent of window size).
+	device;
+}
+
+// Allocate all memory resources that change on a window SizeChanged event.
+void DxBase::CreateWindowSizeDependentResources()
+{
+	// TODO: Initialize windows-size dependent objects here.
+}
+
+void DxBase::OnDeviceLost()
+{
+	// TODO: Add Direct3D resource cleanup here.
+}
+
+void DxBase::OnDeviceRestored()
+{
+	CreateDeviceDependentResources();
+
+	CreateWindowSizeDependentResources();
+}
+#pragma endregion
