@@ -33,12 +33,12 @@ namespace DirectXCore
 
 	void DxWindow::Render()
 	{
-		if (d3dContext_ == 0)
+		if (!m_d3dContext.Get())
 			return;
-
+		
 		float clearColor[4] = { 0.0f, 0.0f, 0.25f, 1.0f };
-		d3dContext_->ClearRenderTargetView(backBufferTarget_, clearColor);
+		m_d3dContext.Get()->ClearRenderTargetView(m_backBufferTarget.Get(), clearColor);
 
-		swapChain_->Present(0, 0);
+		m_swapChain.Get()->Present(0, 0);
 	}
 }

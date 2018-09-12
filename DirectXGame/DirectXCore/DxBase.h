@@ -1,32 +1,49 @@
 #pragma once
+
+#include "DeviceResources.h"
+#include "StepTimer.h"
+
 namespace DirectXCore 
 {
-	class DxBase
+	class DxBase : public IDeviceNotify
 	{
 	public:
-		DxBase();
-		virtual ~DxBase();
+		DxBase() noexcept(false);
 
-		bool Initialize(HINSTANCE hInstance, HWND hwnd);
-		void Shutdown();
+		// Initialization and management
+		void Initialize(HWND window, int width, int height);
 
-		virtual bool LoadContent();
-		virtual void UnloadContent();
+		// Basic game loop
+		void Tick();
 
-		virtual void Update(float dt) = 0;
-		virtual void Render() = 0;
+		// IDeviceNotify
+		virtual void OnDeviceLost() override;
+		virtual void OnDeviceRestored() override;
 
-	protected:
-		HINSTANCE hInstance_;
-		HWND hwnd_;
+		// Messages
+		void OnActivated();
+		void OnDeactivated();
+		void OnSuspending();
+		void OnResuming();
+		void OnWindowMoved();
+		void OnWindowSizeChanged(int width, int height);
 
-		D3D_DRIVER_TYPE driverType_;
-		D3D_FEATURE_LEVEL featureLevel_;
+		// Properties
+		void GetDefaultSize(int& width, int& height) const;
 
-		ID3D11Device* d3dDevice_;
-		ID3D11DeviceContext* d3dContext_;
-		IDXGISwapChain* swapChain_;
-		ID3D11RenderTargetView* backBufferTarget_;
+	private:
+		void Update(StepTimer const& timer);
+		void Render();
+		void Clear();
+
+		void CreateDeviceDependentResources();
+		void CreateWindowSizeDependentResources();
+
+		// Device resources.
+		std::unique_ptr<DeviceResources> m_deviceResources;
+
+		// Rendering loop timer.
+		StepTimer m_timer;
 	};
 }
 
