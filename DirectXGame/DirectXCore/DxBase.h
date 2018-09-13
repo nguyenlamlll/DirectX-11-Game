@@ -2,6 +2,7 @@
 
 #include "DeviceResources.h"
 #include "StepTimer.h"
+#include <Audio.h>
 
 namespace DirectXCore 
 {
@@ -9,6 +10,7 @@ namespace DirectXCore
 	{
 	public:
 		DxBase() noexcept(false);
+		~DxBase();
 
 		// Initialization and management
 		void Initialize(HWND window, int width, int height);
@@ -41,6 +43,8 @@ namespace DirectXCore
 
 		// Device resources.
 		std::unique_ptr<DeviceResources> m_deviceResources;
+
+		std::unique_ptr<DirectX::AudioEngine> m_audioEngine;
 
 		// Rendering loop timer.
 		StepTimer m_timer;

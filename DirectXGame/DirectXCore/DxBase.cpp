@@ -3,11 +3,26 @@
 
 using Microsoft::WRL::ComPtr;
 using namespace DirectXCore;
+using namespace DirectX;
 
 DxBase::DxBase() noexcept(false)
 {
 	m_deviceResources = std::make_unique<DeviceResources>();
 	m_deviceResources->RegisterDeviceNotify(this);
+
+	AUDIO_ENGINE_FLAGS eflags = AudioEngine_Default;
+#ifdef _DEBUG
+	eflags = eflags | AudioEngine_Debug;
+#endif
+	m_audioEngine = std::make_unique<AudioEngine>(eflags);
+}
+
+DirectXCore::DxBase::~DxBase()
+{
+	if (m_audioEngine)
+	{
+		m_audioEngine->Suspend();
+	}
 }
 
 // Initialize the Direct3D resources required to run.
@@ -27,6 +42,8 @@ void DxBase::Initialize(HWND window, int width, int height)
 	m_timer.SetFixedTimeStep(true);
 	m_timer.SetTargetElapsedSeconds(1.0 / 60);
 	*/
+
+	//m_audioEngine 
 }
 
 #pragma region Frame Update
@@ -47,6 +64,12 @@ void DxBase::Update(StepTimer const& timer)
 	float elapsedTime = float(timer.GetElapsedSeconds());
 
 	// TODO: Add your game logic here.
+
+	if (!m_audioEngine->Update())
+	{
+		// ...
+	}
+
 	elapsedTime;
 }
 #pragma endregion
@@ -112,6 +135,8 @@ void DxBase::OnDeactivated()
 void DxBase::OnSuspending()
 {
 	// TODO: Game is being power-suspended (or minimized).
+
+	m_audioEngine->Suspend();
 }
 
 void DxBase::OnResuming()
@@ -119,6 +144,8 @@ void DxBase::OnResuming()
 	m_timer.ResetElapsedTime();
 
 	// TODO: Game is being power-resumed (or returning from minimize).
+
+	m_audioEngine->Resume();
 }
 
 void DxBase::OnWindowMoved()
