@@ -2,6 +2,7 @@
 
 #include "DeviceResources.h"
 #include "StepTimer.h"
+#include "Sound.h"
 #include <Audio.h>
 
 namespace DirectXCore 
@@ -14,6 +15,8 @@ namespace DirectXCore
 
 		// Initialization and management
 		void Initialize(HWND window, int width, int height);
+
+		void CreateSoundAndMusic(const wchar_t* soundFileName);
 
 		// Basic game loop
 		void Tick();
@@ -44,7 +47,8 @@ namespace DirectXCore
 		// Device resources.
 		std::unique_ptr<DeviceResources> m_deviceResources;
 
-		std::unique_ptr<DirectX::AudioEngine> m_audioEngine;
+		std::shared_ptr<DirectX::AudioEngine> m_audioEngine;
+		std::vector<DirectXCore::Sound> m_sounds;
 
 		// Rendering loop timer.
 		StepTimer m_timer;

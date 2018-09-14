@@ -14,7 +14,7 @@ DxBase::DxBase() noexcept(false)
 #ifdef _DEBUG
 	eflags = eflags | AudioEngine_Debug;
 #endif
-	m_audioEngine = std::make_unique<AudioEngine>(eflags);
+	m_audioEngine = std::make_shared<AudioEngine>(eflags);
 }
 
 DirectXCore::DxBase::~DxBase()
@@ -42,8 +42,6 @@ void DxBase::Initialize(HWND window, int width, int height)
 	m_timer.SetFixedTimeStep(true);
 	m_timer.SetTargetElapsedSeconds(1.0 / 60);
 	*/
-
-	//m_audioEngine 
 }
 
 #pragma region Frame Update
@@ -187,6 +185,13 @@ void DxBase::CreateDeviceDependentResources()
 void DxBase::CreateWindowSizeDependentResources()
 {
 	// TODO: Initialize windows-size dependent objects here.
+}
+
+// Load every sound we're asked to.
+void DirectXCore::DxBase::CreateSoundAndMusic(const wchar_t* soundFileName)
+{
+	auto sound = new Sound(m_audioEngine.get(), soundFileName);
+	sound->Play();
 }
 
 void DxBase::OnDeviceLost()
