@@ -7,5 +7,7 @@
 #include "stdafx.h"
 
 #include "DxBase.h"
-#include "DeviceResources.h"
-#include "StepTimer.h"
+//#include "DeviceResources.h"
+//#include "StepTimer.h"
+
+#include "Audio.h"
