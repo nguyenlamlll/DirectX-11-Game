@@ -88,6 +88,7 @@ void DxBase::Render()
 	auto context = m_deviceResources->GetD3DDeviceContext();
 
 	// TODO: Add your rendering code here.
+	sprite->RenderSprite(m_deviceResources.get());
 	context;
 
 	m_deviceResources->PIXEndEvent();
@@ -178,6 +179,7 @@ void DxBase::CreateDeviceDependentResources()
 	auto device = m_deviceResources->GetD3DDevice();
 
 	// TODO: Initialize device dependent objects here (independent of window size).
+	//
 	device;
 }
 
@@ -194,9 +196,16 @@ void DirectXCore::DxBase::CreateSoundAndMusic(const wchar_t* soundFileName)
 	sound->Play();
 }
 
+void DirectXCore::DxBase::CreateSprite(const wchar_t * spriteName)
+{
+	//sprite.CreateSprite(m_deviceResources.get());
+	sprite = new Sprite(m_deviceResources.get(), L"cat.png");
+}
+
 void DxBase::OnDeviceLost()
 {
 	// TODO: Add Direct3D resource cleanup here.
+	sprite->Reset();
 }
 
 void DxBase::OnDeviceRestored()

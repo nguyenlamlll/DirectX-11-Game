@@ -148,6 +148,9 @@
   <ItemGroup>
     <Media Include="res\NightAmbienceSimple.wav" />
   </ItemGroup>
+  <ItemGroup>
+    <Image Include="rockman.png" />
+  </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
     <Import Project="..\packages\directxtk_desktop_2015.2018.8.18.2\build\native\directxtk_desktop_2015.targets" Condition="Exists('..\packages\directxtk_desktop_2015.2018.8.18.2\build\native\directxtk_desktop_2015.targets')" />
