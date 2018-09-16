@@ -67,6 +67,9 @@ int WINAPI wWinMain(
 	GetClientRect(hwnd, &rc);
 
 	game->Initialize(hwnd, rc.right - rc.left, rc.bottom - rc.top);
+	
+	const wchar_t* ambience = L"res\\NightAmbienceSimple.wav";
+	game->CreateSoundAndMusic(ambience);
 
 	// Main message loop
 	MSG msg = { 0 };
