@@ -24,7 +24,6 @@ Animation::Animation(int _rows, int _collums, Sprite* _sprite,float _timePerFram
 			rc->top = frameHeight * i;
 			rc->right = frameWidth * (j + 1);
 			rc->bottom = frameHeight * (i + 1);
-			//animationFrameRects.emplace_back(frameWidth*j, frameHeight*i, frameWidth*(j + 1), frameHeight*(i + 1));
 			animationFrameRects.emplace_back(*rc);
 		}
 	}
@@ -37,7 +36,7 @@ void Animation::Update(float _deltaTime)
 	if (currentFrameTime >= timePerFrame) {
 		currentFrameTime = 0;
 
-		if (frameIndex >= frameCount-1) frameCount = 0;
+		if (frameIndex >= frameCount-1) frameIndex = 0;
 		else frameIndex += 1;
 		mainSprite->SetSpriteRect(animationFrameRects[frameIndex]);
 	}
