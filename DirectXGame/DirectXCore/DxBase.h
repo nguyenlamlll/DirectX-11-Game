@@ -4,6 +4,8 @@
 #include "StepTimer.h"
 #include "Sound.h"
 #include <Audio.h>
+#include "Sprite.h"
+#include "Animation.h"
 
 namespace DirectXCore 
 {
@@ -17,6 +19,7 @@ namespace DirectXCore
 		void Initialize(HWND window, int width, int height);
 
 		void CreateSoundAndMusic(const wchar_t* soundFileName);
+		void CreateSprite(const wchar_t* spriteName);
 
 		// Basic game loop
 		void Tick();
@@ -49,6 +52,8 @@ namespace DirectXCore
 
 		std::shared_ptr<DirectX::AudioEngine> m_audioEngine;
 		std::vector<DirectXCore::Sound> m_sounds;
+		Sprite *sprite;
+		Animation *animation;
 
 		// Rendering loop timer.
 		StepTimer m_timer;
