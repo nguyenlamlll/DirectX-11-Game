@@ -14,7 +14,7 @@ namespace DirectXCore
 		void Loop();
 
 	private:
-		DirectX::SoundEffect* m_soundEffect;
+		std::unique_ptr<DirectX::SoundEffect> m_soundEffect;
 		wchar_t m_fileName;
 	};
 }

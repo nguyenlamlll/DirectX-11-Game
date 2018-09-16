@@ -7,14 +7,13 @@ using namespace DirectX;
 Sound::Sound(DirectX::AudioEngine* audioEngine, const wchar_t* fileName)
 
 {
-	m_soundEffect = new SoundEffect(audioEngine, fileName);
+	m_soundEffect = std::make_unique<SoundEffect>(audioEngine, fileName);
 }
 
 
 Sound::~Sound()
 {
-	if (m_soundEffect)
-		delete m_soundEffect;
+	m_soundEffect.reset();
 }
 
 void DirectXCore::Sound::Play()
