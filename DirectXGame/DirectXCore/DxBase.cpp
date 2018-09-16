@@ -198,11 +198,13 @@ void DirectXCore::DxBase::CreateSoundAndMusic(const wchar_t* soundFileName)
 	sound->Play();
 }
 
+
 void DirectXCore::DxBase::CreateSprite(const wchar_t * spriteName)
 {
 	//sprite = new Sprite(m_deviceResources.get(), L"scott.png");
-	animation = new Animation(2, 8, new Sprite(m_deviceResources.get(), L"scott.png"),0.5f);
+	animation = new Animation(2, 8, new Sprite(m_deviceResources.get(), L"scott.png"), 0.5f);
 }
+
 
 void DxBase::OnDeviceLost()
 {
