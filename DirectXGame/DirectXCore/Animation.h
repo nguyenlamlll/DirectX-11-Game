@@ -7,9 +7,15 @@ class Animation
 {
 public:
 	Animation();
-	Animation(int _rows, int _collums, Sprite _sprite);
+	Animation(int _rows, int _collums, Sprite* _sprite,float _timePerFrame);
+	void Update(float _deltaTime);
+	void Render();
 	~Animation();
 private:
-	int frames;
+	int frameIndex = 0,frameCount, frameWidth, frameHeight;
+	std::vector<RECT> animationFrameRects;
+	Sprite* mainSprite;
+	float currentFrameTime = 0;
+	float timePerFrame = 0;
 };
 

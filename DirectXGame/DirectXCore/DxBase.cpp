@@ -62,6 +62,7 @@ void DxBase::Update(StepTimer const& timer)
 	float elapsedTime = float(timer.GetElapsedSeconds());
 
 	// TODO: Add your game logic here.
+	animation->Update(timer.GetElapsedSeconds());
 
 	if (!m_audioEngine->Update())
 	{
@@ -88,7 +89,8 @@ void DxBase::Render()
 	auto context = m_deviceResources->GetD3DDeviceContext();
 
 	// TODO: Add your rendering code here.
-	sprite->RenderSprite(m_deviceResources.get());
+	//sprite->RenderSprite();
+	animation->Render();
 	context;
 
 	m_deviceResources->PIXEndEvent();
@@ -198,8 +200,8 @@ void DirectXCore::DxBase::CreateSoundAndMusic(const wchar_t* soundFileName)
 
 void DirectXCore::DxBase::CreateSprite(const wchar_t * spriteName)
 {
-	//sprite.CreateSprite(m_deviceResources.get());
-	sprite = new Sprite(m_deviceResources.get(), L"cat.png");
+	//sprite = new Sprite(m_deviceResources.get(), L"scott.png");
+	animation = new Animation(2, 8, new Sprite(m_deviceResources.get(), L"scott.png"),0.5f);
 }
 
 void DxBase::OnDeviceLost()
