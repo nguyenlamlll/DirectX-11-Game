@@ -62,7 +62,7 @@ void DxBase::Update(StepTimer const& timer)
 	float elapsedTime = float(timer.GetElapsedSeconds());
 
 	// TODO: Add your game logic here.
-	animation->Update(timer.GetElapsedSeconds());
+	animation->Update(elapsedTime);
 
 	if (!m_audioEngine->Update())
 	{
