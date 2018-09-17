@@ -29,6 +29,9 @@ Animation::Animation(int _rows, int _collums, Sprite* _sprite,float _timePerFram
 	}
 	mainSprite->SetSpriteRect(animationFrameRects[0]);
 	frameCount = _rows * _collums;
+
+	DirectX::SimpleMath::Vector2* newCenter = new DirectX::SimpleMath::Vector2(frameWidth / 2, frameHeight / 2);
+	_sprite->SetCenter(*newCenter);
 }
 
 void Animation::Update(float _deltaTime)
