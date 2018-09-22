@@ -6,6 +6,7 @@
 #include <Audio.h>
 #include "Sprite.h"
 #include "Animation.h"
+#include "TileMap.h"
 
 namespace DirectXCore 
 {
@@ -54,6 +55,8 @@ namespace DirectXCore
 		std::vector<DirectXCore::Sound> m_sounds;
 		Sprite *sprite;
 		Animation *animation;
+		TileMap *tilemap;
+		Camera* mainCamera;
 
 		// Rendering loop timer.
 		StepTimer m_timer;

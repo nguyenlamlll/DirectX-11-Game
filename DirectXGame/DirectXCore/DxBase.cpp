@@ -44,6 +44,15 @@ void DxBase::Initialize(HWND window, int width, int height)
 	*/
 }
 
+void DirectXCore::DxBase::CreateSprite(const wchar_t * spriteName)
+{
+	//sprite = new Sprite(m_deviceResources.get(), L"scott.png");
+	//animation = new Animation(2, 8, new Sprite(m_deviceResources.get(), L"scott.png"), 0.1f);
+	mainCamera = new Camera(m_deviceResources->GetOutputSize().right / 2, m_deviceResources->GetOutputSize().bottom);
+	tilemap = new TileMap(m_deviceResources.get(),L"Resources/untitled.tmx");
+	tilemap->SetCamera(mainCamera);
+}
+
 #pragma region Frame Update
 // Executes the basic game loop.
 void DxBase::Tick()
@@ -62,7 +71,8 @@ void DxBase::Update(StepTimer const& timer)
 	float elapsedTime = float(timer.GetElapsedSeconds());
 
 	// TODO: Add your game logic here.
-	animation->Update(elapsedTime);
+	//animation->Update(elapsedTime);
+	mainCamera->SetPosition(mainCamera->GetPosition() + DirectX::SimpleMath::Vector2(1, 0));
 
 	if (!m_audioEngine->Update())
 	{
@@ -90,7 +100,8 @@ void DxBase::Render()
 
 	// TODO: Add your rendering code here.
 	//sprite->RenderSprite();
-	animation->Render();
+	//animation->Render();
+	tilemap->Render();
 	context;
 
 	m_deviceResources->PIXEndEvent();
@@ -197,14 +208,6 @@ void DirectXCore::DxBase::CreateSoundAndMusic(const wchar_t* soundFileName)
 	auto sound = new Sound(m_audioEngine.get(), soundFileName);
 	sound->Play();
 }
-
-
-void DirectXCore::DxBase::CreateSprite(const wchar_t * spriteName)
-{
-	//sprite = new Sprite(m_deviceResources.get(), L"scott.png");
-	animation = new Animation(2, 8, new Sprite(m_deviceResources.get(), L"scott.png"), 0.1f);
-}
-
 
 void DxBase::OnDeviceLost()
 {

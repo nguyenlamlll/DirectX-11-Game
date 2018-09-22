@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<map version="1.2" tiledversion="1.2.0" orientation="orthogonal" renderorder="right-down" width="10" height="10" tilewidth="32" tileheight="32" infinite="0" nextlayerid="4" nextobjectid="1">
+ <tileset firstgid="1" source="tileset-platformer.tsx"/>
+ <layer id="1" name="Tile Layer 1" width="10" height="10">
+  <data encoding="csv">
+8,8,8,8,8,8,8,8,8,8,
+8,8,8,8,8,8,8,8,8,8,
+8,8,8,8,8,8,8,8,8,8,
+8,8,8,32,32,32,32,8,8,8,
+8,8,8,32,32,32,32,8,8,8,
+8,8,8,32,32,32,32,8,8,8,
+8,8,8,32,32,32,32,8,8,8,
+8,8,8,8,8,8,8,8,8,8,
+8,8,8,8,8,8,8,8,8,8,
+8,8,8,8,8,8,8,8,8,8
+</data>
+ </layer>
+</map>
