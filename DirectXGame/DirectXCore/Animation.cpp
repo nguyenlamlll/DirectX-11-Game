@@ -1,6 +1,6 @@
 #include "stdafx.h"
 #include "Animation.h"
-
+using namespace DirectXCore;
 
 Animation::Animation()
 {
