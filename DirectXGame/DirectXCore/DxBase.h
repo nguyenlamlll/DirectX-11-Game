@@ -6,6 +6,7 @@
 #include <Audio.h>
 #include "Sprite.h"
 #include "Animation.h"
+#include "Scene.h"
 
 namespace DirectXCore 
 {
@@ -35,7 +36,7 @@ namespace DirectXCore
 		void OnResuming();
 		void OnWindowMoved();
 		void OnWindowSizeChanged(int width, int height);
-
+		
 		// Properties
 		void GetDefaultSize(int& width, int& height) const;
 
@@ -57,6 +58,10 @@ namespace DirectXCore
 
 		// Rendering loop timer.
 		StepTimer m_timer;
+
+		// Scenes
+		std::vector<Scene*> m_Scenes;
+		std::shared_ptr<Scene> m_ActiveScene;
 	};
 }
 
