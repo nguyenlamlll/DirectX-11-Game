@@ -44,7 +44,7 @@ TileMap::TileMap(DirectXCore::DeviceResources *_deviceResource, const wchar_t * 
 void TileMap::Render()
 {
 	DirectX::SimpleMath::Vector2 trans = DirectX::SimpleMath::Vector2(deviceResource->GetOutputSize().right / 2 - mainCamera->GetPosition().x,
-																    	deviceResource->GetOutputSize().bottom / 2 - mainCamera->GetPosition().y);
+		deviceResource->GetOutputSize().bottom / 2 - mainCamera->GetPosition().y);
 
 	for (int i = 0; i < tilemap->GetNumTileLayers(); i++)
 	{
@@ -85,14 +85,22 @@ void TileMap::Render()
 					sourceRECT.right = sourceRECT.left + tileDataWidth;
 
 					//world position = sprite local position + tilemap position
-					DirectX::XMFLOAT2 position((n * tileDataWidth + tileDataWidth / 2) + m_screenPos.x, (m * tileDataHeight + tileDataHeight / 2) + m_screenPos.y);
+					DirectX::SimpleMath::Vector2 position((n * tileDataWidth) + m_screenPos.x, (m * tileDataHeight) + m_screenPos.y);
 					DirectX::SimpleMath::Vector2* newCenter = new DirectX::SimpleMath::Vector2(tileDataWidth / 2, tileDataHeight / 2);
 
 					sprite->SetCenter(*newCenter);
 					sprite->SetScale(1.0f, 1.0f);
-					sprite->SetScreenPosition(position);
 					sprite->SetSpriteRect(sourceRECT);
-					sprite->RenderSprite();
+					//position.y -= 85;
+					sprite->SetScreenPosition(position + trans);
+					if (mainCamera->IsContain(sprite->GetScreenPosition())) sprite->RenderSprite();
+					/*else
+					{
+						bool aas = mainCamera->IsContain(sprite->GetScreenPosition());
+					}*/
+
+					//Sprite *spriteing = sprite;
+					//spriteing->SetScreenPosition(mainCamera->GetPosition());
 				}
 			}
 		}

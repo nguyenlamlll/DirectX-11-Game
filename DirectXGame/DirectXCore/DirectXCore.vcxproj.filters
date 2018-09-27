@@ -16,8 +16,8 @@
     <Filter Include="Header Files\Include">
       <UniqueIdentifier>{bff39484-73d2-4a19-af71-6dd64ed68797}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Source Files\MapReader">
-      <UniqueIdentifier>{8c9e23b2-481d-4197-9058-7e4c29db19df}</UniqueIdentifier>
+    <Filter Include="Header Files\MapReader">
+      <UniqueIdentifier>{88e8c56f-b89b-4b72-b99c-cd813385f388}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -54,82 +54,82 @@
     <ClInclude Include="TileMap.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="Camera.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
     <ClInclude Include="MapReader\tinyxml2.h">
-      <Filter>Source Files\MapReader</Filter>
+      <Filter>Header Files\MapReader</Filter>
     </ClInclude>
     <ClInclude Include="MapReader\TmxEllipse.h">
-      <Filter>Source Files\MapReader</Filter>
+      <Filter>Header Files\MapReader</Filter>
     </ClInclude>
     <ClInclude Include="MapReader\TmxImage.h">
-      <Filter>Source Files\MapReader</Filter>
+      <Filter>Header Files\MapReader</Filter>
     </ClInclude>
     <ClInclude Include="MapReader\TmxImageLayer.h">
-      <Filter>Source Files\MapReader</Filter>
+      <Filter>Header Files\MapReader</Filter>
     </ClInclude>
     <ClInclude Include="MapReader\TmxLayer.h">
-      <Filter>Source Files\MapReader</Filter>
+      <Filter>Header Files\MapReader</Filter>
     </ClInclude>
     <ClInclude Include="MapReader\TmxMap.h">
-      <Filter>Source Files\MapReader</Filter>
+      <Filter>Header Files\MapReader</Filter>
     </ClInclude>
     <ClInclude Include="MapReader\TmxMapTile.h">
-      <Filter>Source Files\MapReader</Filter>
+      <Filter>Header Files\MapReader</Filter>
     </ClInclude>
     <ClInclude Include="MapReader\TmxObject.h">
-      <Filter>Source Files\MapReader</Filter>
+      <Filter>Header Files\MapReader</Filter>
     </ClInclude>
     <ClInclude Include="MapReader\TmxObjectGroup.h">
-      <Filter>Source Files\MapReader</Filter>
+      <Filter>Header Files\MapReader</Filter>
     </ClInclude>
     <ClInclude Include="MapReader\TmxPoint.h">
-      <Filter>Source Files\MapReader</Filter>
+      <Filter>Header Files\MapReader</Filter>
     </ClInclude>
     <ClInclude Include="MapReader\TmxPolygon.h">
-      <Filter>Source Files\MapReader</Filter>
+      <Filter>Header Files\MapReader</Filter>
     </ClInclude>
     <ClInclude Include="MapReader\TmxPolyline.h">
-      <Filter>Source Files\MapReader</Filter>
+      <Filter>Header Files\MapReader</Filter>
     </ClInclude>
     <ClInclude Include="MapReader\TmxPropertySet.h">
-      <Filter>Source Files\MapReader</Filter>
+      <Filter>Header Files\MapReader</Filter>
     </ClInclude>
     <ClInclude Include="MapReader\TmxTerrain.h">
-      <Filter>Source Files\MapReader</Filter>
+      <Filter>Header Files\MapReader</Filter>
     </ClInclude>
     <ClInclude Include="MapReader\TmxTerrainArray.h">
-      <Filter>Source Files\MapReader</Filter>
+      <Filter>Header Files\MapReader</Filter>
     </ClInclude>
     <ClInclude Include="MapReader\TmxTile.h">
-      <Filter>Source Files\MapReader</Filter>
+      <Filter>Header Files\MapReader</Filter>
     </ClInclude>
     <ClInclude Include="MapReader\TmxTileLayer.h">
-      <Filter>Source Files\MapReader</Filter>
+      <Filter>Header Files\MapReader</Filter>
     </ClInclude>
     <ClInclude Include="MapReader\TmxTileOffset.h">
-      <Filter>Source Files\MapReader</Filter>
+      <Filter>Header Files\MapReader</Filter>
     </ClInclude>
     <ClInclude Include="MapReader\TmxTileset.h">
-      <Filter>Source Files\MapReader</Filter>
+      <Filter>Header Files\MapReader</Filter>
     </ClInclude>
     <ClInclude Include="MapReader\TmxUtil.h">
-      <Filter>Source Files\MapReader</Filter>
+      <Filter>Header Files\MapReader</Filter>
     </ClInclude>
     <ClInclude Include="MapReader\zconf.h">
-      <Filter>Source Files\MapReader</Filter>
+      <Filter>Header Files\MapReader</Filter>
     </ClInclude>
     <ClInclude Include="MapReader\zlib.h">
-      <Filter>Source Files\MapReader</Filter>
-    </ClInclude>
-    <ClInclude Include="MapReader\zlib128-dll\include\zconf.h">
-      <Filter>Source Files\MapReader</Filter>
-    </ClInclude>
-    <ClInclude Include="MapReader\zlib128-dll\include\zlib.h">
-      <Filter>Source Files\MapReader</Filter>
+      <Filter>Header Files\MapReader</Filter>
     </ClInclude>
     <ClInclude Include="MapReader\base64.h">
-      <Filter>Source Files\MapReader</Filter>
+      <Filter>Header Files\MapReader</Filter>
     </ClInclude>
-    <ClInclude Include="Camera.h">
+    <ClInclude Include="Collision.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Object.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
@@ -158,67 +158,73 @@
     <ClCompile Include="TileMap.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="MapReader\TmxEllipse.cpp">
-      <Filter>Source Files\MapReader</Filter>
-    </ClCompile>
-    <ClCompile Include="MapReader\TmxImage.cpp">
-      <Filter>Source Files\MapReader</Filter>
-    </ClCompile>
-    <ClCompile Include="MapReader\TmxImageLayer.cpp">
-      <Filter>Source Files\MapReader</Filter>
-    </ClCompile>
-    <ClCompile Include="MapReader\TmxLayer.cpp">
-      <Filter>Source Files\MapReader</Filter>
-    </ClCompile>
-    <ClCompile Include="MapReader\TmxMap.cpp">
-      <Filter>Source Files\MapReader</Filter>
-    </ClCompile>
-    <ClCompile Include="MapReader\TmxObject.cpp">
-      <Filter>Source Files\MapReader</Filter>
-    </ClCompile>
-    <ClCompile Include="MapReader\TmxObjectGroup.cpp">
-      <Filter>Source Files\MapReader</Filter>
-    </ClCompile>
-    <ClCompile Include="MapReader\TmxPolygon.cpp">
-      <Filter>Source Files\MapReader</Filter>
-    </ClCompile>
-    <ClCompile Include="MapReader\TmxPolyline.cpp">
-      <Filter>Source Files\MapReader</Filter>
-    </ClCompile>
-    <ClCompile Include="MapReader\TmxPropertySet.cpp">
-      <Filter>Source Files\MapReader</Filter>
-    </ClCompile>
-    <ClCompile Include="MapReader\TmxTerrain.cpp">
-      <Filter>Source Files\MapReader</Filter>
-    </ClCompile>
-    <ClCompile Include="MapReader\TmxTerrainArray.cpp">
-      <Filter>Source Files\MapReader</Filter>
-    </ClCompile>
-    <ClCompile Include="MapReader\TmxTile.cpp">
-      <Filter>Source Files\MapReader</Filter>
-    </ClCompile>
-    <ClCompile Include="MapReader\TmxTileLayer.cpp">
-      <Filter>Source Files\MapReader</Filter>
-    </ClCompile>
-    <ClCompile Include="MapReader\TmxTileOffset.cpp">
-      <Filter>Source Files\MapReader</Filter>
-    </ClCompile>
-    <ClCompile Include="MapReader\TmxTileset.cpp">
-      <Filter>Source Files\MapReader</Filter>
-    </ClCompile>
-    <ClCompile Include="MapReader\TmxUtil.cpp">
-      <Filter>Source Files\MapReader</Filter>
-    </ClCompile>
-    <ClCompile Include="MapReader\base64.cpp">
-      <Filter>Source Files\MapReader</Filter>
+    <ClCompile Include="Camera.cpp">
+      <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="MapReader\miniz.c">
-      <Filter>Source Files\MapReader</Filter>
+      <Filter>Header Files\MapReader</Filter>
     </ClCompile>
     <ClCompile Include="MapReader\tinyxml2.cpp">
-      <Filter>Source Files\MapReader</Filter>
+      <Filter>Header Files\MapReader</Filter>
     </ClCompile>
-    <ClCompile Include="Camera.cpp">
+    <ClCompile Include="MapReader\TmxEllipse.cpp">
+      <Filter>Header Files\MapReader</Filter>
+    </ClCompile>
+    <ClCompile Include="MapReader\TmxImage.cpp">
+      <Filter>Header Files\MapReader</Filter>
+    </ClCompile>
+    <ClCompile Include="MapReader\TmxImageLayer.cpp">
+      <Filter>Header Files\MapReader</Filter>
+    </ClCompile>
+    <ClCompile Include="MapReader\TmxLayer.cpp">
+      <Filter>Header Files\MapReader</Filter>
+    </ClCompile>
+    <ClCompile Include="MapReader\TmxMap.cpp">
+      <Filter>Header Files\MapReader</Filter>
+    </ClCompile>
+    <ClCompile Include="MapReader\TmxObject.cpp">
+      <Filter>Header Files\MapReader</Filter>
+    </ClCompile>
+    <ClCompile Include="MapReader\TmxObjectGroup.cpp">
+      <Filter>Header Files\MapReader</Filter>
+    </ClCompile>
+    <ClCompile Include="MapReader\TmxPolygon.cpp">
+      <Filter>Header Files\MapReader</Filter>
+    </ClCompile>
+    <ClCompile Include="MapReader\TmxPolyline.cpp">
+      <Filter>Header Files\MapReader</Filter>
+    </ClCompile>
+    <ClCompile Include="MapReader\TmxPropertySet.cpp">
+      <Filter>Header Files\MapReader</Filter>
+    </ClCompile>
+    <ClCompile Include="MapReader\TmxTerrain.cpp">
+      <Filter>Header Files\MapReader</Filter>
+    </ClCompile>
+    <ClCompile Include="MapReader\TmxTerrainArray.cpp">
+      <Filter>Header Files\MapReader</Filter>
+    </ClCompile>
+    <ClCompile Include="MapReader\TmxTile.cpp">
+      <Filter>Header Files\MapReader</Filter>
+    </ClCompile>
+    <ClCompile Include="MapReader\TmxTileLayer.cpp">
+      <Filter>Header Files\MapReader</Filter>
+    </ClCompile>
+    <ClCompile Include="MapReader\TmxTileOffset.cpp">
+      <Filter>Header Files\MapReader</Filter>
+    </ClCompile>
+    <ClCompile Include="MapReader\TmxTileset.cpp">
+      <Filter>Header Files\MapReader</Filter>
+    </ClCompile>
+    <ClCompile Include="MapReader\TmxUtil.cpp">
+      <Filter>Header Files\MapReader</Filter>
+    </ClCompile>
+    <ClCompile Include="MapReader\base64.cpp">
+      <Filter>Header Files\MapReader</Filter>
+    </ClCompile>
+    <ClCompile Include="Collision.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Object.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
@@ -233,7 +239,7 @@
       <Filter>Resource Files</Filter>
     </None>
     <None Include="MapReader\Tmx.h.in">
-      <Filter>Source Files\MapReader</Filter>
+      <Filter>Header Files\MapReader</Filter>
     </None>
   </ItemGroup>
   <ItemGroup>

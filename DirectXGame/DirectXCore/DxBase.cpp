@@ -46,11 +46,11 @@ void DxBase::Initialize(HWND window, int width, int height)
 
 void DirectXCore::DxBase::CreateSprite(const wchar_t * spriteName)
 {
-	//sprite = new Sprite(m_deviceResources.get(), L"scott.png");
+	//sprite = new Sprite(m_deviceResources.get(), L"cat.png");
 	//animation = new Animation(2, 8, new Sprite(m_deviceResources.get(), L"scott.png"), 0.1f);
-	mainCamera = new Camera(m_deviceResources->GetOutputSize().right / 2, m_deviceResources->GetOutputSize().bottom);
-	tilemap = new TileMap(m_deviceResources.get(),L"Resources/untitled.tmx");
-	tilemap->SetCamera(mainCamera);
+	//mainCamera = new Camera(m_deviceResources->GetOutputSize().right / 2, m_deviceResources->GetOutputSize().bottom);
+	//tilemap = new TileMap(m_deviceResources.get(), L"Resources/untitled.tmx");
+	//tilemap->SetCamera(mainCamera);
 }
 
 #pragma region Frame Update
@@ -71,8 +71,16 @@ void DxBase::Update(StepTimer const& timer)
 	float elapsedTime = float(timer.GetElapsedSeconds());
 
 	// TODO: Add your game logic here.
+	//sprite->SetScreenPosition(sprite->GetScreenPosition() + DirectX::SimpleMath::Vector2(0.4f, -0.4f));
 	//animation->Update(elapsedTime);
-	mainCamera->SetPosition(mainCamera->GetPosition() + DirectX::SimpleMath::Vector2(1, 0));
+	//mainCamera->SetPosition(mainCamera->GetPosition() + DirectX::SimpleMath::Vector2(0.4f, -0.4f));
+
+	BoundingBox _bdBox, _bdBox2;
+	_bdBox.Center = DirectX::SimpleMath::Vector3(0, 0, 0);
+	_bdBox.Extents = DirectX::SimpleMath::Vector3(4, 4, 4);
+	_bdBox2.Center = DirectX::SimpleMath::Vector3(1, 1, 1);
+	_bdBox2.Extents = DirectX::SimpleMath::Vector3(1, 1, 1);
+	ContainmentType containtype = _bdBox.Contains(_bdBox2);
 
 	if (!m_audioEngine->Update())
 	{
@@ -101,7 +109,7 @@ void DxBase::Render()
 	// TODO: Add your rendering code here.
 	//sprite->RenderSprite();
 	//animation->Render();
-	tilemap->Render();
+	//tilemap->Render();
 	context;
 
 	m_deviceResources->PIXEndEvent();
