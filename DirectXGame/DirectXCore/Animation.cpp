@@ -54,4 +54,5 @@ void Animation::Render()
 
 Animation::~Animation()
 {
+	if (mainSprite) { delete mainSprite; }
 }

@@ -62,7 +62,7 @@ void DxBase::Update(StepTimer const& timer)
 	float elapsedTime = float(timer.GetElapsedSeconds());
 
 	// TODO: Add your game logic here.
-	animation->Update(elapsedTime);
+	//animation->Update(elapsedTime);
 
 	if (!m_audioEngine->Update())
 	{
@@ -89,8 +89,11 @@ void DxBase::Render()
 	auto context = m_deviceResources->GetD3DDeviceContext();
 
 	// TODO: Add your rendering code here.
+	if (m_activeScene) {
+		m_activeScene->RenderScene();
+	}
 	//sprite->RenderSprite();
-	animation->Render();
+	//animation->Render();
 	context;
 
 	m_deviceResources->PIXEndEvent();
@@ -191,6 +194,12 @@ void DxBase::CreateWindowSizeDependentResources()
 	// TODO: Initialize windows-size dependent objects here.
 }
 
+void DirectXCore::DxBase::InitializeScenes()
+{
+	m_scenes.push_back(new TestScene());
+	std::shared_ptr<Scene> m_activeScene(m_scenes.back());
+}
+
 // Load every sound we're asked to.
 void DirectXCore::DxBase::CreateSoundAndMusic(const wchar_t* soundFileName)
 {
@@ -199,17 +208,27 @@ void DirectXCore::DxBase::CreateSoundAndMusic(const wchar_t* soundFileName)
 }
 
 
-void DirectXCore::DxBase::CreateSprite(const wchar_t * spriteName)
+void DirectXCore::DxBase::CreateSprite(const wchar_t * spriteName, Sprite** returnSprite)
 {
-	//sprite = new Sprite(m_deviceResources.get(), L"scott.png");
-	animation = new Animation(2, 8, new Sprite(m_deviceResources.get(), L"scott.png"), 0.1f);
+	*returnSprite = new Sprite(m_deviceResources.get(), spriteName);
+	//animation = new Animation(2, 8, new Sprite(m_deviceResources.get(), spriteName), 0.1f);
+}
+
+void DirectXCore::DxBase::SwitchToScene(int index)
+{
+	m_activeScene = m_scenes[index];
+}
+
+void DirectXCore::DxBase::AddScene(Scene * scene)
+{
+	m_scenes.push_back(scene);
 }
 
 
 void DxBase::OnDeviceLost()
 {
 	// TODO: Add Direct3D resource cleanup here.
-	sprite->Reset();
+	//sprite->Reset();
 }
 
 void DxBase::OnDeviceRestored()

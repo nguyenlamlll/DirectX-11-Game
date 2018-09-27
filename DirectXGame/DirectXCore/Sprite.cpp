@@ -11,8 +11,8 @@ Sprite::Sprite(DirectXCore::DeviceResources * _deviceResource, const wchar_t * _
 {
 	ComPtr<ID3D11Resource> resource;
 	DirectXCore::ThrowIfFailed(DirectX::CreateWICTextureFromFile(_deviceResource->GetD3DDevice(), _charPath, resource.GetAddressOf(), m_texture.ReleaseAndGetAddressOf()));
-	m_spriteBatch = std::make_unique<DirectX::SpriteBatch>(_deviceResource->GetD3DDeviceContext());
-	m_states = std::make_unique<DirectX::CommonStates>(_deviceResource->GetD3DDevice());
+	m_spriteBatch = std::make_shared<DirectX::SpriteBatch>(_deviceResource->GetD3DDeviceContext());
+	m_states = std::make_shared<DirectX::CommonStates>(_deviceResource->GetD3DDevice());
 
 	ComPtr<ID3D11Texture2D> cat;
 	CD3D11_TEXTURE2D_DESC spriteDesc;

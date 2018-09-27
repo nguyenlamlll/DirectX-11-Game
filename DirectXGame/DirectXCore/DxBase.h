@@ -8,6 +8,8 @@
 #include "Animation.h"
 #include "Scene.h"
 
+#include "TestScene.h"
+
 namespace DirectXCore 
 {
 	class DxBase : public IDeviceNotify
@@ -20,7 +22,11 @@ namespace DirectXCore
 		void Initialize(HWND window, int width, int height);
 
 		void CreateSoundAndMusic(const wchar_t* soundFileName);
-		void CreateSprite(const wchar_t* spriteName);
+		void CreateSprite(const wchar_t* spriteName, Sprite** returnSprite);
+
+		void SwitchToScene(wchar_t* name);
+		void SwitchToScene(int index);
+		void AddScene(Scene* scene);
 
 		// Basic game loop
 		void Tick();
@@ -53,15 +59,16 @@ namespace DirectXCore
 
 		std::shared_ptr<DirectX::AudioEngine> m_audioEngine;
 		std::vector<DirectXCore::Sound> m_sounds;
-		Sprite *sprite;
-		Animation *animation;
+		//Sprite *sprite;
+		//Animation *animation;
 
 		// Rendering loop timer.
 		StepTimer m_timer;
 
 		// Scenes
-		std::vector<Scene*> m_Scenes;
-		std::shared_ptr<Scene> m_ActiveScene;
+		void InitializeScenes();
+		std::vector<Scene*> m_scenes;
+		Scene* m_activeScene;
 	};
 }
 
