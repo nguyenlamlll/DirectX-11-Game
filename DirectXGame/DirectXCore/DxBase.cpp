@@ -217,6 +217,7 @@ void DirectXCore::DxBase::CreateSprite(const wchar_t * spriteName, Sprite** retu
 void DirectXCore::DxBase::SwitchToScene(int index)
 {
 	m_activeScene = m_scenes[index];
+	m_activeScene->LoadScene();
 }
 
 void DirectXCore::DxBase::AddScene(Scene * scene)
