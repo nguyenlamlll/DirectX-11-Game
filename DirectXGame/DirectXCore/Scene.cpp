@@ -1,13 +1,13 @@
 #include "stdafx.h"
-#include "Object.h"
+#include "Scene.h"
 
 using namespace DirectXCore;
 
-Object::Object()
+Scene::Scene()
 {
 }
 
 
-Object::~Object()
+Scene::~Scene()
 {
 }

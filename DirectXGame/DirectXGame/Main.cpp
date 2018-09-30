@@ -2,6 +2,7 @@
 #include <memory>
 
 #include <DirectXCore.h>
+#include "CatScene.h"
 
 LRESULT CALLBACK WndProc(HWND hwnd, UINT message, WPARAM wParam, LPARAM lParam);
 
@@ -32,7 +33,7 @@ int WINAPI wWinMain(
 	if (!RegisterClassEx(&wndClass))
 		return 1;
 
-	std::unique_ptr<DirectXCore::DxBase> game = std::make_unique<DirectXCore::DxBase>();
+	std::shared_ptr<DirectXCore::DxBase> game = std::make_shared<DirectXCore::DxBase>();
 	int w, h;
 	game->GetDefaultSize(w, h);
 
@@ -68,10 +69,11 @@ int WINAPI wWinMain(
 
 	game->Initialize(hwnd, rc.right - rc.left, rc.bottom - rc.top);
 	
-	const wchar_t* ambience = L"res\\NightAmbienceSimple.wav";
-	game->CreateSoundAndMusic(ambience);
-	game->CreateSprite(L"cat.png");
-
+	//const wchar_t* ambience = L"res\\NightAmbienceSimple.wav";
+	//game->CreateSoundAndMusic(ambience);
+	game->CreateSprite(L"Resources/untitled.tmx");
+	game->AddScene(new CatScene(game.get()));
+	game->SwitchToScene(0);
 	// Main message loop
 	MSG msg = { 0 };
 	while (msg.message != WM_QUIT)

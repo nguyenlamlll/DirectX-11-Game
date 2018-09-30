@@ -1,8 +1,13 @@
 #pragma once
-class Object
+
+namespace DirectXCore
 {
-public:
-	Object();
-	~Object();
-};
+	class Object
+	{
+	public:
+		Object();
+		~Object();
+	};
+}
+
 

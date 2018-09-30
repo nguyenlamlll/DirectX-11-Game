@@ -1,6 +1,7 @@
 #include "stdafx.h"
 #include "Sprite.h"
 using Microsoft::WRL::ComPtr;
+using namespace DirectXCore;
 
 Sprite::Sprite()
 {

@@ -1,6 +1,7 @@
 #include "stdafx.h"
 #include "TileMap.h"
 
+using namespace DirectXCore;
 
 TileMap::TileMap()
 {

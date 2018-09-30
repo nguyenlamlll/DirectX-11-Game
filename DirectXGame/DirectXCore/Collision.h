@@ -1,10 +1,13 @@
 #pragma once
 #include "stdafx.h"
 
-class Collision
+namespace DirectXCore
 {
-public:
-	Collision();
-	~Collision();
-};
+	class Collision
+	{
+	public:
+		Collision();
+		~Collision();
+	};
+}
 

@@ -49,8 +49,13 @@ void DirectXCore::DxBase::CreateSprite(const wchar_t * spriteName)
 	//sprite = new Sprite(m_deviceResources.get(), L"cat.png");
 	//animation = new Animation(2, 8, new Sprite(m_deviceResources.get(), L"scott.png"), 0.1f);
 	mainCamera = new Camera(m_deviceResources->GetOutputSize().right / 2, m_deviceResources->GetOutputSize().bottom);
-	tilemap = new TileMap(m_deviceResources.get(), L"Resources/untitled.tmx");
+	tilemap = new TileMap(m_deviceResources.get(), spriteName);
 	tilemap->SetCamera(mainCamera);
+}
+
+void DirectXCore::DxBase::CreateSprite(const wchar_t * spriteName, Sprite** returnSprite)
+{
+	*returnSprite = new Sprite(m_deviceResources.get(), spriteName);
 }
 
 #pragma region Frame Update
@@ -73,7 +78,12 @@ void DxBase::Update(StepTimer const& timer)
 	// TODO: Add your game logic here.
 	//sprite->SetScreenPosition(sprite->GetScreenPosition() + DirectX::SimpleMath::Vector2(0.4f, -0.4f));
 	//animation->Update(elapsedTime);
-	mainCamera->SetPosition(mainCamera->GetPosition() + DirectX::SimpleMath::Vector2(0.4f, 0.4f));
+
+	if (mainCamera)
+	{
+		mainCamera->SetPosition(mainCamera->GetPosition() + DirectX::SimpleMath::Vector2(0.4f, 0.4f));
+	}
+	
 
 	BoundingBox _bdBox, _bdBox2;
 	_bdBox.Center = DirectX::SimpleMath::Vector3(0, 0, 0);
@@ -81,6 +91,11 @@ void DxBase::Update(StepTimer const& timer)
 	_bdBox2.Center = DirectX::SimpleMath::Vector3(1, 1, 1);
 	_bdBox2.Extents = DirectX::SimpleMath::Vector3(1, 1, 1);
 	ContainmentType containtype = _bdBox.Contains(_bdBox2);
+
+	if (m_activeScene) 
+	{
+		m_activeScene->UpdateScene(elapsedTime);
+	}
 
 	if (!m_audioEngine->Update())
 	{
@@ -107,9 +122,13 @@ void DxBase::Render()
 	auto context = m_deviceResources->GetD3DDeviceContext();
 
 	// TODO: Add your rendering code here.
+	if (m_activeScene) {
+		m_activeScene->RenderScene();
+	}
 	//sprite->RenderSprite();
 	//animation->Render();
 	tilemap->Render();
+
 	context;
 
 	m_deviceResources->PIXEndEvent();
@@ -210,6 +229,12 @@ void DxBase::CreateWindowSizeDependentResources()
 	// TODO: Initialize windows-size dependent objects here.
 }
 
+void DirectXCore::DxBase::InitializeScenes()
+{
+	//m_scenes.push_back(new TestScene());
+	//std::shared_ptr<Scene> m_activeScene(m_scenes.back());
+}
+
 // Load every sound we're asked to.
 void DirectXCore::DxBase::CreateSoundAndMusic(const wchar_t* soundFileName)
 {
@@ -217,10 +242,23 @@ void DirectXCore::DxBase::CreateSoundAndMusic(const wchar_t* soundFileName)
 	sound->Play();
 }
 
+
+
+void DirectXCore::DxBase::SwitchToScene(int index)
+{
+	m_activeScene = m_scenes[index];
+	m_activeScene->LoadScene();
+}
+
+void DirectXCore::DxBase::AddScene(Scene * scene)
+{
+	m_scenes.push_back(scene);
+}
+
 void DxBase::OnDeviceLost()
 {
 	// TODO: Add Direct3D resource cleanup here.
-	sprite->Reset();
+	//sprite->Reset();
 }
 
 void DxBase::OnDeviceRestored()

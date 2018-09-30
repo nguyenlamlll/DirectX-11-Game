@@ -1,6 +1,7 @@
 #include "stdafx.h"
 #include "Camera.h"
 
+using namespace DirectXCore;
 
 Camera::Camera()
 {
