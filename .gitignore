@@ -354,7 +354,6 @@ ASALocalRun/
 *.lai
 *.la
 *.a
-*.lib
 
 # Executables
 *.exe
