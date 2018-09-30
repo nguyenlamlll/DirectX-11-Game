@@ -156,6 +156,7 @@
     <ClInclude Include="DirectXCore.h" />
     <ClInclude Include="DxBase.h" />
     <ClInclude Include="resource.h" />
+    <ClInclude Include="Scene.h" />
     <ClInclude Include="Sound.h" />
     <ClInclude Include="Sprite.h" />
     <ClInclude Include="stdafx.h" />
@@ -166,6 +167,7 @@
     <ClCompile Include="Animation.cpp" />
     <ClCompile Include="DeviceResources.cpp" />
     <ClCompile Include="DxBase.cpp" />
+    <ClCompile Include="Scene.cpp" />
     <ClCompile Include="Sound.cpp" />
     <ClCompile Include="Sprite.cpp" />
     <ClCompile Include="stdafx.cpp">

@@ -1,6 +1,6 @@
 #include "stdafx.h"
 #include "Animation.h"
-
+using namespace DirectXCore;
 
 Animation::Animation()
 {
@@ -54,4 +54,5 @@ void Animation::Render()
 
 Animation::~Animation()
 {
+	if (mainSprite) { delete mainSprite; }
 }
