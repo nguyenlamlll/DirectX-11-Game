@@ -8,7 +8,6 @@
 #include "Animation.h"
 #include "Scene.h"
 
-#include "TestScene.h"
 
 namespace DirectXCore 
 {

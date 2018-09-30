@@ -20,7 +20,7 @@ namespace DirectXCore
 		void SetCenter(DirectX::SimpleMath::Vector2 _center) { m_center = _center; }
 		DirectX::SimpleMath::Vector2 GetCenter() { return m_center; }
 		void SetScreenPosition(DirectX::SimpleMath::Vector2 _screenPos) { m_screenPos = _screenPos; }
-		DirectX::SimpleMath::Vector2 GetScreenPOs() { return m_screenPos; }
+		DirectX::SimpleMath::Vector2 GetScreenPosition() { return m_screenPos; }
 
 	private:
 		Microsoft::WRL::ComPtr<ID3D11ShaderResourceView> m_texture;

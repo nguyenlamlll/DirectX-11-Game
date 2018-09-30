@@ -64,6 +64,11 @@ void DxBase::Update(StepTimer const& timer)
 	// TODO: Add your game logic here.
 	//animation->Update(elapsedTime);
 
+	if (m_activeScene) 
+	{
+		m_activeScene->UpdateScene(elapsedTime);
+	}
+
 	if (!m_audioEngine->Update())
 	{
 		// ...
@@ -196,8 +201,8 @@ void DxBase::CreateWindowSizeDependentResources()
 
 void DirectXCore::DxBase::InitializeScenes()
 {
-	m_scenes.push_back(new TestScene());
-	std::shared_ptr<Scene> m_activeScene(m_scenes.back());
+	//m_scenes.push_back(new TestScene());
+	//std::shared_ptr<Scene> m_activeScene(m_scenes.back());
 }
 
 // Load every sound we're asked to.

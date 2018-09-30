@@ -11,11 +11,11 @@ namespace DirectXCore
 		Scene();
 		~Scene();
 
+		virtual void UpdateScene(float elapsedTime) = 0;
 		virtual void RenderScene() = 0;
 		virtual void LoadScene() = 0;
 		virtual void UnloadScene() = 0;
 
-	protected:
 	};
 
 }
