@@ -44,6 +44,20 @@ void DxBase::Initialize(HWND window, int width, int height)
 	*/
 }
 
+void DirectXCore::DxBase::CreateSprite(const wchar_t * spriteName)
+{
+	//sprite = new Sprite(m_deviceResources.get(), L"cat.png");
+	//animation = new Animation(2, 8, new Sprite(m_deviceResources.get(), L"scott.png"), 0.1f);
+	mainCamera = new Camera(m_deviceResources->GetOutputSize().right / 2, m_deviceResources->GetOutputSize().bottom);
+	tilemap = new TileMap(m_deviceResources.get(), spriteName);
+	tilemap->SetCamera(mainCamera);
+}
+
+void DirectXCore::DxBase::CreateSprite(const wchar_t * spriteName, Sprite** returnSprite)
+{
+	*returnSprite = new Sprite(m_deviceResources.get(), spriteName);
+}
+
 #pragma region Frame Update
 // Executes the basic game loop.
 void DxBase::Tick()
@@ -62,7 +76,21 @@ void DxBase::Update(StepTimer const& timer)
 	float elapsedTime = float(timer.GetElapsedSeconds());
 
 	// TODO: Add your game logic here.
+	//sprite->SetScreenPosition(sprite->GetScreenPosition() + DirectX::SimpleMath::Vector2(0.4f, -0.4f));
 	//animation->Update(elapsedTime);
+
+	if (mainCamera)
+	{
+		mainCamera->SetPosition(mainCamera->GetPosition() + DirectX::SimpleMath::Vector2(0.4f, 0.4f));
+	}
+	
+
+	BoundingBox _bdBox, _bdBox2;
+	_bdBox.Center = DirectX::SimpleMath::Vector3(0, 0, 0);
+	_bdBox.Extents = DirectX::SimpleMath::Vector3(4, 4, 4);
+	_bdBox2.Center = DirectX::SimpleMath::Vector3(1, 1, 1);
+	_bdBox2.Extents = DirectX::SimpleMath::Vector3(1, 1, 1);
+	ContainmentType containtype = _bdBox.Contains(_bdBox2);
 
 	if (m_activeScene) 
 	{
@@ -99,6 +127,8 @@ void DxBase::Render()
 	}
 	//sprite->RenderSprite();
 	//animation->Render();
+	tilemap->Render();
+
 	context;
 
 	m_deviceResources->PIXEndEvent();
@@ -213,11 +243,6 @@ void DirectXCore::DxBase::CreateSoundAndMusic(const wchar_t* soundFileName)
 }
 
 
-void DirectXCore::DxBase::CreateSprite(const wchar_t * spriteName, Sprite** returnSprite)
-{
-	*returnSprite = new Sprite(m_deviceResources.get(), spriteName);
-	//animation = new Animation(2, 8, new Sprite(m_deviceResources.get(), spriteName), 0.1f);
-}
 
 void DirectXCore::DxBase::SwitchToScene(int index)
 {
@@ -229,7 +254,6 @@ void DirectXCore::DxBase::AddScene(Scene * scene)
 {
 	m_scenes.push_back(scene);
 }
-
 
 void DxBase::OnDeviceLost()
 {

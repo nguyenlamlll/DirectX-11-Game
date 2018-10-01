@@ -71,7 +71,7 @@ int WINAPI wWinMain(
 	
 	//const wchar_t* ambience = L"res\\NightAmbienceSimple.wav";
 	//game->CreateSoundAndMusic(ambience);
-	//game->CreateSprite(L"cat.png");
+	game->CreateSprite(L"Resources/untitled.tmx");
 	game->AddScene(new CatScene(game.get()));
 	game->SwitchToScene(0);
 	// Main message loop

@@ -6,6 +6,7 @@
 #include <Audio.h>
 #include "Sprite.h"
 #include "Animation.h"
+#include "TileMap.h"
 #include "Scene.h"
 
 
@@ -21,6 +22,8 @@ namespace DirectXCore
 		void Initialize(HWND window, int width, int height);
 
 		void CreateSoundAndMusic(const wchar_t* soundFileName);
+
+		void CreateSprite(const wchar_t* spriteName);
 		void CreateSprite(const wchar_t* spriteName, Sprite** returnSprite);
 
 		void SwitchToScene(wchar_t* name);
@@ -58,8 +61,12 @@ namespace DirectXCore
 
 		std::shared_ptr<DirectX::AudioEngine> m_audioEngine;
 		std::vector<DirectXCore::Sound> m_sounds;
+
 		//Sprite *sprite;
 		//Animation *animation;
+		TileMap *tilemap;
+		Camera* mainCamera;
+
 
 		// Rendering loop timer.
 		StepTimer m_timer;

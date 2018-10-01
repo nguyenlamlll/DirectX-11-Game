@@ -8,7 +8,7 @@ Sprite::Sprite()
 
 }
 
-Sprite::Sprite(DirectXCore::DeviceResources * _deviceResource, const wchar_t * _charPath)
+Sprite::Sprite(DirectXCore::DeviceResources * _deviceResource, const wchar_t * _charPath,float _scale)
 {
 	ComPtr<ID3D11Resource> resource;
 	DirectXCore::ThrowIfFailed(DirectX::CreateWICTextureFromFile(_deviceResource->GetD3DDevice(), _charPath, resource.GetAddressOf(), m_texture.ReleaseAndGetAddressOf()));
@@ -28,6 +28,8 @@ Sprite::Sprite(DirectXCore::DeviceResources * _deviceResource, const wchar_t * _
 	m_tileRect->left = m_tileRect->top = 0;
 	m_tileRect->right = spriteDesc.Width;
 	m_tileRect->bottom = spriteDesc.Height;
+
+	scale = _scale;
 }
 
 
@@ -37,7 +39,7 @@ Sprite::~Sprite()
 void Sprite::RenderSprite()
 {
 	m_spriteBatch->Begin(DirectX::SpriteSortMode_Deferred, m_states->NonPremultiplied());
-	m_spriteBatch->Draw(m_texture.Get(), m_screenPos, m_tileRect, DirectX::Colors::White, 0.f, m_center);
+	m_spriteBatch->Draw(m_texture.Get(), m_screenPos, m_tileRect, DirectX::Colors::White, 0.f, m_center,scale);
 	m_spriteBatch->End();
 }
 
