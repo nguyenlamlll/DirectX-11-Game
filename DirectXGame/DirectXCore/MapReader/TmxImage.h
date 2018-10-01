@@ -28,6 +28,7 @@
 #pragma once
 
 #include <string>
+#include "..\stdafx.h"
 
 namespace tinyxml2 {
     class XMLNode;

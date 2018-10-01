@@ -25,6 +25,7 @@
 //
 // Author: Tamir Atias
 //-----------------------------------------------------------------------------
+#pragma warning(disable:4996)
 #include "tinyxml2.h"
 #include <cstdlib> 
 

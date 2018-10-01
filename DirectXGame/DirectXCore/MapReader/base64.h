@@ -27,6 +27,7 @@
 #ifndef TMXPARSER_BASE64_H_
 #define TMXPARSER_BASE64_H_
 
+#include "..\stdafx.h"
 #include <string>
 
 std::string base64_encode(unsigned char const* , unsigned int len);

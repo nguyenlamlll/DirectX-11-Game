@@ -30,6 +30,7 @@
 #include <vector>
 #include <string>
 
+#include "..\stdafx.h"
 #include "TmxPropertySet.h"
 
 namespace Tmx 

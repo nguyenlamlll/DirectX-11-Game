@@ -28,7 +28,7 @@
 #pragma once
 
 #include <vector>
-
+#include "..\stdafx.h"
 #include "TmxPoint.h"
 
 namespace tinyxml2 {

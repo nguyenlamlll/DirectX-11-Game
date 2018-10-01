@@ -30,6 +30,7 @@
 #include <map>
 #include <string>
 #include <vector>
+#include "..\stdafx.h"
 
 namespace tinyxml2 {
     class XMLNode;
