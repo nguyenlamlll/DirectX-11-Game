@@ -28,7 +28,7 @@
 #pragma once
 
 #include <string>
-#include "..\stdafx.h"
+
 #include "TmxPropertySet.h"
 #include "TmxMapTile.h"
 

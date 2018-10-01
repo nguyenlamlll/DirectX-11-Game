@@ -23,7 +23,7 @@ distribution.
 
 #ifndef TINYXML2_INCLUDED
 #define TINYXML2_INCLUDED
-#include "..\stdafx.h"
+
 #if defined(ANDROID_NDK) || defined(__BORLANDC__) || defined(__QNXNTO__)
 #   include <ctype.h>
 #   include <limits.h>

@@ -25,7 +25,7 @@
 //
 // Author: Tamir Atias
 //-----------------------------------------------------------------------------
-#include "..\stdafx.h"
+
 #include "tinyxml2.h"
 #include <cstdlib>
 

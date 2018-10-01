@@ -28,7 +28,6 @@
 #pragma once
 
 #include <string>
-#include "..\stdafx.h"
 
 namespace Tmx 
 {
