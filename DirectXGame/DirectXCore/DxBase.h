@@ -1,32 +1,80 @@
 #pragma once
+
+#include "DeviceResources.h"
+#include "StepTimer.h"
+#include "Sound.h"
+#include <Audio.h>
+#include "Sprite.h"
+#include "Animation.h"
+#include "TileMap.h"
+#include "Scene.h"
+
+
 namespace DirectXCore 
 {
-	class DxBase
+	class DxBase : public IDeviceNotify
 	{
 	public:
-		DxBase();
-		virtual ~DxBase();
+		DxBase() noexcept(false);
+		~DxBase();
 
-		bool Initialize(HINSTANCE hInstance, HWND hwnd);
-		void Shutdown();
+		// Initialization and management
+		void Initialize(HWND window, int width, int height);
 
-		virtual bool LoadContent();
-		virtual void UnloadContent();
+		void CreateSoundAndMusic(const wchar_t* soundFileName);
 
-		virtual void Update(float dt) = 0;
-		virtual void Render() = 0;
+		void CreateSprite(const wchar_t* spriteName);
+		void CreateSprite(const wchar_t* spriteName, Sprite** returnSprite);
 
-	protected:
-		HINSTANCE hInstance_;
-		HWND hwnd_;
+		void SwitchToScene(wchar_t* name);
+		void SwitchToScene(int index);
+		void AddScene(Scene* scene);
 
-		D3D_DRIVER_TYPE driverType_;
-		D3D_FEATURE_LEVEL featureLevel_;
+		// Basic game loop
+		void Tick();
 
-		ID3D11Device* d3dDevice_;
-		ID3D11DeviceContext* d3dContext_;
-		IDXGISwapChain* swapChain_;
-		ID3D11RenderTargetView* backBufferTarget_;
+		// IDeviceNotify
+		virtual void OnDeviceLost() override;
+		virtual void OnDeviceRestored() override;
+
+		// Messages
+		void OnActivated();
+		void OnDeactivated();
+		void OnSuspending();
+		void OnResuming();
+		void OnWindowMoved();
+		void OnWindowSizeChanged(int width, int height);
+		
+		// Properties
+		void GetDefaultSize(int& width, int& height) const;
+
+	private:
+		void Update(StepTimer const& timer);
+		void Render();
+		void Clear();
+
+		void CreateDeviceDependentResources();
+		void CreateWindowSizeDependentResources();
+
+		// Device resources.
+		std::unique_ptr<DeviceResources> m_deviceResources;
+
+		std::shared_ptr<DirectX::AudioEngine> m_audioEngine;
+		std::vector<DirectXCore::Sound> m_sounds;
+
+		//Sprite *sprite;
+		//Animation *animation;
+		TileMap *tilemap;
+		Camera* mainCamera;
+
+
+		// Rendering loop timer.
+		StepTimer m_timer;
+
+		// Scenes
+		void InitializeScenes();
+		std::vector<Scene*> m_scenes;
+		Scene* m_activeScene;
 	};
 }
 
