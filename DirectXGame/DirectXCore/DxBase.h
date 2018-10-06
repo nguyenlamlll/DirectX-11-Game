@@ -48,6 +48,7 @@ namespace DirectXCore
 
 		void OnKeyUp(KeyCode);
 		void OnKeyDown(KeyCode);
+		Input* GetInputManager() { return m_input.get(); }
 		
 		// Properties
 		void GetDefaultSize(int& width, int& height) const;
