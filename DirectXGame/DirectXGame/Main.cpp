@@ -3,6 +3,7 @@
 
 #include <DirectXCore.h>
 #include "CatScene.h"
+#include "TilemapScene.h"
 
 LRESULT CALLBACK WndProc(HWND hwnd, UINT message, WPARAM wParam, LPARAM lParam);
 
@@ -71,8 +72,7 @@ int WINAPI wWinMain(
 	
 	//const wchar_t* ambience = L"res\\NightAmbienceSimple.wav";
 	//game->CreateSoundAndMusic(ambience);
-	game->CreateSprite(L"Resources/untitled.tmx");
-	game->AddScene(new CatScene(game.get()));
+	game->AddScene(new TilemapScene(game.get()));
 	game->SwitchToScene(0);
 	// Main message loop
 	MSG msg = { 0 };

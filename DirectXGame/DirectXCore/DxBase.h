@@ -22,8 +22,9 @@ namespace DirectXCore
 		void Initialize(HWND window, int width, int height);
 
 		void CreateSoundAndMusic(const wchar_t* soundFileName);
-
-		void CreateSprite(const wchar_t* spriteName);
+		DeviceResources* GetDeviceResource() { return m_deviceResources.get(); }
+		void CreateCamera();
+		void CreateTilemap(const wchar_t * tilemapSpriteName, TileMap** returnTilemap);
 		void CreateSprite(const wchar_t* spriteName, Sprite** returnSprite);
 
 		void SwitchToScene(wchar_t* name);

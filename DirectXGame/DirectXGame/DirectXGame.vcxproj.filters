@@ -21,6 +21,9 @@
     <ClCompile Include="CatScene.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="TilemapScene.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
@@ -30,6 +33,9 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="CatScene.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="TilemapScene.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

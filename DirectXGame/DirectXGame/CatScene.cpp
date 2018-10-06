@@ -25,7 +25,7 @@ void CatScene::RenderScene()
 void CatScene::LoadScene()
 {
 	m_dxBase->CreateSprite(L"cat.png", &m_sprite);
-	m_sprite->SetScreenPosition(Vector2(50, 50));
+	m_sprite->GetTransform()->SetPosition(Vector2(50, 50));
 }
 
 void CatScene::UnloadScene()
@@ -35,7 +35,7 @@ void CatScene::UnloadScene()
 // Move a sprite around 4 corners, clockwise.
 void CatScene::MoveSpriteAround(float elapsedTime)
 {
-	Vector2 currentPosition = m_sprite->GetScreenPosition();
+	Vector2 currentPosition = m_sprite->GetTransform()->GetPosition();
 
 	// At top left, aiming for top right.
 	if (currentPosition.x <= 990 && currentPosition.y <= 710)
@@ -44,7 +44,7 @@ void CatScene::MoveSpriteAround(float elapsedTime)
 			currentPosition.x + 700 * elapsedTime,
 			currentPosition.y);
 
-		m_sprite->SetScreenPosition(newPosition);
+		m_sprite->GetTransform()->SetPosition(newPosition);
 
 	}
 
@@ -55,7 +55,7 @@ void CatScene::MoveSpriteAround(float elapsedTime)
 			currentPosition.x,
 			currentPosition.y + 700 * elapsedTime);
 
-		m_sprite->SetScreenPosition(newPosition);
+		m_sprite->GetTransform()->SetPosition(newPosition);
 	}
 
 	// At bottom right, aiming for bottom left.
@@ -65,7 +65,7 @@ void CatScene::MoveSpriteAround(float elapsedTime)
 			currentPosition.x - 700 * elapsedTime,
 			currentPosition.y);
 
-		m_sprite->SetScreenPosition(newPosition);
+		m_sprite->GetTransform()->SetPosition(newPosition);
 	}
 
 	// At bottom left, aiming for top left.
@@ -75,6 +75,6 @@ void CatScene::MoveSpriteAround(float elapsedTime)
 			currentPosition.x,
 			currentPosition.y - 700 * elapsedTime);
 
-		m_sprite->SetScreenPosition(newPosition);
+		m_sprite->GetTransform()->SetPosition(newPosition);
 	}
 }

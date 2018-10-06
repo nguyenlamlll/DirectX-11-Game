@@ -8,7 +8,7 @@ Sprite::Sprite()
 
 }
 
-Sprite::Sprite(DirectXCore::DeviceResources * _deviceResource, const wchar_t * _charPath,float _scale)
+Sprite::Sprite(DirectXCore::DeviceResources * _deviceResource, const wchar_t * _charPath, float _scale)
 {
 	ComPtr<ID3D11Resource> resource;
 	DirectXCore::ThrowIfFailed(DirectX::CreateWICTextureFromFile(_deviceResource->GetD3DDevice(), _charPath, resource.GetAddressOf(), m_texture.ReleaseAndGetAddressOf()));
@@ -19,17 +19,22 @@ Sprite::Sprite(DirectXCore::DeviceResources * _deviceResource, const wchar_t * _
 	CD3D11_TEXTURE2D_DESC spriteDesc;
 	DirectXCore::ThrowIfFailed(resource.As(&cat));
 	cat->GetDesc(&spriteDesc);
-	m_center.x = float(spriteDesc.Width / 2);
-	m_center.y = float(spriteDesc.Height / 2);
-	m_screenPos.x = _deviceResource->GetOutputSize().right / 2;
-	m_screenPos.y = _deviceResource->GetOutputSize().bottom / 2;
+	pivot.x = float(spriteDesc.Width / 2);
+	pivot.y = float(spriteDesc.Height / 2);
+	//position.x = _deviceResource->GetOutputSize().right / 2;
+	//position.y = _deviceResource->GetOutputSize().bottom / 2;
+	//transform.SetPosition(SimpleMath::Vector2(_deviceResource->GetOutputSize().right / 2, _deviceResource->GetOutputSize().bottom / 2));
+	transform = new Transform(Vector2(_deviceResource->GetOutputSize().right / 2, _deviceResource->GetOutputSize().bottom / 2), Vector2(0, 0), Vector2(1, 1));
 
-	m_tileRect = new RECT();
-	m_tileRect->left = m_tileRect->top = 0;
-	m_tileRect->right = spriteDesc.Width;
-	m_tileRect->bottom = spriteDesc.Height;
+	spriterect = new RECT();
+	spriterect->left = spriterect->top = 0;
+	spriterect->right = spriteDesc.Width;
+	spriterect->bottom = spriteDesc.Height;
 
-	scale = _scale;
+
+	//scale.x = _scale;
+	//scale.y = _scale;
+	transform->SetScale(SimpleMath::Vector2(_scale, _scale));
 }
 
 
@@ -39,7 +44,13 @@ Sprite::~Sprite()
 void Sprite::RenderSprite()
 {
 	m_spriteBatch->Begin(DirectX::SpriteSortMode_Deferred, m_states->NonPremultiplied());
-	m_spriteBatch->Draw(m_texture.Get(), m_screenPos, m_tileRect, DirectX::Colors::White, 0.f, m_center,scale);
+	m_spriteBatch->Draw(m_texture.Get(), transform->GetPosition(), spriterect, DirectX::Colors::White, 0.f, pivot, transform->GetScale());
+	m_spriteBatch->End();
+}
+void Sprite::RenderSprite(DirectX::SimpleMath::Vector2 _newPosition)
+{
+	m_spriteBatch->Begin(DirectX::SpriteSortMode_Deferred, m_states->NonPremultiplied());
+	m_spriteBatch->Draw(m_texture.Get(), _newPosition, spriterect, DirectX::Colors::White, 0.f, pivot, transform->GetScale());
 	m_spriteBatch->End();
 }
 
@@ -47,4 +58,12 @@ void Sprite::Reset()
 {
 	m_texture.Reset();
 	m_states.reset();
+}
+
+void DirectXCore::Sprite::SetSpriteRect(RECT * _newSpriteRect)
+{
+	spriterect->top = _newSpriteRect->top;
+	spriterect->bottom = _newSpriteRect->bottom;
+	spriterect->left = _newSpriteRect->left;
+	spriterect->right = _newSpriteRect->right;
 }

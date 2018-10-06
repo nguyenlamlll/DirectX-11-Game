@@ -3,10 +3,10 @@
 
 using namespace DirectXCore;
 
-Object::Object()
+DirectXCore::Object::Object() 
 {
+	transform = new Transform(Vector2(0,0),Vector2(0,0),Vector2(1,1));
 }
-
 
 Object::~Object()
 {

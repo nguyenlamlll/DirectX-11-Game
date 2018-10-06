@@ -162,9 +162,11 @@
     <ClInclude Include="Animation.h" />
     <ClInclude Include="Camera.h" />
     <ClInclude Include="Collision.h" />
+    <ClInclude Include="Component.h" />
     <ClInclude Include="DeviceResources.h" />
     <ClInclude Include="DirectXCore.h" />
     <ClInclude Include="DxBase.h" />
+    <ClInclude Include="GameObject.h" />
     <ClInclude Include="MapReader\base64.h">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">false</ExcludedFromBuild>
     </ClInclude>
@@ -243,13 +245,16 @@
     <ClInclude Include="StepTimer.h" />
     <ClInclude Include="targetver.h" />
     <ClInclude Include="TileMap.h" />
+    <ClInclude Include="Transform.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Animation.cpp" />
     <ClCompile Include="Camera.cpp" />
     <ClCompile Include="Collision.cpp" />
+    <ClCompile Include="Component.cpp" />
     <ClCompile Include="DeviceResources.cpp" />
     <ClCompile Include="DxBase.cpp" />
+    <ClCompile Include="GameObject.cpp" />
     <ClCompile Include="MapReader\base64.cpp">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">false</ExcludedFromBuild>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">NotUsing</PrecompiledHeader>
@@ -342,6 +347,7 @@
     </ClCompile>
     <ClCompile Include="StepTimer.cpp" />
     <ClCompile Include="TileMap.cpp" />
+    <ClCompile Include="Transform.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="DirectXCore.rc" />

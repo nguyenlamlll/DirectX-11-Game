@@ -24,7 +24,7 @@ Animation::Animation(int _rows, int _collums, Sprite* _sprite,float _timePerFram
 			rc->top = frameHeight * i;
 			rc->right = frameWidth * (j + 1);
 			rc->bottom = frameHeight * (i + 1);
-			animationFrameRects.emplace_back(*rc);
+			animationFrameRects.emplace_back(rc);
 		}
 	}
 	mainSprite->SetSpriteRect(animationFrameRects[0]);
