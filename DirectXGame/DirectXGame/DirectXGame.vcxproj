@@ -131,6 +131,7 @@
   <ItemGroup>
     <ClCompile Include="CatScene.cpp" />
     <ClCompile Include="Main.cpp" />
+    <ClCompile Include="PingPongScene.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\DirectXCore\DirectXCore.vcxproj">
@@ -142,6 +143,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="CatScene.h" />
+    <ClInclude Include="PingPongScene.h" />
     <ClInclude Include="resource.h" />
   </ItemGroup>
   <ItemGroup>

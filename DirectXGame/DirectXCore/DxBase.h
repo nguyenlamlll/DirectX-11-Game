@@ -9,6 +9,7 @@
 #include "TileMap.h"
 #include "Scene.h"
 
+#include "Input.h"
 
 namespace DirectXCore 
 {
@@ -44,6 +45,9 @@ namespace DirectXCore
 		void OnResuming();
 		void OnWindowMoved();
 		void OnWindowSizeChanged(int width, int height);
+
+		void OnKeyUp(KeyCode);
+		void OnKeyDown(KeyCode);
 		
 		// Properties
 		void GetDefaultSize(int& width, int& height) const;
@@ -75,6 +79,8 @@ namespace DirectXCore
 		void InitializeScenes();
 		std::vector<Scene*> m_scenes;
 		Scene* m_activeScene;
+
+		std::unique_ptr<Input> m_input;
 	};
 }
 

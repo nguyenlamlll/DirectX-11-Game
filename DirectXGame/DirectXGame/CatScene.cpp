@@ -32,6 +32,14 @@ void CatScene::UnloadScene()
 {
 }
 
+void CatScene::OnKeyUp(KeyCode)
+{
+}
+
+void CatScene::OnKeyDown(KeyCode)
+{
+}
+
 // Move a sprite around 4 corners, clockwise.
 void CatScene::MoveSpriteAround(float elapsedTime)
 {
