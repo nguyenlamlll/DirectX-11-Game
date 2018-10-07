@@ -23,12 +23,14 @@ private:
 	DirectXCore::Sprite* m_leftPad;
 	DirectXCore::Sprite* m_rightPad;
 
+	std::shared_ptr<DirectXCore::Sprite> m_ball;
+
 	bool m_isLeftPadMoveDown;
 	bool m_isLeftPadMoveUp;
 
 	bool m_isRightPadMoveDown;
 	bool m_isRightPadMoveUp;
 
-	void MovePad(DirectXCore::Sprite* pad, DirectX::SimpleMath::Vector2 newPosition);
+	void MoveSprite(DirectXCore::Sprite* pad, DirectX::SimpleMath::Vector2 newPosition);
 };
 
