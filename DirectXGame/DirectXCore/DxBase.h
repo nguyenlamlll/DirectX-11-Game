@@ -48,6 +48,9 @@ namespace DirectXCore
 
 		void OnKeyUp(KeyCode);
 		void OnKeyDown(KeyCode);
+
+		// Recommended way to handle input (comparing with OnKeyUp and OnKeyDown).
+		// Each scene should get the input manager and ask for key states during UpdateScene method.
 		Input* GetInputManager() { return m_input.get(); }
 		
 		// Properties

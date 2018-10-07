@@ -19,7 +19,7 @@ namespace DirectXCore
 		bool IsKeyDown(KeyCode) const;;
 		bool IsKeyDown(const char*) const;
 		bool IsKeyUp(KeyCode) const;
-
+		bool IsKeyUp(const char*) const;
 
 	private:
 		bool m_keyStates[NUMBER_OF_KEYS];

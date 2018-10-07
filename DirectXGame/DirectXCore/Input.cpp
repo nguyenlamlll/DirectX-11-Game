@@ -39,7 +39,7 @@ const Input::KeyMapping Input::sKeyMap{
 
 Input::Input()
 {
-
+	memset(m_keyStates, false, sizeof(bool) * NUMBER_OF_KEYS);
 }
 
 
@@ -49,11 +49,12 @@ Input::~Input()
 
 void DirectXCore::Input::KeyDown(KeyCode key)
 {
-
+	m_keyStates[key] = true;
 }
 
 void DirectXCore::Input::KeyUp(KeyCode key)
 {
+	m_keyStates[key] = false;
 }
 
 bool DirectXCore::Input::IsKeyDown(KeyCode key) const
@@ -62,7 +63,20 @@ bool DirectXCore::Input::IsKeyDown(KeyCode key) const
 	return state;
 }
 
+bool DirectXCore::Input::IsKeyDown(const char * keyName) const
+{
+	const KeyCode keyCode = sKeyMap.at(keyName);
+	return m_keyStates[keyCode];
+}
+
 bool DirectXCore::Input::IsKeyUp(KeyCode key) const
 {
-	return false;
+	auto state = m_keyStates[key];
+	return state;
+}
+
+bool DirectXCore::Input::IsKeyUp(const char * keyName) const
+{
+	const KeyCode keyCode = sKeyMap.at(keyName);
+	return m_keyStates[keyCode];
 }

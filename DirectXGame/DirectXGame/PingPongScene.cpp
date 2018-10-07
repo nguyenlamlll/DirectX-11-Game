@@ -22,15 +22,23 @@ PingPongScene::~PingPongScene()
 #define SPEED 300
 void PingPongScene::UpdateScene(float elapsedTime)
 {
-	if (m_isLeftPadMoveDown)
+	if (m_dxBase->GetInputManager()->IsKeyDown("S"))
 	{
 		Vector2 currentPosition = m_leftPad->GetScreenPosition();
 		MovePad(m_leftPad, Vector2(currentPosition.x, currentPosition.y + SPEED * elapsedTime));
 	}
-	if (m_isLeftPadMoveUp)
+	else 
+	{
+		
+	}
+	if (m_dxBase->GetInputManager()->IsKeyDown("W"))
 	{
 		Vector2 currentPosition = m_leftPad->GetScreenPosition();
 		MovePad(m_leftPad, Vector2(currentPosition.x, currentPosition.y - SPEED * elapsedTime));
+	}
+	else
+	{
+
 	}
 
 	if (m_isRightPadMoveDown)
@@ -66,14 +74,14 @@ void PingPongScene::UnloadScene()
 
 void PingPongScene::OnKeyUp(KeyCode key)
 {
-	if (key == S_KEY)
-	{
-		m_isLeftPadMoveDown = false;
-	}
-	if (key == W_KEY)
-	{
-		m_isLeftPadMoveUp = false;
-	}
+	//if (key == S_KEY)
+	//{
+	//	m_isLeftPadMoveDown = false;
+	//}
+	//if (key == W_KEY)
+	//{
+	//	m_isLeftPadMoveUp = false;
+	//}
 
 	if (key == VK_DOWN)
 	{
@@ -87,14 +95,14 @@ void PingPongScene::OnKeyUp(KeyCode key)
 
 void PingPongScene::OnKeyDown(KeyCode key)
 {
-	if (key == S_KEY)
-	{
-		m_isLeftPadMoveDown = true;
-	}
-	if (key == W_KEY)
-	{
-		m_isLeftPadMoveUp = true;
-	}
+	//if (key == S_KEY)
+	//{
+	//	m_isLeftPadMoveDown = true;
+	//}
+	//if (key == W_KEY)
+	//{
+	//	m_isLeftPadMoveUp = true;
+	//}
 
 	if (key == VK_DOWN)
 	{

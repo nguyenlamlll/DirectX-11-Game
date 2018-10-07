@@ -252,6 +252,7 @@ LRESULT CALLBACK WndProc(HWND hwnd, UINT message, WPARAM wParam, LPARAM lParam)
 		if (game)
 		{
 			game->OnKeyUp(wParam);
+			game->GetInputManager()->KeyUp(static_cast<KeyCode>(wParam));
 		}
 		break;
 
@@ -259,6 +260,7 @@ LRESULT CALLBACK WndProc(HWND hwnd, UINT message, WPARAM wParam, LPARAM lParam)
 		if (game)
 		{
 			game->OnKeyDown(wParam);
+			game->GetInputManager()->KeyDown(static_cast<KeyCode>(wParam));
 		}
 		break;
 
