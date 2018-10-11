@@ -15,7 +15,7 @@ namespace DirectXCore
 		DirectX::SimpleMath::Matrix GetView() { return DirectX::XMMatrixLookAtRH(this->GetPosition(), DirectX::SimpleMath::Vector3::Forward, DirectX::SimpleMath::Vector3::Up); }
 		int GetWidth() { return camViewport.Width; }
 		int GetHeight() { return camViewport.Height; }
-		bool IsContain(DirectX::SimpleMath::Vector2 _objectPosition);
+		bool IsContain(DirectX::SimpleMath::Vector2 _objectPosition, DirectX::SimpleMath::Vector2 _objectScale);
 
 		void SetViewPort(int _upperX, int _upperY, int _wid, int _hei);
 		void InitializeOthoMatrix(int _wid, int _hei, float _near, float _far);

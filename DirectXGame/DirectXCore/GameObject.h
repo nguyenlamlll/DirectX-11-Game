@@ -1,7 +1,7 @@
 #pragma once
 #include "stdafx.h"
 #include "Object.h"
-#include "Collision.h"
+#include "Transform.h"
 
 namespace DirectXCore
 {
@@ -9,10 +9,15 @@ namespace DirectXCore
 	{
 	public:
 		GameObject();
-		BoundingBox GetBoxCollider() { return boxCollider; }
+		void Update();
+		BoundingBox* GetBoxCollider() { return boxCollider; }
+		Transform* GetTransform() { return transform; }
+		virtual void OnCollisionEnter();
 		~GameObject();
 	private:
-		BoundingBox boxCollider;
+		BoundingBox* boxCollider;
+	protected:
+		Transform* transform;
 	};
 }
 

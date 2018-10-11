@@ -1,6 +1,8 @@
 #pragma once
 #include "Scene.h"
 #include "DxBase.h"
+#include "GameObject.h"
+
 
 class TilemapScene :
 	public DirectXCore::Scene
@@ -26,6 +28,5 @@ private:
 
 	DirectXCore::TileMap* tilemap;
 
-	//static std::vector<Object> sceneObjects;
 };
 

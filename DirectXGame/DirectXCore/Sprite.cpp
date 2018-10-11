@@ -60,10 +60,18 @@ void Sprite::Reset()
 	m_states.reset();
 }
 
-void DirectXCore::Sprite::SetSpriteRect(RECT * _newSpriteRect)
+void Sprite::SetSpriteRect(RECT * _newSpriteRect)
 {
 	spriterect->top = _newSpriteRect->top;
 	spriterect->bottom = _newSpriteRect->bottom;
 	spriterect->left = _newSpriteRect->left;
 	spriterect->right = _newSpriteRect->right;
+}
+
+Vector2 Sprite::GetWorldToScreenScale()
+{
+	Vector2 screenScale = this->GetTransform()->GetScale();
+	screenScale.x += spriterect->right / 2;
+	screenScale.y += spriterect->bottom / 2;
+	return screenScale;
 }

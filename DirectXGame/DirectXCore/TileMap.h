@@ -13,6 +13,7 @@ namespace DirectXCore
 		void SetCamera(Camera* _cam) { mainCamera = _cam; }
 		void Update();
 		void Render();
+		std::vector<GameObject*>* GetListGameObjects() { return gameObjectList; }
 		~TileMap();
 	private:
 		DirectX::SimpleMath::Vector2 position;
@@ -21,6 +22,7 @@ namespace DirectXCore
 		std::map<int, RECT*> listTileID;
 		Camera* mainCamera;
 		DirectXCore::DeviceResources* deviceResource;
+		std::vector<GameObject*>* gameObjectList;
 	};
 }
 

@@ -1,8 +1,10 @@
 #pragma once
+#include "Component.h"
 using namespace DirectX::SimpleMath;
 
 namespace DirectXCore
 {
+	class GameObject;
 	class Transform
 	{
 	public:
@@ -22,6 +24,7 @@ namespace DirectXCore
 		~Transform();
 	private:
 		Vector2 position, rotation, scale;
+		GameObject* parentGameObject;
 	};
 }
 

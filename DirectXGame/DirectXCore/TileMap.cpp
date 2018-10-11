@@ -9,6 +9,7 @@ TileMap::TileMap()
 
 TileMap::TileMap(DirectXCore::DeviceResources *_deviceResource, const wchar_t * path)
 {
+	gameObjectList = new std::vector<GameObject*>();
 	deviceResource = _deviceResource;
 	tilemap = new Tmx::Map;
 	std::wstring ws(path);
@@ -69,7 +70,6 @@ TileMap::TileMap(DirectXCore::DeviceResources *_deviceResource, const wchar_t * 
 			}
 		}
 	}
-
 	for (size_t i = 0; i < tilemap->GetNumObjectGroups(); i++)
 	{
 		const Tmx::ObjectGroup *objectGroup = tilemap->GetObjectGroup(i);
@@ -81,7 +81,7 @@ TileMap::TileMap(DirectXCore::DeviceResources *_deviceResource, const wchar_t * 
 			GameObject *gameObject = new GameObject();
 			gameObject->GetTransform()->SetPosition(Vector2(object->GetX() + object->GetWidth() / 2, object->GetY() + object->GetHeight() / 2));
 			gameObject->GetTransform()->SetScale(Vector2(object->GetWidth(), object->GetHeight()));
-
+			gameObjectList->push_back(gameObject);
 		}
 	}
 }
@@ -90,9 +90,9 @@ void DirectXCore::TileMap::Update()
 {
 	/*DirectX::SimpleMath::Vector2 trans = DirectX::SimpleMath::Vector2(deviceResource->GetOutputSize().right / 2 - mainCamera->GetPosition().x,
 		deviceResource->GetOutputSize().bottom / 2 - mainCamera->GetPosition().y);*/
-
-		//position += DirectX::SimpleMath::Vector2(2.f,0);
-		//mainCamera->SetPosition(mainCamera->GetPosition() + DirectX::SimpleMath::Vector2(3.4f,0));
+	//position += DirectX::SimpleMath::Vector2(2.f,0);
+	mainCamera->SetPosition(mainCamera->GetPosition() + DirectX::SimpleMath::Vector2(3.f, 0));
+	for (size_t i = 0; i < gameObjectList->size(); i++) gameObjectList->at(i)->Update();
 }
 
 void TileMap::Render()
@@ -120,7 +120,7 @@ void TileMap::Render()
 					DirectX::SimpleMath::Vector2 currentPosition((n * tileDataWidth) + position.x, (m * tileDataHeight) + position.y);
 					sprite->SetSpriteRect(listTileID[tileID]);
 					sprite->GetTransform()->SetPosition(currentPosition);
-					if (mainCamera->IsContain(sprite->GetTransform()->GetWorldToCameraPosition(worldToScreenPosition)))
+					if (mainCamera->IsContain(sprite->GetTransform()->GetWorldToCameraPosition(worldToScreenPosition), sprite->GetWorldToScreenScale()))
 					{
 						sprite->RenderSprite(sprite->GetTransform()->GetPosition() + worldToScreenPosition);
 					}

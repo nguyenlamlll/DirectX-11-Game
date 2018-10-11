@@ -22,6 +22,8 @@ namespace DirectXCore
 		void SetCenter(DirectX::SimpleMath::Vector2 _pivot) { pivot = _pivot; }
 		DirectX::SimpleMath::Vector2 GetCenter() { return pivot; }
 
+		Vector2 GetWorldToScreenScale();
+
 	private:
 		Microsoft::WRL::ComPtr<ID3D11ShaderResourceView> m_texture;
 		std::unique_ptr<DirectX::CommonStates> m_states;

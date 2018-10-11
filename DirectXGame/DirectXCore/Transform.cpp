@@ -3,7 +3,7 @@
 
 using namespace DirectXCore;
 
-DirectXCore::Transform::Transform()
+Transform::Transform()
 {
 }
 
@@ -14,7 +14,7 @@ Transform::Transform(Vector2 _pos = Vector2(0,0), Vector2 _rot = Vector2(0,0), V
 	scale = _scl;
 }
 
-void DirectXCore::Transform::SetPosition(Vector2 _newPosition)
+void Transform::SetPosition(Vector2 _newPosition)
 {
 	position.x = _newPosition.x;
 	position.y = _newPosition.y;
