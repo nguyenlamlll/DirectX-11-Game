@@ -3,16 +3,15 @@
 
 #include <DirectXCore.h>
 #include "CatScene.h"
+#include "LoadText.h"
 
 LRESULT CALLBACK WndProc(HWND hwnd, UINT message, WPARAM wParam, LPARAM lParam);
 
-int WINAPI wWinMain(
-	HINSTANCE hInstance,
-	HINSTANCE prevInstance,
-	LPWSTR cmdLine,
-	int cmdShow
-)
+int WINAPI wWinMain(HINSTANCE hInstance, HINSTANCE prevInstance, LPWSTR cmdLine, int cmdShow)
 {
+	
+
+	
 	UNREFERENCED_PARAMETER(prevInstance);
 	UNREFERENCED_PARAMETER(cmdLine);
 
@@ -73,7 +72,9 @@ int WINAPI wWinMain(
 	//game->CreateSoundAndMusic(ambience);
 	game->CreateSprite(L"Resources/untitled.tmx");
 	game->AddScene(new CatScene(game.get()));
+//	game->AddText(new LoadText(game.get()));
 	game->SwitchToScene(0);
+	
 	// Main message loop
 	MSG msg = { 0 };
 	while (msg.message != WM_QUIT)
@@ -91,8 +92,9 @@ int WINAPI wWinMain(
 	game.reset();
 	CoUninitialize();
 	return static_cast<int>(msg.wParam);
-}
 
+
+}
 
 LRESULT CALLBACK WndProc(HWND hwnd, UINT message, WPARAM wParam, LPARAM lParam)
 {
@@ -255,3 +257,4 @@ LRESULT CALLBACK WndProc(HWND hwnd, UINT message, WPARAM wParam, LPARAM lParam)
 
 	return 0;
 }
+

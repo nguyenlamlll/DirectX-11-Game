@@ -1,4 +1,5 @@
 #include "stdafx.h"
+#include "stdafx.h"
 #include "DxBase.h"
 
 using Microsoft::WRL::ComPtr;
@@ -255,6 +256,11 @@ void DirectXCore::DxBase::AddScene(Scene * scene)
 	m_scenes.push_back(scene);
 }
 
+/*void DirectXCore::DxBase::AddText(LoadText * ltext)
+{
+	m_ltext.push_back(ltext);
+}
+*/
 void DxBase::OnDeviceLost()
 {
 	// TODO: Add Direct3D resource cleanup here.

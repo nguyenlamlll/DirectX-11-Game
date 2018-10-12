@@ -8,6 +8,7 @@
 #include "Animation.h"
 #include "TileMap.h"
 #include "Scene.h"
+#include "LoadText.h"
 
 
 namespace DirectXCore 
@@ -29,6 +30,7 @@ namespace DirectXCore
 		void SwitchToScene(wchar_t* name);
 		void SwitchToScene(int index);
 		void AddScene(Scene* scene);
+		//void AddText(LoadText* ltext);
 
 		// Basic game loop
 		void Tick();
@@ -75,6 +77,10 @@ namespace DirectXCore
 		void InitializeScenes();
 		std::vector<Scene*> m_scenes;
 		Scene* m_activeScene;
+		//Text
+		//std::vector<LoadText*> m_ltext;
+
+
 	};
 }
 

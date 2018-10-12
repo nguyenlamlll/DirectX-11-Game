@@ -3,6 +3,7 @@
 #include "Sprite.h"
 #include "Animation.h"
 
+
 namespace DirectXCore 
 {
 	class Scene
