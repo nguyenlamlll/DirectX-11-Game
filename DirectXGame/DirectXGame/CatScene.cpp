@@ -20,12 +20,16 @@ void CatScene::UpdateScene(float elapsedTime)
 void CatScene::RenderScene()
 {
 	m_sprite->RenderSprite();
+	m_text->RenderText();
 }
 
 void CatScene::LoadScene()
 {
 	m_dxBase->CreateSprite(L"cat.png", &m_sprite);
 	m_sprite->SetScreenPosition(Vector2(50, 50));
+
+	m_dxBase->CreateText(L"myfileb.spritefont", L"Hello!", &m_text);
+	m_text->SetScreenPosition(Vector2(500, 500));
 }
 
 void CatScene::UnloadScene()

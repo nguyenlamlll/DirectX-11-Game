@@ -3,15 +3,16 @@
 
 #include <DirectXCore.h>
 #include "CatScene.h"
-#include "LoadText.h"
 
 LRESULT CALLBACK WndProc(HWND hwnd, UINT message, WPARAM wParam, LPARAM lParam);
 
-int WINAPI wWinMain(HINSTANCE hInstance, HINSTANCE prevInstance, LPWSTR cmdLine, int cmdShow)
+int WINAPI wWinMain(
+	HINSTANCE hInstance,
+	HINSTANCE prevInstance,
+	LPWSTR cmdLine,
+	int cmdShow
+)
 {
-	
-
-	
 	UNREFERENCED_PARAMETER(prevInstance);
 	UNREFERENCED_PARAMETER(cmdLine);
 
@@ -43,18 +44,18 @@ int WINAPI wWinMain(HINSTANCE hInstance, HINSTANCE prevInstance, LPWSTR cmdLine,
 	rc.bottom = static_cast<LONG>(h);
 
 	AdjustWindowRect(&rc, WS_OVERLAPPEDWINDOW, FALSE);
-	
+
 	HWND hwnd = CreateWindowA(
-		"DX11Game", 
-		"DX11Game Window", 
+		"DX11Game",
+		"DX11Game Window",
 		WS_OVERLAPPEDWINDOW,
-		CW_USEDEFAULT, 
-		CW_USEDEFAULT, 
-		rc.right - rc.left, 
+		CW_USEDEFAULT,
+		CW_USEDEFAULT,
+		rc.right - rc.left,
 		rc.bottom - rc.top,
-		NULL, 
-		NULL, 
-		hInstance, 
+		NULL,
+		NULL,
+		hInstance,
 		NULL);
 
 	if (!hwnd)
@@ -67,14 +68,12 @@ int WINAPI wWinMain(HINSTANCE hInstance, HINSTANCE prevInstance, LPWSTR cmdLine,
 	GetClientRect(hwnd, &rc);
 
 	game->Initialize(hwnd, rc.right - rc.left, rc.bottom - rc.top);
-	
+
 	//const wchar_t* ambience = L"res\\NightAmbienceSimple.wav";
 	//game->CreateSoundAndMusic(ambience);
 	game->CreateSprite(L"Resources/untitled.tmx");
 	game->AddScene(new CatScene(game.get()));
-//	game->AddText(new LoadText(game.get()));
 	game->SwitchToScene(0);
-	
 	// Main message loop
 	MSG msg = { 0 };
 	while (msg.message != WM_QUIT)
@@ -92,9 +91,8 @@ int WINAPI wWinMain(HINSTANCE hInstance, HINSTANCE prevInstance, LPWSTR cmdLine,
 	game.reset();
 	CoUninitialize();
 	return static_cast<int>(msg.wParam);
-
-
 }
+
 
 LRESULT CALLBACK WndProc(HWND hwnd, UINT message, WPARAM wParam, LPARAM lParam)
 {
@@ -111,7 +109,7 @@ LRESULT CALLBACK WndProc(HWND hwnd, UINT message, WPARAM wParam, LPARAM lParam)
 	switch (message)
 	{
 	case WM_PAINT:
-		if (s_in_sizemove && game) 
+		if (s_in_sizemove && game)
 		{
 			game->Tick();
 		}
@@ -250,11 +248,10 @@ LRESULT CALLBACK WndProc(HWND hwnd, UINT message, WPARAM wParam, LPARAM lParam)
 		// A menu is active and the user presses a key that does not correspond
 		// to any mnemonic or accelerator key. Ignore so we don't produce an error beep.
 		return MAKELRESULT(0, MNC_CLOSE);
-	
+
 	default:
 		return DefWindowProc(hwnd, message, wParam, lParam);
 	}
 
 	return 0;
 }
-

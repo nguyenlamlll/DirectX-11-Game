@@ -1,5 +1,4 @@
 #include "stdafx.h"
-#include "stdafx.h"
 #include "DxBase.h"
 
 using Microsoft::WRL::ComPtr;
@@ -57,6 +56,11 @@ void DirectXCore::DxBase::CreateSprite(const wchar_t * spriteName)
 void DirectXCore::DxBase::CreateSprite(const wchar_t * spriteName, Sprite** returnSprite)
 {
 	*returnSprite = new Sprite(m_deviceResources.get(), spriteName);
+}
+
+void DirectXCore::DxBase::CreateText(const wchar_t * fontPath, const wchar_t * content, Text ** returnText)
+{
+	*returnText = new Text(m_deviceResources.get(), fontPath, content);
 }
 
 #pragma region Frame Update
@@ -256,11 +260,6 @@ void DirectXCore::DxBase::AddScene(Scene * scene)
 	m_scenes.push_back(scene);
 }
 
-/*void DirectXCore::DxBase::AddText(LoadText * ltext)
-{
-	m_ltext.push_back(ltext);
-}
-*/
 void DxBase::OnDeviceLost()
 {
 	// TODO: Add Direct3D resource cleanup here.
