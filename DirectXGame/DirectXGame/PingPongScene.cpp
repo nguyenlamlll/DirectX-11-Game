@@ -26,6 +26,7 @@ PingPongScene::~PingPongScene()
 bool hitRight = true;
 bool hitLeft = false;
 float bounceAngle = 0.0f;
+bool padNotHit = false;
 void PingPongScene::UpdateScene(float elapsedTime)
 {
 	bool isLeftPadDown, isLeftPadUp;
@@ -81,20 +82,28 @@ void PingPongScene::UpdateScene(float elapsedTime)
 			ballCurrentPosition.x - SPEED * 0.75 * elapsedTime,
 			ballCurrentPosition.y + bounceAngle * elapsedTime
 		));
-
-		if ((ballCurrentPosition.x - BALL_RADIUS) <= (leftPadCurrentPosition.x + PIXELS_TO_LONG_EDGE))
+		if (ballCurrentPosition.y <= leftPadCurrentPosition.y - 40 || 
+			ballCurrentPosition.y >= leftPadCurrentPosition.y + 40)
 		{
-			hitRight = false;
-			hitLeft = true;
-			if (isLeftPadDown)
+			// Keep moving
+		}
+		else
+		{
+			if ((ballCurrentPosition.x - BALL_RADIUS) <= (leftPadCurrentPosition.x + PIXELS_TO_LONG_EDGE))
 			{
-				bounceAngle = SPEED * 0.2;
-			}
-			if (isLeftPadUp)
-			{
-				bounceAngle = -SPEED * 0.2;
+				hitRight = false;
+				hitLeft = true;
+				if (isLeftPadDown)
+				{
+					bounceAngle = SPEED * 0.2;
+				}
+				if (isLeftPadUp)
+				{
+					bounceAngle = -SPEED * 0.2;
+				}
 			}
 		}
+
 	}
 	if (hitLeft == true)
 	{

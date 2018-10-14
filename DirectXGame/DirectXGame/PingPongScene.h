@@ -19,7 +19,7 @@ public:
 
 private:
 	std::shared_ptr<DirectXCore::DxBase> m_dxBase;
-
+	
 	DirectXCore::Sprite* m_leftPad;
 	DirectXCore::Sprite* m_rightPad;
 
