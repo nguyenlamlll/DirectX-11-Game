@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
+﻿<?xml version="1.0" encoding="utf-8"?>
 <Project DefaultTargets="Build" ToolsVersion="15.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup Label="ProjectConfigurations">
     <ProjectConfiguration Include="Debug|Win32">
@@ -165,6 +165,7 @@
     <ClInclude Include="DeviceResources.h" />
     <ClInclude Include="DirectXCore.h" />
     <ClInclude Include="DxBase.h" />
+    <ClInclude Include="Text.h" />
     <ClInclude Include="Input.h" />
     <ClInclude Include="MapReader\base64.h">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">false</ExcludedFromBuild>
@@ -251,6 +252,7 @@
     <ClCompile Include="Collision.cpp" />
     <ClCompile Include="DeviceResources.cpp" />
     <ClCompile Include="DxBase.cpp" />
+    <ClCompile Include="Text.cpp" />
     <ClCompile Include="Input.cpp" />
     <ClCompile Include="MapReader\base64.cpp">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">false</ExcludedFromBuild>
@@ -349,6 +351,7 @@
     <ResourceCompile Include="DirectXCore.rc" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="..\DirectXGame\myfile.spritefont" />
     <None Include="MapReader\Tmx.h.in">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">false</ExcludedFromBuild>
     </None>

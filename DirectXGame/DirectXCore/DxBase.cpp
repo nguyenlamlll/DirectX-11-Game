@@ -60,6 +60,11 @@ void DirectXCore::DxBase::CreateSprite(const wchar_t * spriteName, Sprite** retu
 	*returnSprite = new Sprite(m_deviceResources.get(), spriteName);
 }
 
+void DirectXCore::DxBase::CreateText(const wchar_t * fontPath, const wchar_t * content, Text ** returnText)
+{
+	*returnText = new Text(m_deviceResources.get(), fontPath, content);
+}
+
 #pragma region Frame Update
 // Executes the basic game loop.
 void DxBase::Tick()

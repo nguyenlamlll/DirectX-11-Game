@@ -29,6 +29,7 @@ private:
 	std::shared_ptr<DirectXCore::DxBase> m_dxBase;
 
 	DirectXCore::Sprite* m_sprite;
+	DirectXCore::Text* m_text;
 
 	void MoveSpriteAround(float elapsedTime);
 

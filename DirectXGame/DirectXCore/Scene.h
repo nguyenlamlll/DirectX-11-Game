@@ -4,6 +4,7 @@
 #include "Animation.h"
 #include "Input.h"
 
+
 namespace DirectXCore 
 {
 	class Scene
