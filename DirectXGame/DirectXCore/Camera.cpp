@@ -9,7 +9,7 @@ Camera::Camera()
 
 Camera::Camera(int _x, int _y)
 {
-	this->SetPosition(DirectX::SimpleMath::Vector2(_x, _y));
+	this->SetPosition(DirectX::SimpleMath::Vector3(_x, _y, 1));
 	this->SetViewPort(0, 0, _x * 2, _y * 2);
 }
 
@@ -32,7 +32,7 @@ RECT Camera::GetBound()
 }
 
 
-bool Camera::IsContain(DirectX::SimpleMath::Vector2 _objectPosition, DirectX::SimpleMath::Vector2 _objectScale)
+bool Camera::IsContain(DirectX::SimpleMath::Vector3 _objectPosition, DirectX::SimpleMath::Vector3 _objectScale)
 {
 	bool containX = (_objectPosition.x + _objectScale.x<0 || _objectPosition.x - _objectScale.x>camViewport.Width);
 	bool containY = (_objectPosition.y + _objectScale.y<0 || _objectPosition.y - _objectScale.y>camViewport.Height);

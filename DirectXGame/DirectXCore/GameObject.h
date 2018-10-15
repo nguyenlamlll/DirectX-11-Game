@@ -9,14 +9,13 @@ namespace DirectXCore
 	{
 	public:
 		GameObject();
-		void Update();
+		virtual void Update();
 		BoundingBox* GetBoxCollider() { return boxCollider; }
 		Transform* GetTransform() { return transform; }
 		virtual void OnCollisionEnter();
 		~GameObject();
-	private:
-		BoundingBox* boxCollider;
 	protected:
+		BoundingBox* boxCollider;
 		Transform* transform;
 	};
 }

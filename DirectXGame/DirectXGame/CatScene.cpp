@@ -1,7 +1,7 @@
 #include "CatScene.h"
 
 using namespace DirectXCore;
-using DirectX::SimpleMath::Vector2;
+using DirectX::SimpleMath::Vector3;
 
 CatScene::CatScene(DxBase* dxBase)
 {
@@ -19,13 +19,13 @@ void CatScene::UpdateScene(float elapsedTime)
 
 void CatScene::RenderScene()
 {
-	m_sprite->RenderSprite();
+	m_sprite->Render();
 }
 
 void CatScene::LoadScene()
 {
 	m_dxBase->CreateSprite(L"cat.png", &m_sprite);
-	m_sprite->GetTransform()->SetPosition(Vector2(50, 50));
+	m_sprite->GetTransform()->SetPosition(Vector3(50, 50, 1));
 }
 
 void CatScene::UnloadScene()
@@ -35,14 +35,15 @@ void CatScene::UnloadScene()
 // Move a sprite around 4 corners, clockwise.
 void CatScene::MoveSpriteAround(float elapsedTime)
 {
-	Vector2 currentPosition = m_sprite->GetTransform()->GetPosition();
+	Vector3 currentPosition = m_sprite->GetTransform()->GetPosition();
 
 	// At top left, aiming for top right.
 	if (currentPosition.x <= 990 && currentPosition.y <= 710)
 	{
-		Vector2 newPosition(
+		Vector3 newPosition(
 			currentPosition.x + 700 * elapsedTime,
-			currentPosition.y);
+			currentPosition.y,
+			1);
 
 		m_sprite->GetTransform()->SetPosition(newPosition);
 
@@ -51,9 +52,10 @@ void CatScene::MoveSpriteAround(float elapsedTime)
 	// At top right, aiming for bottom right.
 	if (currentPosition.x >= 990 && currentPosition.y <= 710)
 	{
-		Vector2 newPosition(
+		Vector3 newPosition(
 			currentPosition.x,
-			currentPosition.y + 700 * elapsedTime);
+			currentPosition.y + 700 * elapsedTime,
+			1);
 
 		m_sprite->GetTransform()->SetPosition(newPosition);
 	}
@@ -61,9 +63,10 @@ void CatScene::MoveSpriteAround(float elapsedTime)
 	// At bottom right, aiming for bottom left.
 	if (currentPosition.x >= 40 && currentPosition.y >= 710)
 	{
-		Vector2 newPosition(
+		Vector3 newPosition(
 			currentPosition.x - 700 * elapsedTime,
-			currentPosition.y);
+			currentPosition.y,
+			1);
 
 		m_sprite->GetTransform()->SetPosition(newPosition);
 	}
@@ -71,9 +74,10 @@ void CatScene::MoveSpriteAround(float elapsedTime)
 	// At bottom left, aiming for top left.
 	if (currentPosition.x <= 40 && currentPosition.y >= 70)
 	{
-		Vector2 newPosition(
+		Vector3 newPosition(
 			currentPosition.x,
-			currentPosition.y - 700 * elapsedTime);
+			currentPosition.y - 700 * elapsedTime,
+			1);
 
 		m_sprite->GetTransform()->SetPosition(newPosition);
 	}

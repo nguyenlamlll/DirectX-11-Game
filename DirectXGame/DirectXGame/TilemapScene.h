@@ -27,6 +27,9 @@ private:
 	std::shared_ptr<DirectXCore::DxBase> m_dxBase;
 
 	DirectXCore::TileMap* tilemap;
+	DirectXCore::Sprite* sprite;
 
+	std::vector<DirectXCore::GameObject*>* gameObjectList;
+	bool collide = false;
 };
 

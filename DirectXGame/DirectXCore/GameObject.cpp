@@ -5,13 +5,13 @@ using namespace DirectXCore;
 
 GameObject::GameObject()
 {
-	transform = new Transform(Vector2(0, 0), Vector2(0, 0), Vector2(1, 1));
+	transform = new Transform(Vector3(0, 0, 1), Vector3(0, 0, 1), Vector3(1, 1, 1));
 	boxCollider = new BoundingBox();
 }
 
 void DirectXCore::GameObject::Update()
 {
-	Vector2* colliderCenter = new Vector2(transform->GetPosition().x + transform->GetScale().x / 2, transform->GetPosition().y + transform->GetScale().y / 2);
+	Vector3* colliderCenter = new Vector3(transform->GetPosition().x + transform->GetScale().x / 2, transform->GetPosition().y + transform->GetScale().y / 2, 1);
 	boxCollider->Center = Vector3(colliderCenter->x, colliderCenter->y, 1);
 	boxCollider->Extents = Vector3(transform->GetScale().x / 2, transform->GetScale().y / 2, 1);
 }

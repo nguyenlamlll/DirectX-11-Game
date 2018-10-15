@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.2" tiledversion="1.2.0" orientation="orthogonal" renderorder="right-down" width="212" height="16" tilewidth="32" tileheight="32" infinite="0" nextlayerid="5" nextobjectid="50">
+<map version="1.2" tiledversion="1.2.0" orientation="orthogonal" renderorder="right-down" width="212" height="16" tilewidth="32" tileheight="32" infinite="0" nextlayerid="5" nextobjectid="51">
  <tileset firstgid="1" name="mariotileset" tilewidth="32" tileheight="32" tilecount="924" columns="33">
   <image source="mariotileset.png" width="1056" height="896"/>
  </tileset>
@@ -20,7 +20,7 @@
  </layer>
  <objectgroup id="4" name="object">
   <object id="1" x="1" y="447" width="2206" height="61"/>
-  <object id="2" x="896.667" y="385" width="62.3333" height="62"/>
+  <object id="2" x="897" y="385" width="64" height="60"/>
   <object id="3" x="1217" y="353" width="62" height="94"/>
   <object id="4" x="1474" y="323" width="59" height="125"/>
   <object id="5" x="1825.33" y="321.667" width="61.3333" height="124.333"/>

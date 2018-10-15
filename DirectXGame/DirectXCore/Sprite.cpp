@@ -23,8 +23,8 @@ Sprite::Sprite(DirectXCore::DeviceResources * _deviceResource, const wchar_t * _
 	pivot.y = float(spriteDesc.Height / 2);
 	//position.x = _deviceResource->GetOutputSize().right / 2;
 	//position.y = _deviceResource->GetOutputSize().bottom / 2;
-	//transform.SetPosition(SimpleMath::Vector2(_deviceResource->GetOutputSize().right / 2, _deviceResource->GetOutputSize().bottom / 2));
-	transform = new Transform(Vector2(_deviceResource->GetOutputSize().right / 2, _deviceResource->GetOutputSize().bottom / 2), Vector2(0, 0), Vector2(1, 1));
+	//transform.SetPosition(SimpleMath::Vector3(_deviceResource->GetOutputSize().right / 2, _deviceResource->GetOutputSize().bottom / 2));
+	transform = new Transform(Vector3(_deviceResource->GetOutputSize().right / 2, _deviceResource->GetOutputSize().bottom / 2, 1), Vector3(0, 0, 1), Vector3(1, 1, 1));
 
 	spriterect = new RECT();
 	spriterect->left = spriterect->top = 0;
@@ -34,20 +34,26 @@ Sprite::Sprite(DirectXCore::DeviceResources * _deviceResource, const wchar_t * _
 
 	//scale.x = _scale;
 	//scale.y = _scale;
-	transform->SetScale(SimpleMath::Vector2(_scale, _scale));
+	transform->SetScale(SimpleMath::Vector3(_scale, _scale, 1));
 }
 
 
 Sprite::~Sprite()
 {
 }
-void Sprite::RenderSprite()
+void Sprite::Update()
+{
+	Vector3* colliderCenter = new Vector3(transform->GetPosition().x + transform->GetScale().x / 2, transform->GetPosition().y + transform->GetScale().y / 2, 1);
+	boxCollider->Center = Vector3(colliderCenter->x, colliderCenter->y, 1);
+	boxCollider->Extents = Vector3(transform->GetScale().x / 2 + spriterect->right / 2, transform->GetScale().y / 2 + spriterect->bottom / 2, 1);
+}
+void Sprite::Render()
 {
 	m_spriteBatch->Begin(DirectX::SpriteSortMode_Deferred, m_states->NonPremultiplied());
 	m_spriteBatch->Draw(m_texture.Get(), transform->GetPosition(), spriterect, DirectX::Colors::White, 0.f, pivot, transform->GetScale());
 	m_spriteBatch->End();
 }
-void Sprite::RenderSprite(DirectX::SimpleMath::Vector2 _newPosition)
+void Sprite::Render(DirectX::SimpleMath::Vector3 _newPosition)
 {
 	m_spriteBatch->Begin(DirectX::SpriteSortMode_Deferred, m_states->NonPremultiplied());
 	m_spriteBatch->Draw(m_texture.Get(), _newPosition, spriterect, DirectX::Colors::White, 0.f, pivot, transform->GetScale());
@@ -68,9 +74,9 @@ void Sprite::SetSpriteRect(RECT * _newSpriteRect)
 	spriterect->right = _newSpriteRect->right;
 }
 
-Vector2 Sprite::GetWorldToScreenScale()
+Vector3 Sprite::GetWorldToScreenScale()
 {
-	Vector2 screenScale = this->GetTransform()->GetScale();
+	Vector3 screenScale = this->GetTransform()->GetScale();
 	screenScale.x += spriterect->right / 2;
 	screenScale.y += spriterect->bottom / 2;
 	return screenScale;
