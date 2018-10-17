@@ -15,6 +15,8 @@ DxBase::DxBase() noexcept(false)
 	eflags = eflags | AudioEngine_Debug;
 #endif
 	m_audioEngine = std::make_shared<AudioEngine>(eflags);
+
+	m_input = std::make_unique<Input>();
 }
 
 DirectXCore::DxBase::~DxBase()
@@ -63,6 +65,11 @@ void DirectXCore::DxBase::CreateSprite(const wchar_t * spriteName, Sprite** retu
 	*returnSprite = new Sprite(m_deviceResources.get(), spriteName);
 }
 
+void DirectXCore::DxBase::CreateText(const wchar_t * fontPath, const wchar_t * content, Text ** returnText)
+{
+	*returnText = new Text(m_deviceResources.get(), fontPath, content);
+}
+
 #pragma region Frame Update
 // Executes the basic game loop.
 void DxBase::Tick()
@@ -78,6 +85,7 @@ void DxBase::Tick()
 // Updates the world.
 void DxBase::Update(StepTimer const& timer)
 {
+
 	float elapsedTime = float(timer.GetElapsedSeconds());
 
 	// TODO: Add your game logic here.
@@ -203,6 +211,16 @@ void DxBase::OnWindowSizeChanged(int width, int height)
 	CreateWindowSizeDependentResources();
 
 	// TODO: Game window is being resized.
+}
+
+void DirectXCore::DxBase::OnKeyUp(KeyCode key)
+{
+	m_activeScene->OnKeyUp(key);
+}
+
+void DirectXCore::DxBase::OnKeyDown(KeyCode key)
+{
+	m_activeScene->OnKeyDown(key);
 }
 
 // Properties

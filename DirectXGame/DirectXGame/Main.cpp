@@ -4,6 +4,7 @@
 #include <DirectXCore.h>
 #include "CatScene.h"
 #include "TilemapScene.h"
+#include "PingPongScene.h"
 
 LRESULT CALLBACK WndProc(HWND hwnd, UINT message, WPARAM wParam, LPARAM lParam);
 
@@ -45,18 +46,18 @@ int WINAPI wWinMain(
 	rc.bottom = static_cast<LONG>(h);
 
 	AdjustWindowRect(&rc, WS_OVERLAPPEDWINDOW, FALSE);
-	
+
 	HWND hwnd = CreateWindowA(
-		"DX11Game", 
-		"DX11Game Window", 
+		"DX11Game",
+		"DX11Game Window",
 		WS_OVERLAPPEDWINDOW,
-		CW_USEDEFAULT, 
-		CW_USEDEFAULT, 
-		rc.right - rc.left, 
+		CW_USEDEFAULT,
+		CW_USEDEFAULT,
+		rc.right - rc.left,
 		rc.bottom - rc.top,
-		NULL, 
-		NULL, 
-		hInstance, 
+		NULL,
+		NULL,
+		hInstance,
 		NULL);
 
 	if (!hwnd)
@@ -69,10 +70,13 @@ int WINAPI wWinMain(
 	GetClientRect(hwnd, &rc);
 
 	game->Initialize(hwnd, rc.right - rc.left, rc.bottom - rc.top);
-	
+
 	//const wchar_t* ambience = L"res\\NightAmbienceSimple.wav";
 	//game->CreateSoundAndMusic(ambience);
 	game->AddScene(new TilemapScene(game.get()));
+	//game->CreateSprite(L"Resources/untitled.tmx");
+	//game->AddScene(new PingPongScene(game.get()));
+
 	game->SwitchToScene(0);
 	// Main message loop
 	MSG msg = { 0 };
@@ -109,7 +113,7 @@ LRESULT CALLBACK WndProc(HWND hwnd, UINT message, WPARAM wParam, LPARAM lParam)
 	switch (message)
 	{
 	case WM_PAINT:
-		if (s_in_sizemove && game) 
+		if (s_in_sizemove && game)
 		{
 			game->Tick();
 		}
@@ -244,11 +248,30 @@ LRESULT CALLBACK WndProc(HWND hwnd, UINT message, WPARAM wParam, LPARAM lParam)
 		}
 		break;
 
+	case WM_SYSKEYUP:
+		break;
+
+	case WM_KEYUP:
+		if (game)
+		{
+			game->OnKeyUp(wParam);
+			game->GetInputManager()->KeyUp(static_cast<KeyCode>(wParam));
+		}
+		break;
+
+	case WM_KEYDOWN:
+		if (game)
+		{
+			game->OnKeyDown(wParam);
+			game->GetInputManager()->KeyDown(static_cast<KeyCode>(wParam));
+		}
+		break;
+
 	case WM_MENUCHAR:
 		// A menu is active and the user presses a key that does not correspond
 		// to any mnemonic or accelerator key. Ignore so we don't produce an error beep.
 		return MAKELRESULT(0, MNC_CLOSE);
-	
+
 	default:
 		return DefWindowProc(hwnd, message, wParam, lParam);
 	}
