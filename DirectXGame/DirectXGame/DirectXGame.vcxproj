@@ -131,6 +131,7 @@
   <ItemGroup>
     <ClCompile Include="CatScene.cpp" />
     <ClCompile Include="Main.cpp" />
+    <ClCompile Include="TilemapScene.cpp" />
     <ClCompile Include="PingPongScene.cpp" />
   </ItemGroup>
   <ItemGroup>
@@ -145,6 +146,7 @@
     <ClInclude Include="CatScene.h" />
     <ClInclude Include="PingPongScene.h" />
     <ClInclude Include="resource.h" />
+    <ClInclude Include="TilemapScene.h" />
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="DirectXGame.rc" />

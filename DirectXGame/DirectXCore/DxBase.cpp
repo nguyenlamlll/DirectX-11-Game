@@ -46,13 +46,18 @@ void DxBase::Initialize(HWND window, int width, int height)
 	*/
 }
 
-void DirectXCore::DxBase::CreateSprite(const wchar_t * spriteName)
+void DirectXCore::DxBase::CreateCamera()
 {
-	//sprite = new Sprite(m_deviceResources.get(), L"cat.png");
-	//animation = new Animation(2, 8, new Sprite(m_deviceResources.get(), L"scott.png"), 0.1f);
 	mainCamera = new Camera(m_deviceResources->GetOutputSize().right / 2, m_deviceResources->GetOutputSize().bottom);
-	tilemap = new TileMap(m_deviceResources.get(), spriteName);
+	mainCamera->GetBound();
+}
+
+void DirectXCore::DxBase::CreateTilemap(const wchar_t * tilemapSpriteName,TileMap** returnTilemap)
+{
+	CreateCamera();
+	tilemap = new TileMap(m_deviceResources.get(), tilemapSpriteName);
 	tilemap->SetCamera(mainCamera);
+	*returnTilemap = tilemap;
 }
 
 void DirectXCore::DxBase::CreateSprite(const wchar_t * spriteName, Sprite** returnSprite)
@@ -87,18 +92,18 @@ void DxBase::Update(StepTimer const& timer)
 	//sprite->SetScreenPosition(sprite->GetScreenPosition() + DirectX::SimpleMath::Vector2(0.4f, -0.4f));
 	//animation->Update(elapsedTime);
 
-	if (mainCamera)
-	{
-		mainCamera->SetPosition(mainCamera->GetPosition() + DirectX::SimpleMath::Vector2(0.4f, 0.4f));
-	}
+	//if (mainCamera)
+	//{
+	//	mainCamera->SetPosition(mainCamera->GetPosition() + DirectX::SimpleMath::Vector2(0.4f, 0.4f));
+	//}
 	
 
-	BoundingBox _bdBox, _bdBox2;
-	_bdBox.Center = DirectX::SimpleMath::Vector3(0, 0, 0);
-	_bdBox.Extents = DirectX::SimpleMath::Vector3(4, 4, 4);
-	_bdBox2.Center = DirectX::SimpleMath::Vector3(1, 1, 1);
-	_bdBox2.Extents = DirectX::SimpleMath::Vector3(1, 1, 1);
-	ContainmentType containtype = _bdBox.Contains(_bdBox2);
+	//BoundingBox _bdBox, _bdBox2;
+	//_bdBox.Center = DirectX::SimpleMath::Vector3(0, 0, 0);
+	//_bdBox.Extents = DirectX::SimpleMath::Vector3(4, 4, 4);
+	//_bdBox2.Center = DirectX::SimpleMath::Vector3(1, 1, 1);
+	//_bdBox2.Extents = DirectX::SimpleMath::Vector3(1, 1, 1);
+	//ContainmentType containtype = _bdBox.Contains(_bdBox2);
 
 	if (m_activeScene) 
 	{
@@ -133,9 +138,6 @@ void DxBase::Render()
 	if (m_activeScene) {
 		m_activeScene->RenderScene();
 	}
-	//sprite->RenderSprite();
-	//animation->Render();
-	tilemap->Render();
 
 	context;
 

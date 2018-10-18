@@ -33,8 +33,8 @@ void PingPongScene::UpdateScene(float elapsedTime)
 	if (m_dxBase->GetInputManager()->IsKeyDown("S"))
 	{
 		isLeftPadDown = true;
-		Vector2 currentPosition = m_leftPad->GetScreenPosition();
-		MoveSprite(m_leftPad, Vector2(currentPosition.x, currentPosition.y + SPEED * elapsedTime));
+		Vector2 currentPosition = m_leftPad->GetTransform()->GetPosition();
+		MoveSprite(m_leftPad, Vector3(currentPosition.x, currentPosition.y + SPEED * elapsedTime, 0));
 	}
 	else 
 	{
@@ -43,8 +43,8 @@ void PingPongScene::UpdateScene(float elapsedTime)
 	if (m_dxBase->GetInputManager()->IsKeyDown("W"))
 	{
 		isLeftPadUp = true;
-		Vector2 currentPosition = m_leftPad->GetScreenPosition();
-		MoveSprite(m_leftPad, Vector2(currentPosition.x, currentPosition.y - SPEED * elapsedTime));
+		Vector2 currentPosition = m_leftPad->GetTransform()->GetPosition();
+		MoveSprite(m_leftPad, Vector3(currentPosition.x, currentPosition.y - SPEED * elapsedTime, 0));
 	}
 	else
 	{
@@ -55,8 +55,8 @@ void PingPongScene::UpdateScene(float elapsedTime)
 	if (m_isRightPadMoveDown)
 	{
 		isRightPadDown = true;
-		Vector2 currentPosition = m_rightPad->GetScreenPosition();
-		MoveSprite(m_rightPad, Vector2(currentPosition.x, currentPosition.y + SPEED * elapsedTime));
+		Vector2 currentPosition = m_rightPad->GetTransform()->GetPosition();
+		MoveSprite(m_rightPad, Vector3(currentPosition.x, currentPosition.y + SPEED * elapsedTime, 0));
 	}
 	else
 	{
@@ -65,22 +65,23 @@ void PingPongScene::UpdateScene(float elapsedTime)
 	if (m_isRightPadMoveUp)
 	{
 		isRightPadUp = true;
-		Vector2 currentPosition = m_rightPad->GetScreenPosition();
-		MoveSprite(m_rightPad, Vector2(currentPosition.x, currentPosition.y - SPEED * elapsedTime));
+		Vector2 currentPosition = m_rightPad->GetTransform()->GetPosition();
+		MoveSprite(m_rightPad, Vector3(currentPosition.x, currentPosition.y - SPEED * elapsedTime, 0));
 	}
 	else
 	{
 		isRightPadUp = false;
 	}
 
-	Vector2 ballCurrentPosition = m_ball->GetScreenPosition();
-	Vector2 rightPadCurrentPosition = m_rightPad->GetScreenPosition();
-	Vector2 leftPadCurrentPosition = m_leftPad->GetScreenPosition();
+	Vector2 ballCurrentPosition = m_ball->GetTransform()->GetPosition();
+	Vector2 rightPadCurrentPosition = m_rightPad->GetTransform()->GetPosition();
+	Vector2 leftPadCurrentPosition = m_leftPad->GetTransform()->GetPosition();
 	if (hitRight == true)
 	{
-		MoveSprite(m_ball.get(), Vector2(
+		MoveSprite(m_ball.get(), Vector3(
 			ballCurrentPosition.x - SPEED * 0.75 * elapsedTime,
-			ballCurrentPosition.y + bounceAngle * elapsedTime
+			ballCurrentPosition.y + bounceAngle * elapsedTime,
+			0
 		));
 		if (ballCurrentPosition.y <= leftPadCurrentPosition.y - 40 || 
 			ballCurrentPosition.y >= leftPadCurrentPosition.y + 40)
@@ -107,9 +108,10 @@ void PingPongScene::UpdateScene(float elapsedTime)
 	}
 	if (hitLeft == true)
 	{
-		MoveSprite(m_ball.get(), Vector2(
+		MoveSprite(m_ball.get(), Vector3(
 			ballCurrentPosition.x + SPEED * 0.75 * elapsedTime,
-			ballCurrentPosition.y + bounceAngle * elapsedTime
+			ballCurrentPosition.y + bounceAngle * elapsedTime,
+			0
 		));
 
 		if ((ballCurrentPosition.x + BALL_RADIUS) >= (rightPadCurrentPosition.x - PIXELS_TO_LONG_EDGE))
@@ -131,24 +133,24 @@ void PingPongScene::UpdateScene(float elapsedTime)
 
 void PingPongScene::RenderScene()
 {
-	m_leftPad->RenderSprite();
-	m_rightPad->RenderSprite();
-	m_ball->RenderSprite();
+	m_leftPad->Render();
+	m_rightPad->Render();
+	m_ball->Render();
 }
 
 void PingPongScene::LoadScene()
 {
 	m_dxBase->CreateSprite(L"Resources\\button.png", &m_leftPad);
-	m_leftPad->SetScreenPosition(Vector2(50, 384));
+	m_leftPad->GetTransform()->SetPosition(Vector3(50, 384, 0));
 
 	m_dxBase->CreateSprite(L"Resources\\button.png", &m_rightPad);
-	m_rightPad->SetScreenPosition(Vector2(974, 384));
+	m_rightPad->GetTransform()->SetPosition(Vector3(974, 384, 0));
 
 	m_ball = std::make_unique<Sprite>();
 	auto temp = m_ball.get();
 	m_dxBase->CreateSprite(L"Resources\\neon-circle.png", &temp);
 	m_ball.reset(temp);
-	m_ball->SetScale(0.5, 0.5);
+	m_ball->GetTransform()->SetScale(Vector3(0.5, 0.5, 0));
 }
 
 void PingPongScene::UnloadScene()
@@ -197,7 +199,7 @@ void PingPongScene::OnKeyDown(KeyCode key)
 	}
 }
 
-void PingPongScene::MoveSprite(Sprite* sprite, Vector2 newPosition)
+void PingPongScene::MoveSprite(Sprite* sprite, Vector3 newPosition)
 {
-	sprite->SetScreenPosition(newPosition);
+	sprite->GetTransform()->SetPosition(newPosition);
 }

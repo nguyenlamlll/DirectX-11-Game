@@ -31,6 +31,6 @@ private:
 	bool m_isRightPadMoveDown;
 	bool m_isRightPadMoveUp;
 
-	void MoveSprite(DirectXCore::Sprite* pad, DirectX::SimpleMath::Vector2 newPosition);
+	void MoveSprite(DirectXCore::Sprite* pad, DirectX::SimpleMath::Vector3 newPosition);
 };
 
