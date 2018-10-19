@@ -7,7 +7,7 @@ namespace DirectXCore
 	class Collision : Object
 	{
 	public:
-		Collision();
+		Collision(); 
 		//static DirectX::ContainmentType CollisionType(DirectX::BoundingBox _thisObject, DirectX::BoundingBox _thatObject);
 		~Collision();
 	private:
