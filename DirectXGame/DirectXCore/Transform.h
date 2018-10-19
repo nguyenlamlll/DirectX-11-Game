@@ -1,10 +1,11 @@
 #pragma once
+#include "Component.h"
 using namespace DirectX::SimpleMath;
 
 namespace DirectXCore
 {
 	class GameObject;
-	class Transform
+	class Transform :public Component
 	{
 	public:
 		Transform();

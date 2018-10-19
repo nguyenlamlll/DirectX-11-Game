@@ -10,6 +10,7 @@ namespace DirectXCore
 	public:
 		GameObject();
 		virtual void Update();
+		virtual void Render();
 		BoundingBox* GetBoxCollider() { return boxCollider; }
 		Transform* GetTransform() { return transform; }
 		virtual void OnCollisionEnter();

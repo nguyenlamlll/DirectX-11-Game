@@ -28,6 +28,7 @@ private:
 
 	DirectXCore::TileMap* tilemap;
 	DirectXCore::Sprite* sprite;
+	DirectXCore::Camera* camera;
 
 	std::vector<DirectXCore::GameObject*>* gameObjectList;
 	bool collide = false;

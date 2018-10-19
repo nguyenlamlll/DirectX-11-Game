@@ -16,6 +16,11 @@ void DirectXCore::GameObject::Update()
 	boxCollider->Extents = Vector3(transform->GetScale().x / 2, transform->GetScale().y / 2, 1);
 }
 
+void DirectXCore::GameObject::Render()
+{
+
+}
+
 
 void DirectXCore::GameObject::OnCollisionEnter()
 {

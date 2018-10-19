@@ -16,6 +16,7 @@ void TilemapScene::UpdateScene(float elapsedTime)
 {
 	tilemap->Update();
 	sprite->Update();
+	for (size_t i = 0; i < gameObjectList->size(); i++) gameObjectList->at(i)->Update();
 	for (size_t i = 0; i < gameObjectList->size(); i++)
 	{
 		bool colType = sprite->GetBoxCollider()->Intersects(*gameObjectList->at(i)->GetBoxCollider());
@@ -23,27 +24,32 @@ void TilemapScene::UpdateScene(float elapsedTime)
 		if (colType || colType2)
 			collide = true;
 	}
-	if (!collide) sprite->GetTransform()->SetPosition(sprite->GetTransform()->GetPosition() + Vector3(0, 4.f, 0));
+	//if (!collide) sprite->GetTransform()->SetPosition(sprite->GetTransform()->GetPosition() + Vector3(0, 4.f, 0));
 }
 
 void TilemapScene::RenderScene()
 {
 	tilemap->Render();
-	sprite->Render();
-	for (size_t i = 0; i < gameObjectList->size(); i++) gameObjectList->at(i)->Update();
+	DirectX::SimpleMath::Vector3 worldToScreenPosition = DirectX::SimpleMath::Vector3(camera->GetBound().right / 2 - camera->GetPosition().x, camera->GetBound().bottom / 2 - camera->GetPosition().y, 1);
+	for (size_t i = 0; i < gameObjectList->size(); i++)
+	{
+		if (camera->IsContain(gameObjectList->at(i)->GetTransform()->GetWorldToCameraPosition(worldToScreenPosition), gameObjectList->at(i)->GetTransform()->GetScale()))
+		{
+			gameObjectList->at(i)->Render();
+		}
+	}
 }
 
 void TilemapScene::LoadScene()
 {
 	gameObjectList = new std::vector<GameObject*>();
+	m_dxBase->CreateCamera(&camera);
 	m_dxBase->CreateSprite(L"cat.png", &sprite);
-	sprite->GetTransform()->SetPosition(Vector3(100, 0, 1));
 	m_dxBase->CreateTilemap(L"Resources/marioworld1-1.tmx", &tilemap);
+	tilemap->SetCamera(camera);
+	sprite->GetTransform()->SetPosition(Vector3(0, 0, 1));
 	gameObjectList->insert(gameObjectList->end(), tilemap->GetListGameObjects()->begin(), tilemap->GetListGameObjects()->end());
-	//mainCamera = new Camera(m_deviceResources->GetOutputSize().right / 2, m_deviceResources->GetOutputSize().bottom);
-	//tilemap = new TileMap(, L"Resources/untitled.tmx");
-	//tilemap->SetCamera(mainCamera);
-	int a = 0;
+	gameObjectList->insert(gameObjectList->end(),sprite);
 }
 
 void TilemapScene::UnloadScene()

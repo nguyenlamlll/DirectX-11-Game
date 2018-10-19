@@ -92,13 +92,12 @@ void DirectXCore::TileMap::Update()
 	/*DirectX::SimpleMath::Vector3 trans = DirectX::SimpleMath::Vector3(deviceResource->GetOutputSize().right / 2 - mainCamera->GetPosition().x,
 		deviceResource->GetOutputSize().bottom / 2 - mainCamera->GetPosition().y);*/
 		//position += DirectX::SimpleMath::Vector3(2.f,0);
-		mainCamera->SetPosition(mainCamera->GetPosition() + DirectX::SimpleMath::Vector3(3.f, 0,0));
+		//mainCamera->SetPosition(mainCamera->GetPosition() + DirectX::SimpleMath::Vector3(3.f, 0,0));
 }
 
 void TileMap::Render()
 {
 	DirectX::SimpleMath::Vector3 worldToScreenPosition = DirectX::SimpleMath::Vector3(mainCamera->GetBound().right / 2 - mainCamera->GetPosition().x, mainCamera->GetBound().bottom / 2 - mainCamera->GetPosition().y, 1);
-	//DirectX::SimpleMath::Vector3 trans = DirectX::SimpleMath::Vector3(deviceResource->GetOutputSize().right / 2 - mainCamera->GetPosition().x, deviceResource->GetOutputSize().bottom / 2 - mainCamera->GetPosition().y);
 	for (int i = 0; i < tilemap->GetNumTileLayers(); i++)
 	{
 		const Tmx::TileLayer *layer = tilemap->GetTileLayer(i);
@@ -122,7 +121,7 @@ void TileMap::Render()
 					sprite->GetTransform()->SetPosition(currentPosition);
 					if (mainCamera->IsContain(sprite->GetTransform()->GetWorldToCameraPosition(worldToScreenPosition), sprite->GetWorldToScreenScale()))
 					{
-						sprite->Render(sprite->GetTransform()->GetPosition() + worldToScreenPosition);
+						sprite->Render(sprite->GetTransform()->GetWorldToCameraPosition(worldToScreenPosition));
 					}
 
 				}
