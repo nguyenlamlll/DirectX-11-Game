@@ -2,6 +2,7 @@
 #include "Scene.h"
 #include "DxBase.h"
 #include "GameObject.h"
+#include "Rigidbody.h"
 
 
 class TilemapScene :

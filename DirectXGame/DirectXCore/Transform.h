@@ -4,7 +4,6 @@ using namespace DirectX::SimpleMath;
 
 namespace DirectXCore
 {
-	class GameObject;
 	class Transform :public Component
 	{
 	public:
@@ -24,7 +23,6 @@ namespace DirectXCore
 		~Transform();
 	private:
 		Vector3 position, rotation, scale;
-		GameObject* parentGameObject;
 	};
 }
 

@@ -162,6 +162,9 @@
     <ClInclude Include="Component.h">
       <Filter>Header Files\Components</Filter>
     </ClInclude>
+    <ClInclude Include="Rigidbody.h">
+      <Filter>Header Files\Components</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="MapReader\miniz.c">
@@ -267,6 +270,9 @@
       <Filter>Source Files\Object</Filter>
     </ClCompile>
     <ClCompile Include="Component.cpp">
+      <Filter>Source Files\Components</Filter>
+    </ClCompile>
+    <ClCompile Include="Rigidbody.cpp">
       <Filter>Source Files\Components</Filter>
     </ClCompile>
   </ItemGroup>

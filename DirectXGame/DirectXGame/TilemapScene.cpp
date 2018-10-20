@@ -50,6 +50,8 @@ void TilemapScene::LoadScene()
 	sprite->GetTransform()->SetPosition(Vector3(0, 0, 1));
 	gameObjectList->insert(gameObjectList->end(), tilemap->GetListGameObjects()->begin(), tilemap->GetListGameObjects()->end());
 	gameObjectList->insert(gameObjectList->end(),sprite);
+	//sprite->AddComponent<Rigidbody>(new Rigidbody());
+	Rigidbody *ads = sprite->GetComponent<Rigidbody>();
 }
 
 void TilemapScene::UnloadScene()

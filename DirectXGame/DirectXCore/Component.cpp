@@ -3,6 +3,7 @@
 
 using namespace DirectXCore;
 
+
 Component::Component()
 {
 }

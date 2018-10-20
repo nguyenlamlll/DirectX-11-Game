@@ -3,10 +3,11 @@
 
 using namespace DirectXCore;
 
-GameObject::GameObject()
+DirectXCore::GameObject::GameObject()
 {
 	transform = new Transform(Vector3(0, 0, 1), Vector3(0, 0, 1), Vector3(1, 1, 1));
 	boxCollider = new BoundingBox();
+	componentList = new std::vector<Component*>();
 }
 
 void DirectXCore::GameObject::Update()
@@ -21,12 +22,12 @@ void DirectXCore::GameObject::Render()
 
 }
 
-
 void DirectXCore::GameObject::OnCollisionEnter()
 {
 	//transform->SetPosition(transform->GetPosition());
 }
 
-GameObject::~GameObject()
+
+DirectXCore::GameObject::~GameObject()
 {
 }
