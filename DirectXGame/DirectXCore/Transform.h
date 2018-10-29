@@ -15,10 +15,10 @@ namespace DirectXCore
 		void LerpPosition(Vector3 _newPosition,float _deltatime) { position.Lerp(position,_newPosition,_deltatime); }
 
 		Vector3 GetRotation() { return rotation; }
-		void SetRotation(Vector3 _newRotation) { rotation = _newRotation; }
+		void SetRotation(Vector3 _newRotation);
 
 		Vector3 GetScale() { return scale; }
-		void SetScale(Vector3 _newScale) { scale = _newScale; }
+		void SetScale(Vector3 _newScale);
 
 		~Transform();
 	private:

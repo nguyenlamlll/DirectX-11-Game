@@ -7,17 +7,28 @@ Transform::Transform()
 {
 }
 
-Transform::Transform(Vector3 _pos = Vector3(0,0,1), Vector3 _rot = Vector3(0,0,1), Vector3 _scl = Vector3(1,1,1))
+Transform::Transform(Vector3 _pos = Vector3(0,0,0), Vector3 _rot = Vector3(0,0,0), Vector3 _scl = Vector3(1,1,1))
 {
-	position = _pos;
-	rotation = _rot;
-	scale = _scl;
+	SetPosition(_pos);
+	SetRotation(_rot);
+	SetScale(_scl);
 }
 
 void Transform::SetPosition(Vector3 _newPosition)
 {
 	position.x = _newPosition.x;
 	position.y = _newPosition.y;
+}
+void DirectXCore::Transform::SetRotation(Vector3 _newRotation)
+{
+	rotation.x = _newRotation.x;
+	rotation.y = _newRotation.y;
+	rotation.z = _newRotation.z;
+}
+void Transform::SetScale(Vector3 _newScale) {
+	scale.x = _newScale.x;
+	scale.y = _newScale.y;
+	scale.z = _newScale.z;
 }
 
 

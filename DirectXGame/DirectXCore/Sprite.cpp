@@ -24,7 +24,7 @@ Sprite::Sprite(DirectXCore::DeviceResources * _deviceResource, const wchar_t * _
 	//position.x = _deviceResource->GetOutputSize().right / 2;
 	//position.y = _deviceResource->GetOutputSize().bottom / 2;
 	//transform.SetPosition(SimpleMath::Vector3(_deviceResource->GetOutputSize().right / 2, _deviceResource->GetOutputSize().bottom / 2));
-	transform = new Transform(Vector3(_deviceResource->GetOutputSize().right / 2, _deviceResource->GetOutputSize().bottom / 2, 1), Vector3(0, 0, 1), Vector3(1, 1, 1));
+	transform = new Transform(Vector3(_deviceResource->GetOutputSize().right / 2, _deviceResource->GetOutputSize().bottom / 2, 0), Vector3(0, 0, 0), Vector3(1, 1, 1));
 
 	spriterect = new RECT();
 	spriterect->left = spriterect->top = 0;
@@ -43,9 +43,18 @@ Sprite::~Sprite()
 }
 void Sprite::Update()
 {
-	Vector3* colliderCenter = new Vector3(transform->GetPosition().x + transform->GetScale().x / 2, transform->GetPosition().y + transform->GetScale().y / 2, 1);
-	boxCollider->Center = Vector3(colliderCenter->x, colliderCenter->y, 1);
-	boxCollider->Extents = Vector3(transform->GetScale().x / 2 + spriterect->right / 2, transform->GetScale().y / 2 + spriterect->bottom / 2, 1);
+	Rigidbody *rigidBody = GetComponent<Rigidbody>();
+	if (rigidBody) if (!rigidBody->IsKinematic()) rigidBody->Move(SimpleMath::Vector3(0, 9.8f*rigidBody->GetMass().y, 0), 0.4f);
+	for (size_t i = 0; i < componentList->size(); i++)
+	{
+		componentList->at(i)->Update();
+	}
+	Collider *collider = GetComponent<Collider>();
+	if (collider)
+	{
+		collider->SetColliderScale(Vector3(transform->GetScale().x * spriterect->right / 2, transform->GetScale().y * spriterect->bottom / 2, 1));
+		collider->SetColliderPosition(transform->GetPosition());
+	}
 }
 void Sprite::Render()
 {

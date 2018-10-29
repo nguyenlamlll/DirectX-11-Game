@@ -9,7 +9,9 @@ namespace DirectXCore
 	{
 	public:
 		Component();
+		Component(GameObject* _gameObject);
 		virtual void Update() {};
+		void SetAttachedGameObject(GameObject* _gameObject);
 		~Component();
 	protected:
 		GameObject* attachedGameObject;

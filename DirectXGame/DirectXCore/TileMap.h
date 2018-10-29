@@ -2,6 +2,7 @@
 #include "Sprite.h"
 #include "Camera.h"
 #include "GameObject.h"
+#include "Collider.h"
 
 namespace DirectXCore
 {

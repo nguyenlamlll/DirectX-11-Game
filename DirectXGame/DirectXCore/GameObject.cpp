@@ -5,16 +5,24 @@ using namespace DirectXCore;
 
 DirectXCore::GameObject::GameObject()
 {
-	transform = new Transform(Vector3(0, 0, 1), Vector3(0, 0, 1), Vector3(1, 1, 1));
-	boxCollider = new BoundingBox();
+	transform = new Transform(Vector3(0, 0, 0), Vector3(0, 0, 0), Vector3(1, 1, 1));
 	componentList = new std::vector<Component*>();
 }
 
 void DirectXCore::GameObject::Update()
 {
 	Vector3* colliderCenter = new Vector3(transform->GetPosition().x + transform->GetScale().x / 2, transform->GetPosition().y + transform->GetScale().y / 2, 1);
-	boxCollider->Center = Vector3(colliderCenter->x, colliderCenter->y, 1);
-	boxCollider->Extents = Vector3(transform->GetScale().x / 2, transform->GetScale().y / 2, 1);
+	Rigidbody *rigidBody = GetComponent<Rigidbody>();
+	if (rigidBody) GetTransform()->SetPosition(GetTransform()->GetPosition()+rigidBody->GetVelocity());
+	Collider *collider = GetComponent<Collider>();
+	/*if (collider)
+	{
+		collider->SetColliderTransform(transform);
+	}*/
+	for (size_t i = 0; i < componentList->size(); i++)
+	{
+		componentList->at(i)->Update();
+	}
 }
 
 void DirectXCore::GameObject::Render()
@@ -30,4 +38,12 @@ void DirectXCore::GameObject::OnCollisionEnter()
 
 DirectXCore::GameObject::~GameObject()
 {
+}
+
+void DirectXCore::GameObject::ReferenceGameObject()
+{
+	for (size_t i = 0; i < componentList->size(); i++)
+	{
+		componentList->at(i)->SetAttachedGameObject(this);
+	}
 }

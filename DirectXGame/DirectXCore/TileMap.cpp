@@ -63,7 +63,7 @@ TileMap::TileMap(DirectXCore::DeviceResources *_deviceResource, const wchar_t * 
 					tilesetSheet[layer->GetTileTilesetIndex(n, m)]->SetCenter(Vector3(tileDataWidth / 2, tileDataHeight / 2, 1));
 					tilesetSheet[layer->GetTileTilesetIndex(n, m)]->GetTransform()->SetScale(DirectX::SimpleMath::Vector3(1.0f, 1.0f, 1.0f));
 					tilesetSheet[layer->GetTileTilesetIndex(n, m)]->SetSpriteRect(sourceRECT);
-					tilesetSheet[layer->GetTileTilesetIndex(n, m)]->GetTransform()->SetPosition(Vector3((n * tileDataWidth) + position.x, (m * tileDataHeight) + position.y, 1));
+					tilesetSheet[layer->GetTileTilesetIndex(n, m)]->GetTransform()->SetPosition(Vector3((n * tileDataWidth) + position.x, (m * tileDataHeight) + position.y, 0));
 				}
 			}
 		}
@@ -76,12 +76,9 @@ TileMap::TileMap(DirectXCore::DeviceResources *_deviceResource, const wchar_t * 
 		{
 			Tmx::Object *object = objectGroup->GetObjects().at(j);
 			GameObject *gameObject = new GameObject();
-			gameObject->GetTransform()->SetPosition(Vector3(object->GetX(), object->GetY(), 1));
+			gameObject->GetTransform()->SetPosition(position + Vector3(object->GetX(), object->GetY(), 1));
 			gameObject->GetTransform()->SetScale(Vector3(object->GetWidth(), object->GetHeight(), 1));
-			Vector3 colPos = Vector3(gameObject->GetTransform()->GetPosition().x, gameObject->GetTransform()->GetPosition().y, 1.f);
-			Vector3 colScl = Vector3(gameObject->GetTransform()->GetScale().x, gameObject->GetTransform()->GetScale().y, 1.f);
-			gameObject->GetBoxCollider()->Center = colPos;
-			gameObject->GetBoxCollider()->Extents = colScl;
+			gameObject->AddComponent<Collider>(new Collider(gameObject, gameObject->GetTransform()));
 			gameObjectList->push_back(gameObject);
 		}
 	}
