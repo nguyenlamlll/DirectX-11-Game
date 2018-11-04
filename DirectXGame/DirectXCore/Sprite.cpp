@@ -19,11 +19,10 @@ Sprite::Sprite(DirectXCore::DeviceResources * _deviceResource, const wchar_t * _
 	CD3D11_TEXTURE2D_DESC spriteDesc;
 	DirectXCore::ThrowIfFailed(resource.As(&cat));
 	cat->GetDesc(&spriteDesc);
-	pivot.x = float(spriteDesc.Width / 2);
-	pivot.y = float(spriteDesc.Height / 2);
-	//position.x = _deviceResource->GetOutputSize().right / 2;
-	//position.y = _deviceResource->GetOutputSize().bottom / 2;
-	//transform.SetPosition(SimpleMath::Vector3(_deviceResource->GetOutputSize().right / 2, _deviceResource->GetOutputSize().bottom / 2));
+	//pivot.x = float(spriteDesc.Width / 2);
+	pivot.x = 0;
+	//pivot.y = float(spriteDesc.Height / 2);
+	pivot.y = 0;
 	transform = new Transform(Vector3(_deviceResource->GetOutputSize().right / 2, _deviceResource->GetOutputSize().bottom / 2, 0), Vector3(0, 0, 0), Vector3(1, 1, 1));
 
 	spriterect = new RECT();
@@ -31,9 +30,7 @@ Sprite::Sprite(DirectXCore::DeviceResources * _deviceResource, const wchar_t * _
 	spriterect->right = spriteDesc.Width;
 	spriterect->bottom = spriteDesc.Height;
 
-
-	//scale.x = _scale;
-	//scale.y = _scale;
+	transform->SetRotation(Vector3(0,0,0));
 	transform->SetScale(SimpleMath::Vector3(_scale, _scale, 1));
 }
 
@@ -52,7 +49,8 @@ void Sprite::Update()
 	Collider *collider = GetComponent<Collider>();
 	if (collider)
 	{
-		collider->SetColliderScale(Vector3(transform->GetScale().x * spriterect->right / 2, transform->GetScale().y * spriterect->bottom / 2, 1));
+		//collider->SetColliderScale(Vector3(transform->GetScale().x * spriterect->right / 2, transform->GetScale().y * spriterect->bottom / 2, 1));
+		collider->SetColliderScale(Vector3(transform->GetScale().x * spriterect->right, transform->GetScale().y * spriterect->bottom, 1));
 		collider->SetColliderPosition(transform->GetPosition());
 	}
 }

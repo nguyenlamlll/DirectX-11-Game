@@ -60,7 +60,6 @@ TileMap::TileMap(DirectXCore::DeviceResources *_deviceResource, const wchar_t * 
 
 					listTileID.insert(std::pair<int, RECT*>(tileID, sourceRECT));
 					//world position = sprite local position + tilemap position
-					tilesetSheet[layer->GetTileTilesetIndex(n, m)]->SetCenter(Vector3(tileDataWidth / 2, tileDataHeight / 2, 1));
 					tilesetSheet[layer->GetTileTilesetIndex(n, m)]->GetTransform()->SetScale(DirectX::SimpleMath::Vector3(1.0f, 1.0f, 1.0f));
 					tilesetSheet[layer->GetTileTilesetIndex(n, m)]->SetSpriteRect(sourceRECT);
 					tilesetSheet[layer->GetTileTilesetIndex(n, m)]->GetTransform()->SetPosition(Vector3((n * tileDataWidth) + position.x, (m * tileDataHeight) + position.y, 0));
@@ -76,9 +75,10 @@ TileMap::TileMap(DirectXCore::DeviceResources *_deviceResource, const wchar_t * 
 		{
 			Tmx::Object *object = objectGroup->GetObjects().at(j);
 			GameObject *gameObject = new GameObject();
-			gameObject->GetTransform()->SetPosition(position + Vector3(object->GetX(), object->GetY(), 1));
+			gameObject->GetTransform()->SetPosition(position + Vector3(object->GetX(), object->GetY(), 0));
 			gameObject->GetTransform()->SetScale(Vector3(object->GetWidth(), object->GetHeight(), 1));
 			gameObject->AddComponent<Collider>(new Collider(gameObject, gameObject->GetTransform()));
+			//gameObject->GetComponent<Collider>()->SetColliderScale(Vector3(object->GetWidth(), object->GetHeight(), 1));
 			gameObjectList->push_back(gameObject);
 		}
 	}
@@ -120,7 +120,6 @@ void TileMap::Render()
 					{
 						sprite->Render(sprite->GetTransform()->GetWorldToCameraPosition(worldToScreenPosition));
 					}
-
 				}
 			}
 		}

@@ -36,7 +36,7 @@ void DirectXCore::Collider::SetColliderScale(Vector3 _newScale)
 {
 	collider->Extents.x = _newScale.x / 2;
 	collider->Extents.y = _newScale.y / 2;
-	collider->Extents.z = _newScale.z / 2;
+	collider->Extents.z = _newScale.z;
 }
 
 void DirectXCore::Collider::SetColliderTransform(Transform* _newTransform)

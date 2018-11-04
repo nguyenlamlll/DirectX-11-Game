@@ -20,7 +20,7 @@ void TilemapScene::UpdateScene(float elapsedTime)
 		{
 			bool colType = sprite->GetComponent<Collider>()->GetCollider()->Intersects(*gameObjectList->at(i)->GetComponent<Collider>()->GetCollider());
 			bool colType2 = gameObjectList->at(i)->GetComponent<Collider>()->GetCollider()->Intersects(*sprite->GetComponent<Collider>()->GetCollider());
-			if (colType || colType2)	collide = true;
+			if (colType || colType2) collide = true;
 		}
 	}
 	if (collide) {
@@ -47,10 +47,10 @@ void TilemapScene::LoadScene()
 {
 	gameObjectList = new std::vector<GameObject*>();
 	m_dxBase->CreateCamera(&camera);
-	m_dxBase->CreateSprite(L"cat.png", &sprite);
+	m_dxBase->CreateSprite(L"Resources/Rockman.png", &sprite);
 	m_dxBase->CreateTilemap(L"Resources/marioworld1-1.tmx", &tilemap);
 	tilemap->SetCamera(camera);
-	sprite->GetTransform()->SetPosition(Vector3(100, 0, 0));
+	sprite->GetTransform()->SetPosition(Vector3(0, 0, 0));
 	gameObjectList->insert(gameObjectList->end(), tilemap->GetListGameObjects()->begin(), tilemap->GetListGameObjects()->end());
 	gameObjectList->insert(gameObjectList->end(),sprite);
 	sprite->AddComponent<Rigidbody>(new Rigidbody(sprite));

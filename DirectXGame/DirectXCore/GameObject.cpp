@@ -11,7 +11,7 @@ DirectXCore::GameObject::GameObject()
 
 void DirectXCore::GameObject::Update()
 {
-	Vector3* colliderCenter = new Vector3(transform->GetPosition().x + transform->GetScale().x / 2, transform->GetPosition().y + transform->GetScale().y / 2, 1);
+	Vector3* colliderCenter = new Vector3(transform->GetPosition().x + transform->GetScale().x, transform->GetPosition().y + transform->GetScale().y, 1);
 	Rigidbody *rigidBody = GetComponent<Rigidbody>();
 	if (rigidBody) GetTransform()->SetPosition(GetTransform()->GetPosition()+rigidBody->GetVelocity());
 	Collider *collider = GetComponent<Collider>();

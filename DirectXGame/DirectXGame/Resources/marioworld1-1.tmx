@@ -20,7 +20,7 @@
  </layer>
  <objectgroup id="4" name="object">
   <object id="1" x="1" y="447" width="2206" height="61"/>
-  <object id="2" x="10" y="384" width="64" height="60"/>
+  <object id="2" x="284" y="390" width="64" height="60"/>
   <object id="3" x="1217" y="353" width="62" height="94"/>
   <object id="4" x="1474" y="323" width="59" height="125"/>
   <object id="5" x="1825.33" y="321.667" width="61.3333" height="124.333"/>
