@@ -3,6 +3,7 @@
 
 #include <DirectXCore.h>
 #include "CatScene.h"
+#include "TilemapScene.h"
 #include "PingPongScene.h"
 
 #if defined(DEBUG) | defined(_DEBUG)
@@ -89,8 +90,10 @@ int WINAPI wWinMain(
 
 	//const wchar_t* ambience = L"res\\NightAmbienceSimple.wav";
 	//game->CreateSoundAndMusic(ambience);
-	game->CreateSprite(L"Resources/untitled.tmx");
-	game->AddScene(new PingPongScene(game.get()));
+	game->AddScene(new TilemapScene(game.get()));
+	//game->CreateSprite(L"Resources/untitled.tmx");
+	//game->AddScene(new PingPongScene(game.get()));
+
 	game->SwitchToScene(0);
 	// Main message loop
 	MSG msg = { 0 };

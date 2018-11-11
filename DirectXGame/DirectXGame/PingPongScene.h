@@ -19,7 +19,7 @@ public:
 
 private:
 	std::shared_ptr<DirectXCore::DxBase> m_dxBase;
-
+	
 	DirectXCore::Sprite* m_leftPad;
 	DirectXCore::Sprite* m_rightPad;
 
@@ -31,6 +31,6 @@ private:
 	bool m_isRightPadMoveDown;
 	bool m_isRightPadMoveUp;
 
-	void MoveSprite(DirectXCore::Sprite* pad, DirectX::SimpleMath::Vector2 newPosition);
+	void MoveSprite(DirectXCore::Sprite* pad, DirectX::SimpleMath::Vector3 newPosition);
 };
 

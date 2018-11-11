@@ -1,4 +1,6 @@
 #pragma once
+#include "Transform.h"
+using namespace DirectX;
 
 namespace DirectXCore
 {
@@ -7,6 +9,8 @@ namespace DirectXCore
 	public:
 		Object();
 		~Object();
+	protected:
+		std::string tag, name;
 	};
 }
 

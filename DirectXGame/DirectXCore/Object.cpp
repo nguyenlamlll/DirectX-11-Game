@@ -3,10 +3,9 @@
 
 using namespace DirectXCore;
 
-Object::Object()
+DirectXCore::Object::Object() 
 {
 }
-
 
 Object::~Object()
 {

@@ -5,9 +5,11 @@ using namespace DirectXCore;
 
 Collision::Collision()
 {
+	
 }
 
 
 Collision::~Collision()
 {
 }
+

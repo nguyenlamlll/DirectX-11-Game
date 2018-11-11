@@ -1,5 +1,4 @@
 #pragma once
-
 #include "DeviceResources.h"
 #include "StepTimer.h"
 #include "Sound.h"
@@ -8,7 +7,7 @@
 #include "Animation.h"
 #include "TileMap.h"
 #include "Scene.h"
-
+#include "Text.h"
 #include "Input.h"
 
 namespace DirectXCore 
@@ -23,9 +22,12 @@ namespace DirectXCore
 		void Initialize(HWND window, int width, int height);
 
 		void CreateSoundAndMusic(const wchar_t* soundFileName);
-
-		void CreateSprite(const wchar_t* spriteName);
+		DeviceResources* GetDeviceResource() { return m_deviceResources.get(); }
+		void CreateCamera();
+		void CreateTilemap(const wchar_t * tilemapSpriteName, TileMap** returnTilemap);
 		void CreateSprite(const wchar_t* spriteName, Sprite** returnSprite);
+
+		void CreateText(const wchar_t* fontPath, const wchar_t* content, Text** returnText);
 
 		void SwitchToScene(wchar_t* name);
 		void SwitchToScene(int index);

@@ -15,7 +15,7 @@ namespace DirectXCore
 		~Animation();
 	private:
 		int frameIndex = 0, frameCount, frameWidth, frameHeight;
-		std::vector<RECT> animationFrameRects;
+		std::vector<RECT*> animationFrameRects;
 		Sprite* mainSprite;
 		float currentFrameTime = 0, timePerFrame = 0, scale = 0;
 	};
