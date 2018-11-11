@@ -6,6 +6,18 @@
 #include "TilemapScene.h"
 #include "PingPongScene.h"
 
+#if defined(DEBUG) | defined(_DEBUG)
+#define _CRTDBG_MAP_ALLOC  
+#include <stdlib.h>  
+#include <crtdbg.h>  
+#endif
+
+#ifdef _DEBUG
+#define new new( _NORMAL_BLOCK , __FILE__ , __LINE__ )
+#else
+#define new new
+#endif
+
 LRESULT CALLBACK WndProc(HWND hwnd, UINT message, WPARAM wParam, LPARAM lParam);
 
 int WINAPI wWinMain(
@@ -15,6 +27,11 @@ int WINAPI wWinMain(
 	int cmdShow
 )
 {
+	// Memory leak detecting in debug mode.
+#if defined(DEBUG) | defined(_DEBUG)
+	_CrtSetDbgFlag(_CRTDBG_ALLOC_MEM_DF | _CRTDBG_LEAK_CHECK_DF);
+#endif
+
 	UNREFERENCED_PARAMETER(prevInstance);
 	UNREFERENCED_PARAMETER(cmdLine);
 
