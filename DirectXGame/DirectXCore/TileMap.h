@@ -3,6 +3,7 @@
 #include "Camera.h"
 #include "GameObject.h"
 #include "Collider.h"
+#include "Renderer.h"
 
 namespace DirectXCore
 {
@@ -21,6 +22,7 @@ namespace DirectXCore
 		Tmx::Map *tilemap;
 		std::map<int, Sprite*> tilesetSheet;
 		std::map<int, RECT*> listTileID;
+		std::map<int, Vector3> listRECTPositions;
 		Camera* mainCamera;
 		DirectXCore::DeviceResources* deviceResource;
 		std::vector<GameObject*>* gameObjectList;

@@ -34,13 +34,15 @@ void TilemapScene::RenderScene()
 {
 	tilemap->Render();
 	DirectX::SimpleMath::Vector3 worldToScreenPosition = DirectX::SimpleMath::Vector3(camera->GetBound().right / 2 - camera->GetPosition().x, camera->GetBound().bottom / 2 - camera->GetPosition().y, 0);
-	for (size_t i = 0; i < gameObjectList->size(); i++)
+	/*for (size_t i = 0; i < gameObjectList->size(); i++)
 	{
 		if (camera->IsContain(gameObjectList->at(i)->GetTransform()->GetWorldToCameraPosition(worldToScreenPosition), gameObjectList->at(i)->GetTransform()->GetScale()))
 		{
 			gameObjectList->at(i)->Render();
 		}
-	}
+	}*/
+	//sprite->Render();
+	sprite->GetComponent<Renderer>()->Render();
 }
 
 void TilemapScene::LoadScene()
@@ -55,6 +57,7 @@ void TilemapScene::LoadScene()
 	gameObjectList->insert(gameObjectList->end(),sprite);
 	sprite->AddComponent<Rigidbody>(new Rigidbody(sprite));
 	sprite->AddComponent<Collider>(new Collider(sprite, sprite->GetTransform()));
+	sprite->AddComponent<Renderer>(new Renderer(m_dxBase->GetDeviceResource(), L"Resources/Rockman.png", sprite));
 }
 
 void TilemapScene::UnloadScene()

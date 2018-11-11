@@ -11,6 +11,7 @@ namespace DirectXCore
 		Component();
 		Component(GameObject* _gameObject);
 		virtual void Update() {};
+		virtual void Render() {};
 		void SetAttachedGameObject(GameObject* _gameObject);
 		~Component();
 	protected:

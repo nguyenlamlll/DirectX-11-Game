@@ -29,6 +29,7 @@ TileMap::TileMap(DirectXCore::DeviceResources *_deviceResource, const wchar_t * 
 
 		Sprite *tileSet = new Sprite(_deviceResource, spritePath);
 		tilesetSheet.insert(std::pair<int, Sprite*>(i, tileSet));
+		tileSet->AddComponent<Renderer>(new Renderer(_deviceResource,spritePath));
 	}
 	for (int i = 0; i < tilemap->GetNumTileLayers(); i++)
 	{
@@ -59,10 +60,7 @@ TileMap::TileMap(DirectXCore::DeviceResources *_deviceResource, const wchar_t * 
 					sourceRECT->right = sourceRECT->left + tileDataWidth;
 
 					listTileID.insert(std::pair<int, RECT*>(tileID, sourceRECT));
-					//world position = sprite local position + tilemap position
-					tilesetSheet[layer->GetTileTilesetIndex(n, m)]->GetTransform()->SetScale(DirectX::SimpleMath::Vector3(1.0f, 1.0f, 1.0f));
-					tilesetSheet[layer->GetTileTilesetIndex(n, m)]->SetSpriteRect(sourceRECT);
-					tilesetSheet[layer->GetTileTilesetIndex(n, m)]->GetTransform()->SetPosition(Vector3((n * tileDataWidth) + position.x, (m * tileDataHeight) + position.y, 0));
+					//listRECTPositions.insert(std::pair<int,Vector3>(tileID, Vector3((n * tileDataWidth) + position.x, (m * tileDataHeight) + position.y, 0)));
 				}
 			}
 		}
@@ -86,10 +84,6 @@ TileMap::TileMap(DirectXCore::DeviceResources *_deviceResource, const wchar_t * 
 
 void DirectXCore::TileMap::Update()
 {
-	/*DirectX::SimpleMath::Vector3 trans = DirectX::SimpleMath::Vector3(deviceResource->GetOutputSize().right / 2 - mainCamera->GetPosition().x,
-		deviceResource->GetOutputSize().bottom / 2 - mainCamera->GetPosition().y);*/
-		//position += DirectX::SimpleMath::Vector3(2.f,0);
-		//mainCamera->SetPosition(mainCamera->GetPosition() + DirectX::SimpleMath::Vector3(3.f, 0,0));
 }
 
 void TileMap::Render()
@@ -111,14 +105,12 @@ void TileMap::Render()
 					//tile index
 					int tileID = layer->GetTileId(n, m);
 
-					//world position = sprite local position + tilemap position
 					Sprite* sprite = tilesetSheet[layer->GetTileTilesetIndex(n, m)];
 					DirectX::SimpleMath::Vector3 currentPosition((n * tileDataWidth) + position.x, (m * tileDataHeight) + position.y, 1);
-					sprite->SetSpriteRect(listTileID[tileID]);
-					sprite->GetTransform()->SetPosition(currentPosition);
-					if (mainCamera->IsContain(sprite->GetTransform()->GetWorldToCameraPosition(worldToScreenPosition), sprite->GetWorldToScreenScale()))
+					if (mainCamera->IsContain(currentPosition + worldToScreenPosition, sprite->GetWorldToScreenScale()))
 					{
-						sprite->Render(sprite->GetTransform()->GetWorldToCameraPosition(worldToScreenPosition));
+						sprite->GetComponent<Renderer>()->SetRECT(*listTileID[tileID]);
+						sprite->GetComponent<Renderer>()->Render(currentPosition);
 					}
 				}
 			}
