@@ -18,7 +18,7 @@ namespace DirectXCore
 		std::vector<GameObject*>* GetListGameObjects() { return gameObjectList; }
 		~TileMap();
 	private:
-		DirectX::SimpleMath::Vector2 position;
+		DirectX::SimpleMath::Vector3 position,worldToScreenPosition;
 		Tmx::Map *tilemap;
 		std::map<int, Sprite*> tilesetSheet;
 		std::map<int, RECT*> listTileID;

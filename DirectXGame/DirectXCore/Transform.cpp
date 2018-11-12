@@ -14,6 +14,10 @@ Transform::Transform(Vector3 _pos = Vector3(0,0,0), Vector3 _rot = Vector3(0,0,0
 	SetScale(_scl);
 }
 
+void Transform::SetWorldToCameraPosition(Vector3 _cameraShift) {
+	screenPosition = position + _cameraShift;
+}
+
 void Transform::SetPosition(Vector3 _newPosition)
 {
 	position.x = _newPosition.x;

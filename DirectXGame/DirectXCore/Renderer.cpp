@@ -55,7 +55,7 @@ DirectXCore::Renderer::Renderer(DeviceResources * _deviceResource, const wchar_t
 void DirectXCore::Renderer::Render()
 {
 	m_spriteBatch->Begin(DirectX::SpriteSortMode_Deferred, m_states->NonPremultiplied());
-	m_spriteBatch->Draw(m_texture.Get(), sprite->GetTransform()->GetPosition(), spriterect, Colors::White, 0.f, pivot, sprite->GetTransform()->GetScale());
+	m_spriteBatch->Draw(m_texture.Get(), sprite->GetTransform()->GetWorldToCameraPosition(), spriterect, Colors::White, 0.f, pivot, sprite->GetTransform()->GetScale());
 	m_spriteBatch->End();
 }
 

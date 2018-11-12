@@ -10,7 +10,8 @@ namespace DirectXCore
 		Transform();
 		Transform(Vector3 _pos,Vector3 _rot, Vector3 _scl);
 		Vector3 GetPosition() { return position; }
-		Vector3 GetWorldToCameraPosition(Vector3 _cameraPosition) { return position + _cameraPosition; }
+		Vector3 GetWorldToCameraPosition() { return screenPosition; }
+		void SetWorldToCameraPosition(Vector3 _cameraShift);
 		void SetPosition(Vector3 _newPosition);
 		void LerpPosition(Vector3 _newPosition,float _deltatime) { position.Lerp(position,_newPosition,_deltatime); }
 
@@ -23,6 +24,7 @@ namespace DirectXCore
 		~Transform();
 	private:
 		Vector3 position, rotation, scale;
+		Vector3 screenPosition;
 	};
 }
 
