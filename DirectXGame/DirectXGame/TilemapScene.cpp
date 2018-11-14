@@ -30,7 +30,7 @@ void TilemapScene::UpdateScene(float elapsedTime)
 	}
 	for (size_t i = 0; i < gameObjectList->size(); i++) gameObjectList->at(i)->Update();
 	tilemap->Update();
-	camera->SetPosition(camera->GetPosition() + Vector3(-2.f, 0, 0));
+	camera->SetPosition(camera->GetPosition() + Vector3(2.f, 0, 0));
 }
 
 void TilemapScene::RenderScene()
@@ -54,7 +54,7 @@ void TilemapScene::LoadScene()
 	sprite = new Sprite(m_dxBase->GetDeviceResource(), L"Resources/Rockman.png");
 	m_dxBase->CreateTilemap(L"Resources/marioworld1-1.tmx", &tilemap);
 	tilemap->SetCamera(camera);
-	sprite->GetTransform()->SetPosition(Vector3(0, 0, 0));
+	sprite->GetTransform()->SetPosition(Vector3(100, 0, 0));
 	sprite->AddComponent<Rigidbody>(new Rigidbody(sprite));
 	sprite->AddComponent<Collider>(new Collider(sprite, sprite->GetTransform()));
 	sprite->AddComponent<Renderer>(new Renderer(m_dxBase->GetDeviceResource(), L"Resources/Rockman.png", sprite));

@@ -90,7 +90,10 @@ void DirectXCore::TileMap::Update()
 
 void TileMap::Render()
 {
-	Vector3 worldToScreenShift = Vector3(mainCamera->GetBound().right / 2 - mainCamera->GetPosition().x, mainCamera->GetBound().bottom / 2 - mainCamera->GetPosition().y, 0);
+	Vector3 worldToScreenShift = Vector3(
+		mainCamera->GetBound().right / 2 - mainCamera->GetPosition().x, 
+		mainCamera->GetBound().bottom / 2 - mainCamera->GetPosition().y, 
+		0);
 	worldToScreenPosition = position + worldToScreenShift;
 	for (int i = 0; i < tilemap->GetNumTileLayers(); i++)
 	{
@@ -110,11 +113,17 @@ void TileMap::Render()
 
 					Sprite* sprite = tilesetSheet[layer->GetTileTilesetIndex(n, m)];
 					DirectX::SimpleMath::Vector3 currentPosition((n * tileDataWidth) + worldToScreenPosition.x, (m * tileDataHeight) + worldToScreenPosition.y, 1);
-					if (mainCamera->IsContain(currentPosition + worldToScreenPosition, sprite->GetWorldToScreenScale()))
+					if (mainCamera->IsContain(currentPosition, sprite->GetWorldToScreenScale()))
 					{
 						sprite->GetComponent<Renderer>()->SetRECT(*listTileID[tileID]);
 						sprite->GetComponent<Renderer>()->Render(currentPosition);
 					}
+#if defined(DEBUG) | defined(_DEBUG)
+					else
+					{
+						int placeBreakPointHereToCheckIfCameraIsWorking = 0;
+					}
+#endif
 				}
 			}
 		}
