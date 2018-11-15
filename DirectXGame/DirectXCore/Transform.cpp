@@ -23,6 +23,7 @@ void Transform::SetPosition(Vector3 _newPosition)
 	position.x = _newPosition.x;
 	position.y = _newPosition.y;
 }
+
 void DirectXCore::Transform::SetRotation(Vector3 _newRotation)
 {
 	rotation.x = _newRotation.x;
@@ -34,7 +35,6 @@ void Transform::SetScale(Vector3 _newScale) {
 	scale.y = _newScale.y;
 	scale.z = _newScale.z;
 }
-
 
 Transform::~Transform()
 {

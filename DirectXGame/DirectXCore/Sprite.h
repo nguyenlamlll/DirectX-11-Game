@@ -17,6 +17,7 @@ namespace DirectXCore
 		void Render();
 		void Render(DirectX::SimpleMath::Vector3 _newPosition);
 
+
 		void SetSpriteRect(RECT* _newSpriteRect);
 		RECT GetSpriteRect() { return *spriterect; }
 		void SetCenter(DirectX::SimpleMath::Vector3 _pivot) { pivot = _pivot; }

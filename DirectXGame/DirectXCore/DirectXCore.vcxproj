@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
+﻿<?xml version="1.0" encoding="utf-8"?>
 <Project DefaultTargets="Build" ToolsVersion="15.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup Label="ProjectConfigurations">
     <ProjectConfiguration Include="Debug|Win32">
@@ -162,11 +162,14 @@
     <ClInclude Include="Animation.h" />
     <ClInclude Include="Camera.h" />
     <ClInclude Include="Collider.h" />
+    <ClInclude Include="Collision.h" />
     <ClInclude Include="Component.h" />
     <ClInclude Include="DeviceResources.h" />
     <ClInclude Include="DirectXCore.h" />
     <ClInclude Include="DxBase.h" />
     <ClInclude Include="GameObject.h" />
+    <ClInclude Include="Text.h" />
+    <ClInclude Include="Input.h" />
     <ClInclude Include="MapReader\base64.h">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">false</ExcludedFromBuild>
     </ClInclude>
@@ -253,10 +256,13 @@
     <ClCompile Include="Animation.cpp" />
     <ClCompile Include="Camera.cpp" />
     <ClCompile Include="Collider.cpp" />
+    <ClCompile Include="Collision.cpp" />
     <ClCompile Include="Component.cpp" />
     <ClCompile Include="DeviceResources.cpp" />
     <ClCompile Include="DxBase.cpp" />
     <ClCompile Include="GameObject.cpp" />
+    <ClCompile Include="Text.cpp" />
+    <ClCompile Include="Input.cpp" />
     <ClCompile Include="MapReader\base64.cpp">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">false</ExcludedFromBuild>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">NotUsing</PrecompiledHeader>
@@ -357,6 +363,7 @@
     <ResourceCompile Include="DirectXCore.rc" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="..\DirectXGame\myfile.spritefont" />
     <None Include="MapReader\Tmx.h.in">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">false</ExcludedFromBuild>
     </None>

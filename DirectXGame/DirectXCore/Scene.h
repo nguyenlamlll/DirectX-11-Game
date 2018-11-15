@@ -2,6 +2,8 @@
 #include "Sound.h"
 #include "Sprite.h"
 #include "Animation.h"
+#include "Input.h"
+
 
 namespace DirectXCore 
 {
@@ -15,6 +17,9 @@ namespace DirectXCore
 		virtual void RenderScene() = 0;
 		virtual void LoadScene() = 0;
 		virtual void UnloadScene() = 0;
+
+		virtual void OnKeyUp(KeyCode) = 0;
+		virtual void OnKeyDown(KeyCode) = 0;
 
 	};
 

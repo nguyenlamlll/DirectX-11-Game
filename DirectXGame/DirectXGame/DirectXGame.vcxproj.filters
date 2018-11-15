@@ -24,6 +24,9 @@
     <ClCompile Include="TilemapScene.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="PingPongScene.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
@@ -36,6 +39,9 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="TilemapScene.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="PingPongScene.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

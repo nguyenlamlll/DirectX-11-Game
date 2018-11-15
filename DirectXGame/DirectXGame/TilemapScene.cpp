@@ -51,7 +51,9 @@ void TilemapScene::LoadScene()
 	m_dxBase->CreateCamera(&camera);
 	//m_dxBase->CreateSprite(L"Resources/Rockman.png", &sprite);
 	//tilemap = new TileMap(m_dxBase->GetDeviceResource(), L"Resources/Resources/marioworld1-1.tmx");
-	sprite = new Sprite(m_dxBase->GetDeviceResource(), L"Resources/Rockman.png");
+
+	m_dxBase->CreateSprite(L"Resources/Rockman.png", &sprite);
+	//sprite = new Sprite(m_dxBase->GetDeviceResource(), L"Resources/Rockman.png");
 	m_dxBase->CreateTilemap(L"Resources/marioworld1-1.tmx", &tilemap);
 	tilemap->SetCamera(camera);
 	sprite->GetTransform()->SetPosition(Vector3(100, 0, 0));

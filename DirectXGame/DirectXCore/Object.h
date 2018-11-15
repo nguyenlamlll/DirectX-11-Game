@@ -10,6 +10,7 @@ namespace DirectXCore
 		~Object();
 	protected:
 		//std::string tag, name;
+
 	};
 }
 

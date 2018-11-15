@@ -10,14 +10,14 @@ Collider::Collider()
 
 DirectXCore::Collider::Collider(GameObject * _attachedGameObject, Transform* _gameObjectTransform)
 {
-	if (!attachedGameObject) attachedGameObject = _attachedGameObject;
+	attachedGameObject = _attachedGameObject;
 	collider = new BoundingBox(_gameObjectTransform->GetPosition(), _gameObjectTransform->GetScale());
 	SetColliderTransform(_gameObjectTransform);
 }
 
 DirectXCore::Collider::Collider(GameObject * _attachedGameObject, Vector3 _pos, Vector3 _rot, Vector3 _scl)
 {
-	if (!attachedGameObject) attachedGameObject = _attachedGameObject;
+	attachedGameObject = _attachedGameObject;
 }
 
 void DirectXCore::Collider::Update()

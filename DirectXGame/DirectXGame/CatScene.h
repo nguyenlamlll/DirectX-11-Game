@@ -21,10 +21,15 @@ public:
 	// Scene is probably inactive but the game is yet over. To save memory, unload this scene completely.
 	void UnloadScene() override;
 
+	void OnKeyUp(KeyCode) override;
+
+	void OnKeyDown(KeyCode) override;
+
 private:
 	std::shared_ptr<DirectXCore::DxBase> m_dxBase;
 
 	DirectXCore::Sprite* m_sprite;
+	DirectXCore::Text* m_text;
 
 	void MoveSpriteAround(float elapsedTime);
 

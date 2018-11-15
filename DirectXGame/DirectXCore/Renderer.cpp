@@ -26,7 +26,7 @@ DirectXCore::Renderer::Renderer(DeviceResources * _deviceResource, const wchar_t
 	texture->GetDesc(&spriteDesc);
 	pivot = Vector3(0, 0, 0);
 
-	if (!spriterect) spriterect = new RECT();
+	spriterect = new RECT();
 	spriterect->top = spriterect->left = 0;
 	spriterect->bottom = spriteDesc.Height;
 	spriterect->right = spriteDesc.Width;
@@ -34,7 +34,7 @@ DirectXCore::Renderer::Renderer(DeviceResources * _deviceResource, const wchar_t
 
 DirectXCore::Renderer::Renderer(DeviceResources * _deviceResource, const wchar_t * _charPath, Sprite * _sprite)
 {
-	if (!sprite) sprite = _sprite;
+	sprite = _sprite;
 	ComPtr<ID3D11Resource> resource;
 	ThrowIfFailed(CreateWICTextureFromFile(_deviceResource->GetD3DDevice(), _charPath, resource.GetAddressOf(), m_texture.ReleaseAndGetAddressOf()));
 	m_spriteBatch = std::make_unique<DirectX::SpriteBatch>(_deviceResource->GetD3DDeviceContext());
@@ -46,7 +46,7 @@ DirectXCore::Renderer::Renderer(DeviceResources * _deviceResource, const wchar_t
 	texture->GetDesc(&spriteDesc);
 	pivot = Vector3(0, 0, 0);
 
-	if (!spriterect) spriterect = new RECT();
+	spriterect = new RECT();
 	spriterect->top = spriterect->left = 0;
 	spriterect->bottom = spriteDesc.Height;
 	spriterect->right = spriteDesc.Width;

@@ -5,7 +5,6 @@
 #include "Rigidbody.h"
 #include "Renderer.h"
 
-
 class TilemapScene :
 	public DirectXCore::Scene
 {
@@ -25,11 +24,15 @@ public:
 	// Scene is probably inactive but the game is yet over. To save memory, unload this scene completely.
 	void UnloadScene() override;
 
+	void OnKeyUp(KeyCode) override { }
+	void OnKeyDown(KeyCode) override { }
+
 private:
 	std::shared_ptr<DirectXCore::DxBase> m_dxBase;
 
 	DirectXCore::TileMap* tilemap;
 	DirectXCore::Sprite* sprite;
+
 	DirectXCore::Camera* camera;
 
 	std::vector<DirectXCore::GameObject*>* gameObjectList;

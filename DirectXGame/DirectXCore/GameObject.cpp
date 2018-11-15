@@ -35,7 +35,6 @@ void DirectXCore::GameObject::OnCollisionEnter()
 	//transform->SetPosition(transform->GetPosition());
 }
 
-
 DirectXCore::GameObject::~GameObject()
 {
 }

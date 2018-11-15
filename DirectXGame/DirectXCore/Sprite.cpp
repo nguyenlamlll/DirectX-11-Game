@@ -29,6 +29,7 @@ Sprite::Sprite(DirectXCore::DeviceResources * _deviceResource, const wchar_t * _
 Sprite::~Sprite()
 {
 }
+
 void Sprite::Update()
 {
 	Rigidbody *rigidBody = GetComponent<Rigidbody>();
@@ -44,6 +45,7 @@ void Sprite::Update()
 		collider->SetColliderPosition(transform->GetPosition());
 	}
 }
+
 void Sprite::Render()
 {
 	for (size_t i = 0; i < componentList->size(); i++)

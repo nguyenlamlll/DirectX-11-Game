@@ -1,9 +1,11 @@
 #pragma once
 #include "Component.h"
+
 using namespace DirectX::SimpleMath;
 
 namespace DirectXCore
 {
+
 	class Transform :public Component
 	{
 	public:
@@ -24,6 +26,7 @@ namespace DirectXCore
 		~Transform();
 	private:
 		Vector3 position, rotation, scale;
+
 		Vector3 screenPosition;
 	};
 }

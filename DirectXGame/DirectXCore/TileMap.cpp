@@ -19,6 +19,7 @@ TileMap::TileMap(DirectXCore::DeviceResources *_deviceResource, const wchar_t * 
 	position.y = 0;
 	position.z = 0;
 	worldToScreenPosition = position;
+
 	for (size_t i = 0; i < tilemap->GetNumTilesets(); i++)
 	{
 		const Tmx::Tileset *tileset = tilemap->GetTileset(i);
@@ -86,6 +87,7 @@ TileMap::TileMap(DirectXCore::DeviceResources *_deviceResource, const wchar_t * 
 
 void DirectXCore::TileMap::Update()
 {
+
 }
 
 void TileMap::Render()
@@ -95,6 +97,7 @@ void TileMap::Render()
 		mainCamera->GetBound().bottom / 2 - mainCamera->GetPosition().y, 
 		0);
 	worldToScreenPosition = position + worldToScreenShift;
+
 	for (int i = 0; i < tilemap->GetNumTileLayers(); i++)
 	{
 		const Tmx::TileLayer *layer = tilemap->GetTileLayer(i);
