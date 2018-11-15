@@ -34,9 +34,11 @@ RECT Camera::GetBound()
 
 bool Camera::IsContain(DirectX::SimpleMath::Vector3 _objectPosition, DirectX::SimpleMath::Vector3 _objectScale)
 {
-	bool containX = (_objectPosition.x + _objectScale.x<0 || _objectPosition.x - _objectScale.x>camViewport.Width);
-	bool containY = (_objectPosition.y + _objectScale.y<0 || _objectPosition.y - _objectScale.y>camViewport.Height);
-	bool iscontain = !(containX || containY);
+	bool notContainX = (_objectPosition.x + _objectScale.x<0 || _objectPosition.x - _objectScale.x>camViewport.Width);
+	bool notContainY = (_objectPosition.y + _objectScale.y<0 || _objectPosition.y - _objectScale.y>camViewport.Height);
+	// To be contained, both X and Y of an object must be within viewport.
+	// !notContainX is ContainX and so on with Y.
+	bool iscontain = !notContainX && !notContainY;
 	return iscontain;
 }
 

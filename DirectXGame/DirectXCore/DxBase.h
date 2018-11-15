@@ -23,7 +23,7 @@ namespace DirectXCore
 
 		void CreateSoundAndMusic(const wchar_t* soundFileName);
 		DeviceResources* GetDeviceResource() { return m_deviceResources.get(); }
-		void CreateCamera();
+		void CreateCamera(Camera** returnCamera);
 		void CreateTilemap(const wchar_t * tilemapSpriteName, TileMap** returnTilemap);
 		void CreateSprite(const wchar_t* spriteName, Sprite** returnSprite);
 

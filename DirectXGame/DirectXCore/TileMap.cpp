@@ -17,6 +17,9 @@ TileMap::TileMap(DirectXCore::DeviceResources *_deviceResource, const wchar_t * 
 	tilemap->ParseFile(pathstr);
 	position.x = 0;
 	position.y = 0;
+	position.z = 0;
+	worldToScreenPosition = position;
+
 	for (size_t i = 0; i < tilemap->GetNumTilesets(); i++)
 	{
 		const Tmx::Tileset *tileset = tilemap->GetTileset(i);
@@ -29,6 +32,7 @@ TileMap::TileMap(DirectXCore::DeviceResources *_deviceResource, const wchar_t * 
 
 		Sprite *tileSet = new Sprite(_deviceResource, spritePath);
 		tilesetSheet.insert(std::pair<int, Sprite*>(i, tileSet));
+		tileSet->AddComponent<Renderer>(new Renderer(_deviceResource,spritePath));
 	}
 	for (int i = 0; i < tilemap->GetNumTileLayers(); i++)
 	{
@@ -59,11 +63,7 @@ TileMap::TileMap(DirectXCore::DeviceResources *_deviceResource, const wchar_t * 
 					sourceRECT->right = sourceRECT->left + tileDataWidth;
 
 					listTileID.insert(std::pair<int, RECT*>(tileID, sourceRECT));
-					//world position = sprite local position + tilemap position
-					tilesetSheet[layer->GetTileTilesetIndex(n, m)]->SetCenter(Vector3(tileDataWidth / 2, tileDataHeight / 2, 1));
-					tilesetSheet[layer->GetTileTilesetIndex(n, m)]->GetTransform()->SetScale(DirectX::SimpleMath::Vector3(1.0f, 1.0f, 1.0f));
-					tilesetSheet[layer->GetTileTilesetIndex(n, m)]->SetSpriteRect(sourceRECT);
-					tilesetSheet[layer->GetTileTilesetIndex(n, m)]->GetTransform()->SetPosition(Vector3((n * tileDataWidth) + position.x, (m * tileDataHeight) + position.y, 1));
+					//listRECTPositions.insert(std::pair<int,Vector3>(tileID, Vector3((n * tileDataWidth) + position.x, (m * tileDataHeight) + position.y, 0)));
 				}
 			}
 		}
@@ -76,12 +76,10 @@ TileMap::TileMap(DirectXCore::DeviceResources *_deviceResource, const wchar_t * 
 		{
 			Tmx::Object *object = objectGroup->GetObjects().at(j);
 			GameObject *gameObject = new GameObject();
-			gameObject->GetTransform()->SetPosition(Vector3(object->GetX(), object->GetY(), 1));
+			gameObject->GetTransform()->SetPosition(position + Vector3(object->GetX(), object->GetY(), 0));
 			gameObject->GetTransform()->SetScale(Vector3(object->GetWidth(), object->GetHeight(), 1));
-			Vector3 colPos = Vector3(gameObject->GetTransform()->GetPosition().x, gameObject->GetTransform()->GetPosition().y, 1.f);
-			Vector3 colScl = Vector3(gameObject->GetTransform()->GetScale().x, gameObject->GetTransform()->GetScale().y, 1.f);
-			gameObject->GetBoxCollider()->Center = colPos;
-			gameObject->GetBoxCollider()->Extents = colScl;
+			gameObject->AddComponent<Collider>(new Collider(gameObject, gameObject->GetTransform()));
+			//gameObject->GetComponent<Collider>()->SetColliderScale(Vector3(object->GetWidth(), object->GetHeight(), 1));
 			gameObjectList->push_back(gameObject);
 		}
 	}
@@ -89,16 +87,17 @@ TileMap::TileMap(DirectXCore::DeviceResources *_deviceResource, const wchar_t * 
 
 void DirectXCore::TileMap::Update()
 {
-	/*DirectX::SimpleMath::Vector3 trans = DirectX::SimpleMath::Vector3(deviceResource->GetOutputSize().right / 2 - mainCamera->GetPosition().x,
-		deviceResource->GetOutputSize().bottom / 2 - mainCamera->GetPosition().y);*/
-		//position += DirectX::SimpleMath::Vector3(2.f,0);
-		mainCamera->SetPosition(mainCamera->GetPosition() + DirectX::SimpleMath::Vector3(3.f, 0,0));
+
 }
 
 void TileMap::Render()
 {
-	DirectX::SimpleMath::Vector3 worldToScreenPosition = DirectX::SimpleMath::Vector3(mainCamera->GetBound().right / 2 - mainCamera->GetPosition().x, mainCamera->GetBound().bottom / 2 - mainCamera->GetPosition().y, 1);
-	//DirectX::SimpleMath::Vector3 trans = DirectX::SimpleMath::Vector3(deviceResource->GetOutputSize().right / 2 - mainCamera->GetPosition().x, deviceResource->GetOutputSize().bottom / 2 - mainCamera->GetPosition().y);
+	Vector3 worldToScreenShift = Vector3(
+		mainCamera->GetBound().right / 2 - mainCamera->GetPosition().x, 
+		mainCamera->GetBound().bottom / 2 - mainCamera->GetPosition().y, 
+		0);
+	worldToScreenPosition = position + worldToScreenShift;
+
 	for (int i = 0; i < tilemap->GetNumTileLayers(); i++)
 	{
 		const Tmx::TileLayer *layer = tilemap->GetTileLayer(i);
@@ -115,16 +114,19 @@ void TileMap::Render()
 					//tile index
 					int tileID = layer->GetTileId(n, m);
 
-					//world position = sprite local position + tilemap position
 					Sprite* sprite = tilesetSheet[layer->GetTileTilesetIndex(n, m)];
-					DirectX::SimpleMath::Vector3 currentPosition((n * tileDataWidth) + position.x, (m * tileDataHeight) + position.y, 1);
-					sprite->SetSpriteRect(listTileID[tileID]);
-					sprite->GetTransform()->SetPosition(currentPosition);
-					if (mainCamera->IsContain(sprite->GetTransform()->GetWorldToCameraPosition(worldToScreenPosition), sprite->GetWorldToScreenScale()))
+					DirectX::SimpleMath::Vector3 currentPosition((n * tileDataWidth) + worldToScreenPosition.x, (m * tileDataHeight) + worldToScreenPosition.y, 1);
+					if (mainCamera->IsContain(currentPosition, sprite->GetWorldToScreenScale()))
 					{
-						sprite->Render(sprite->GetTransform()->GetPosition() + worldToScreenPosition);
+						sprite->GetComponent<Renderer>()->SetRECT(*listTileID[tileID]);
+						sprite->GetComponent<Renderer>()->Render(currentPosition);
 					}
-
+#if defined(DEBUG) | defined(_DEBUG)
+					else
+					{
+						int placeBreakPointHereToCheckIfCameraIsWorking = 0;
+					}
+#endif
 				}
 			}
 		}

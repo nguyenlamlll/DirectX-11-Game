@@ -2,7 +2,8 @@
 #include "Scene.h"
 #include "DxBase.h"
 #include "GameObject.h"
-
+#include "Rigidbody.h"
+#include "Renderer.h"
 
 class TilemapScene :
 	public DirectXCore::Scene
@@ -31,6 +32,8 @@ private:
 
 	DirectXCore::TileMap* tilemap;
 	DirectXCore::Sprite* sprite;
+
+	DirectXCore::Camera* camera;
 
 	std::vector<DirectXCore::GameObject*>* gameObjectList;
 	bool collide = false;

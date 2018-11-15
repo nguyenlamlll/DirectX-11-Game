@@ -46,17 +46,17 @@ void DxBase::Initialize(HWND window, int width, int height)
 	*/
 }
 
-void DirectXCore::DxBase::CreateCamera()
+void DirectXCore::DxBase::CreateCamera(Camera** returnCamera)
 {
-	mainCamera = new Camera(m_deviceResources->GetOutputSize().right / 2, m_deviceResources->GetOutputSize().bottom);
-	mainCamera->GetBound();
+	mainCamera = new Camera(m_deviceResources->GetOutputSize().right / 2, m_deviceResources->GetOutputSize().bottom/2);
+	*returnCamera = mainCamera;
 }
 
 void DirectXCore::DxBase::CreateTilemap(const wchar_t * tilemapSpriteName,TileMap** returnTilemap)
 {
-	CreateCamera();
+	//CreateCamera();
 	tilemap = new TileMap(m_deviceResources.get(), tilemapSpriteName);
-	tilemap->SetCamera(mainCamera);
+	//tilemap->SetCamera(mainCamera);
 	*returnTilemap = tilemap;
 }
 

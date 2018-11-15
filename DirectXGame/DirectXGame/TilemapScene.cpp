@@ -14,36 +14,54 @@ TilemapScene::~TilemapScene()
 
 void TilemapScene::UpdateScene(float elapsedTime)
 {
-	tilemap->Update();
-	sprite->Update();
+	Vector3 worldToScreenShift = Vector3(camera->GetBound().right / 2 - camera->GetPosition().x, camera->GetBound().bottom / 2 - camera->GetPosition().y, 0);
 	for (size_t i = 0; i < gameObjectList->size(); i++)
 	{
-		bool colType = sprite->GetBoxCollider()->Intersects(*gameObjectList->at(i)->GetBoxCollider());
-		bool colType2 = gameObjectList->at(i)->GetBoxCollider()->Intersects(*sprite->GetBoxCollider()); 
-		if (colType || colType2)
-			collide = true;
+		gameObjectList->at(i)->GetTransform()->SetWorldToCameraPosition(worldToScreenShift);
+		if (sprite != gameObjectList->at(i))
+		{
+			bool colType = sprite->GetComponent<Collider>()->GetCollider()->Intersects(*gameObjectList->at(i)->GetComponent<Collider>()->GetCollider());
+			bool colType2 = gameObjectList->at(i)->GetComponent<Collider>()->GetCollider()->Intersects(*sprite->GetComponent<Collider>()->GetCollider());
+			if (colType || colType2) collide = true;
+		}
 	}
-	if (!collide) sprite->GetTransform()->SetPosition(sprite->GetTransform()->GetPosition() + Vector3(0, 4.f, 0));
+	if (collide) {
+		if(sprite->GetComponent<Rigidbody>()!=NULL) sprite->GetComponent<Rigidbody>()->SetKinematic(true);
+	}
+	for (size_t i = 0; i < gameObjectList->size(); i++) gameObjectList->at(i)->Update();
+	tilemap->Update();
+	camera->SetPosition(camera->GetPosition() + Vector3(2.f, 0, 0));
 }
 
 void TilemapScene::RenderScene()
 {
 	tilemap->Render();
-	sprite->Render();
-	for (size_t i = 0; i < gameObjectList->size(); i++) gameObjectList->at(i)->Update();
+	for (size_t i = 0; i < gameObjectList->size(); i++)
+	{
+		if (camera->IsContain(gameObjectList->at(i)->GetTransform()->GetWorldToCameraPosition(), gameObjectList->at(i)->GetTransform()->GetScale()))
+		{
+			gameObjectList->at(i)->Render();
+		}
+	}
 }
 
 void TilemapScene::LoadScene()
 {
 	gameObjectList = new std::vector<GameObject*>();
-	m_dxBase->CreateSprite(L"cat.png", &sprite);
-	sprite->GetTransform()->SetPosition(Vector3(100, 0, 1));
+	m_dxBase->CreateCamera(&camera);
+	//m_dxBase->CreateSprite(L"Resources/Rockman.png", &sprite);
+	//tilemap = new TileMap(m_dxBase->GetDeviceResource(), L"Resources/Resources/marioworld1-1.tmx");
+
+	m_dxBase->CreateSprite(L"Resources/Rockman.png", &sprite);
+	//sprite = new Sprite(m_dxBase->GetDeviceResource(), L"Resources/Rockman.png");
 	m_dxBase->CreateTilemap(L"Resources/marioworld1-1.tmx", &tilemap);
+	tilemap->SetCamera(camera);
+	sprite->GetTransform()->SetPosition(Vector3(100, 0, 0));
+	sprite->AddComponent<Rigidbody>(new Rigidbody(sprite));
+	sprite->AddComponent<Collider>(new Collider(sprite, sprite->GetTransform()));
+	sprite->AddComponent<Renderer>(new Renderer(m_dxBase->GetDeviceResource(), L"Resources/Rockman.png", sprite));
 	gameObjectList->insert(gameObjectList->end(), tilemap->GetListGameObjects()->begin(), tilemap->GetListGameObjects()->end());
-	//mainCamera = new Camera(m_deviceResources->GetOutputSize().right / 2, m_deviceResources->GetOutputSize().bottom);
-	//tilemap = new TileMap(, L"Resources/untitled.tmx");
-	//tilemap->SetCamera(mainCamera);
-	int a = 0;
+	gameObjectList->insert(gameObjectList->end(), sprite);
 }
 
 void TilemapScene::UnloadScene()

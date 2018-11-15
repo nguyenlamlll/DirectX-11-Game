@@ -2,6 +2,8 @@
 #include "stdafx.h"
 #include "Object.h"
 #include "Transform.h"
+#include "Rigidbody.h"
+#include "Collider.h"
 
 namespace DirectXCore
 {
@@ -10,13 +12,31 @@ namespace DirectXCore
 	public:
 		GameObject();
 		virtual void Update();
-		BoundingBox* GetBoxCollider() { return boxCollider; }
+		virtual void Render();
+		GameObject* GetGameObject() { return this; }
 		Transform* GetTransform() { return transform; }
+		template<class ComponentType>	ComponentType* GetComponent() {
+			for (size_t i = 0; i < componentList->size(); i++)
+			{
+				if (ComponentType* compo = dynamic_cast<ComponentType*>(componentList->at(i))) return compo;
+			}
+			return nullptr;
+		}
+		template<class ComponentType>	void AddComponent(ComponentType *_component) {
+			for (size_t i = 0; i < componentList->size(); i++)
+			{
+				if (ComponentType* compo = dynamic_cast<ComponentType*>(componentList->at(i))) return ;
+			}
+			componentList->push_back(_component);
+			ReferenceGameObject();
+		}
 		virtual void OnCollisionEnter();
 		~GameObject();
 	protected:
-		BoundingBox* boxCollider;
 		Transform* transform;
+		std::vector<Component*>* componentList;
+	private:
+		void ReferenceGameObject();
 	};
 }
 

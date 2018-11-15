@@ -14,7 +14,7 @@ CatScene::~CatScene()
 
 void CatScene::UpdateScene(float elapsedTime)
 {
-	MoveSpriteAround(elapsedTime);
+	//MoveSpriteAround(elapsedTime);
 }
 
 void CatScene::RenderScene()
@@ -30,7 +30,6 @@ void CatScene::LoadScene()
 
 	m_dxBase->CreateText(L"myfileb.spritefont", L"Hello!", &m_text);
 	m_text->SetScreenPosition(Vector2(500, 500));
-
 }
 
 void CatScene::UnloadScene()
