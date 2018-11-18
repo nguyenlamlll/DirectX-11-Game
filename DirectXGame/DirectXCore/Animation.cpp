@@ -8,6 +8,7 @@ Animation::Animation()
 
 Animation::Animation(Sprite* _sprite, int _rows, int _collums, float _timePerFrame, float _scale)
 {
+	loop = true;
 	//attachedGameObject = _sprite;
 	mainSprite = _sprite;
 	timePerFrame = _timePerFrame;
@@ -39,11 +40,15 @@ Animation::Animation(Sprite* _sprite, int _rows, int _collums, float _timePerFra
 
 DirectXCore::Animation::Animation(int _rows, int _collums, float _timePerFrame, float _timeScale)
 {
+	loop = true;
 }
 
-DirectXCore::Animation::Animation(Renderer * mainRenderer, int _rows, int _collums, float _timePerFrame, float _timeScale)
+DirectXCore::Animation::Animation(Renderer * mainRenderer, int _rows, int _collums, float _timePerFrame, float _timeScale ,bool _loop)
 {
+	loop = true;
 	mainrender = mainRenderer;
+	timePerFrame = _timePerFrame;
+	loop = _loop;
 	frameWidth = (mainrender->GetRECT()->right - mainrender->GetRECT()->left) / _collums;
 	frameHeight = (mainrender->GetRECT()->bottom - mainrender->GetRECT()->top) / _rows;
 
@@ -88,12 +93,12 @@ void Animation::Update(float _deltaTime)
 {
 	if (currentFrameTime >= timePerFrame) {
 		currentFrameTime = 0;
-
-		if (frameIndex >= frameCount - 1) frameIndex = 0;
-		else frameIndex += 1;
+		if (frameIndex < frameCount - 1) frameIndex += 1;
+		else if (frameIndex >= frameCount - 1) frameIndex = (loop) ? 0 : frameCount - 1;
 		mainrender->SetRECT(*animationFrameRects[frameIndex]);
 	}
 	else currentFrameTime += _deltaTime;
+
 }
 
 void Animation::Render()
@@ -104,5 +109,4 @@ void Animation::Render()
 
 Animation::~Animation()
 {
-	if (mainSprite) { delete mainSprite; }
 }

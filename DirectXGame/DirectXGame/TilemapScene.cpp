@@ -14,18 +14,18 @@ TilemapScene::~TilemapScene()
 
 void TilemapScene::UpdateScene(float elapsedTime)
 {
+
 	Vector3 worldToScreenShift = Vector3(camera->GetBound().right / 2 - camera->GetPosition().x, camera->GetBound().bottom / 2 - camera->GetPosition().y, 0);
 	newGameObject->GetTransform()->SetWorldToScreenPosition(worldToScreenShift);
+
 	newGameObject->GetComponent<Animation>()->Update(0.11f);
 	newGameObject->GetComponent<Collider>()->SetColliderScale(Vector3(46, 46, 1));
 	newGameObject->GetComponent<Collider>()->SetColliderPosition(newGameObject->GetTransform()->GetPosition());
-	//sprite->GetComponent<Animation>()->Update(0.001f);
 	Rigidbody *rigidBody = newGameObject->GetComponent<Rigidbody>();
-	if (rigidBody)
-		if (!rigidBody->IsKinematic()) 
-			rigidBody->Move(SimpleMath::Vector3(0, 9.8f*rigidBody->GetMass().y, 0), 0.5f);
-		else
-			rigidBody->Move(SimpleMath::Vector3(0, 0.f*rigidBody->GetMass().y, 0), 0.5f);
+	if (rigidBody) {
+		if (!rigidBody->IsKinematic()) rigidBody->Move(SimpleMath::Vector3(0, 9.8f*rigidBody->GetMass().y, 0), 0.5f);
+		else rigidBody->Move(SimpleMath::Vector3(0, 0.f*rigidBody->GetMass().y, 0), 0.5f);
+	}
 	newGameObject->GetTransform()->SetPosition(newGameObject->GetTransform()->GetPosition() + rigidBody->GetVelocity());
 	for (size_t i = 0; i < gameObjectList->size(); i++)
 	{
@@ -40,15 +40,23 @@ void TilemapScene::UpdateScene(float elapsedTime)
 	if (collide && first) {
 		if (newGameObject->GetComponent<Rigidbody>() != NULL) {
 			newGameObject->GetComponent<Rigidbody>()->SetKinematic(true);
-			/*newGameObject->GetComponent<Renderer>()->LoadTexture(m_dxBase->GetDeviceResource(), L"Resources/scott.png");
-			newGameObject->GetComponent<Animation>()->ResetAnimation(2, 8);*/
+			//newGameObject->GetComponent<State>()->SetState("stand");
+			newGameObject->GetComponent<Renderer>()->LoadTexture(m_dxBase->GetDeviceResource(), L"Resources/start2.png");
+			newGameObject->GetComponent<Animation>()->ResetAnimation(1, 6);
 		}
 		first = false;
 	}
 	if (m_dxBase->GetInputManager()->IsKeyDown("D")) {
-		newGameObject->GetComponent<Renderer>()->LoadTexture(m_dxBase->GetDeviceResource(), L"Resources/scott.png");
-		newGameObject->GetComponent<Animation>()->ResetAnimation(2, 8);
+		//newGameObject->GetComponent<State>()->SetState("shoot");
+		newGameObject->GetComponent<Renderer>()->LoadTexture(m_dxBase->GetDeviceResource(), L"Resources/stand_attack.png");
+		newGameObject->GetComponent<Animation>()->ResetAnimation(1, 2);
 	}
+	else if (m_dxBase->GetInputManager()->IsKeyDown("A")) {
+		//newGameObject->GetComponent<State>()->SetState("run");
+		newGameObject->GetComponent<Renderer>()->LoadTexture(m_dxBase->GetDeviceResource(), L"Resources/run.png");
+		newGameObject->GetComponent<Animation>()->ResetAnimation(1, 11);
+	}
+
 	for (size_t i = 0; i < gameObjectList->size(); i++) gameObjectList->at(i)->Update();
 	tilemap->Update();
 	//camera->SetPosition(camera->GetPosition() + Vector3(2.f, 0, 0));
@@ -72,16 +80,24 @@ void TilemapScene::LoadScene()
 	gameObjectList = new std::vector<GameObject*>();
 	m_dxBase->CreateCamera(&camera);
 	tilemap = new TileMap(m_dxBase->GetDeviceResource(), L"Resources/marioworld1-1.tmx");
-	//sprite = new Sprite(m_dxBase->GetDeviceResource(), L"Resources/run.png");
 	tilemap->SetCamera(camera);
 	newGameObject = new GameObject();
-	newGameObject->AddComponent<Renderer>(new Renderer(m_dxBase->GetDeviceResource(), L"Resources/run.png"));
 	newGameObject->GetTransform()->SetPosition(Vector3(100, 0, 0));
+	newGameObject->AddComponent<Renderer>(new Renderer(m_dxBase->GetDeviceResource(), L"Resources/run.png"));
 	newGameObject->AddComponent<Rigidbody>(new Rigidbody(newGameObject));
 	newGameObject->AddComponent<Collider>(new Collider(newGameObject, newGameObject->GetTransform()));
-	newGameObject->AddComponent<Animation>(new Animation(newGameObject->GetComponent<Renderer>(), 1, 10, 0.001f));
+	newGameObject->AddComponent<Animation>(new Animation(newGameObject->GetComponent<Renderer>(), 1, 11, 1.0f, 1.0f, true));
+	std::vector<std::string>* stringStates = new std::vector<std::string>();
+	stringStates->push_back("jump");
+	stringStates->push_back("run");
+	stringStates->push_back("shoot");
+	stringStates->push_back("stand");
+	newGameObject->AddComponent<State>(new State(newGameObject, *stringStates));
+	//newGameObject->GetComponent<State>()->SetState("jump");
+	newGameObject->GetComponent<Renderer>()->LoadTexture(m_dxBase->GetDeviceResource(), L"Resources/jump.png");
+	newGameObject->GetComponent<Animation>()->ResetAnimation(1, 7);
+
 	gameObjectList->insert(gameObjectList->end(), tilemap->GetListGameObjects()->begin(), tilemap->GetListGameObjects()->end());
-	//gameObjectList->insert(gameObjectList->end(), sprite);
 	//gameObjectList->insert(gameObjectList->end(), newGameObject);
 }
 

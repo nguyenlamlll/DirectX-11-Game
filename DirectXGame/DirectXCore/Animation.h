@@ -4,7 +4,7 @@
 #include "Sprite.h"
 #include "Renderer.h"
 
-namespace DirectXCore 
+namespace DirectXCore
 {
 	class Animation : public Component
 	{
@@ -12,11 +12,12 @@ namespace DirectXCore
 		Animation();
 		Animation(Sprite *_sprite, int _rows, int _collums, float _timePerFrame, float _scale = 1.0f);
 		Animation(int _rows, int _collums, float _timePerFrame, float _timeScale = 1.0f);
-		Animation(Renderer* mainRenderer,int _rows, int _collums, float _timePerFrame, float _timeScale = 1.0f);
+		Animation(Renderer* mainRenderer, int _rows, int _collums, float _timePerFrame, float _timeScale, bool _loop);
 		void ResetAnimation(int _rows, int _collums);
 		void Update(float _deltaTime);
 		void Render();
 		~Animation();
+		bool loop;
 	private:
 		int frameIndex = 0, frameCount, frameWidth, frameHeight;
 		std::vector<RECT*> animationFrameRects;
