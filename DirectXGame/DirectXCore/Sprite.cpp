@@ -43,6 +43,7 @@ void Sprite::Update()
 	{
 		collider->SetColliderScale(Vector3(transform->GetScale().x * spriterect->right, transform->GetScale().y * spriterect->bottom, 1));
 		collider->SetColliderPosition(transform->GetPosition());
+		int a = 1;
 	}
 }
 

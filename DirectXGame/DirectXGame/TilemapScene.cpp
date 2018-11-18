@@ -52,7 +52,7 @@ void TilemapScene::LoadScene()
 	gameObjectList = new std::vector<GameObject*>();
 	m_dxBase->CreateCamera(&camera);
 	tilemap = new TileMap(m_dxBase->GetDeviceResource(), L"Resources/marioworld1-1.tmx");
-	sprite = new Sprite(m_dxBase->GetDeviceResource(), L"Resources/rockman.png");
+	sprite = new Sprite(m_dxBase->GetDeviceResource(), L"Resources/run.png");
 	tilemap->SetCamera(camera);
 	sprite->GetTransform()->SetPosition(Vector3(100, 0, 0));
 	sprite->AddComponent<Rigidbody>(new Rigidbody(sprite));
