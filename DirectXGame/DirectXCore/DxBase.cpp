@@ -44,6 +44,8 @@ void DxBase::Initialize(HWND window, int width, int height)
 	m_timer.SetFixedTimeStep(true);
 	m_timer.SetTargetElapsedSeconds(1.0 / 60);
 	*/
+	m_timer.SetFixedTimeStep(true);
+	m_timer.SetTargetElapsedSeconds(1.0 / 60);
 }
 
 void DirectXCore::DxBase::CreateCamera(Camera** returnCamera)
