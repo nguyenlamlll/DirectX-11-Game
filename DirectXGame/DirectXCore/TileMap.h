@@ -26,6 +26,7 @@ namespace DirectXCore
 		Camera* mainCamera;
 		DirectXCore::DeviceResources* deviceResource;
 		std::vector<GameObject*>* gameObjectList;
+		Renderer* thisRenderer;
 	};
 }
 

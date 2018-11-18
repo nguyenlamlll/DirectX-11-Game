@@ -32,7 +32,8 @@ TileMap::TileMap(DirectXCore::DeviceResources *_deviceResource, const wchar_t * 
 
 		Sprite *tileSet = new Sprite(_deviceResource, spritePath);
 		tilesetSheet.insert(std::pair<int, Sprite*>(i, tileSet));
-		tileSet->AddComponent<Renderer>(new Renderer(_deviceResource,spritePath));
+		//tileSet->AddComponent<Renderer>(new Renderer(_deviceResource,spritePath));
+		thisRenderer = new Renderer(_deviceResource, spritePath);
 	}
 	for (int i = 0; i < tilemap->GetNumTileLayers(); i++)
 	{
@@ -116,17 +117,21 @@ void TileMap::Render()
 
 					Sprite* sprite = tilesetSheet[layer->GetTileTilesetIndex(n, m)];
 					DirectX::SimpleMath::Vector3 currentPosition((n * tileDataWidth) + worldToScreenPosition.x, (m * tileDataHeight) + worldToScreenPosition.y, 1);
-					if (mainCamera->IsContain(currentPosition, sprite->GetTransform()->GetScreenScale()))
-					{
-						sprite->GetComponent<Renderer>()->SetRECT(*listTileID[tileID]);
-						sprite->GetComponent<Renderer>()->Render(currentPosition);
-					}
-#if defined(DEBUG) | defined(_DEBUG)
-					else
-					{
-						int placeBreakPointHereToCheckIfCameraIsWorking = 0;
-					}
-#endif
+//					if (mainCamera->IsContain(currentPosition, sprite->GetTransform()->GetScreenScale()))
+//					{
+//						thisRenderer->SetRECT(*listTileID[tileID]);
+//						thisRenderer->Render(currentPosition);
+//						/*sprite->GetComponent<Renderer>()->SetRECT(*listTileID[tileID]);
+//						sprite->GetComponent<Renderer>()->Render(currentPosition);*/
+//					}
+//#if defined(DEBUG) | defined(_DEBUG)
+//					else
+//					{
+//						int placeBreakPointHereToCheckIfCameraIsWorking = 0;
+//					}
+//#endif
+					thisRenderer->SetRECT(*listTileID[tileID]);
+					thisRenderer->Render(currentPosition);
 				}
 			}
 		}

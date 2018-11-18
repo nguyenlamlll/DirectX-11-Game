@@ -7,12 +7,13 @@
 
 namespace DirectXCore 
 {
-	class Sprite : public GameObject
+	class Sprite : public Component
 	{
 	public:
 		Sprite();
 		Sprite(DirectXCore::DeviceResources* _deviceResource, const wchar_t* _charPath, float _scale = 1.0f);
 		~Sprite();
+		void LoadTexture(const wchar_t* _charPath);
 		void Update() override;
 		void Render();
 
