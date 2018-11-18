@@ -20,7 +20,6 @@ namespace DirectXCore
 
 		virtual void OnKeyUp(KeyCode) = 0;
 		virtual void OnKeyDown(KeyCode) = 0;
-
 	};
 
 }

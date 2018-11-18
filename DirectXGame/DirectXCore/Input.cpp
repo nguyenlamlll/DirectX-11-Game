@@ -3,6 +3,7 @@
 
 using namespace DirectXCore;
 
+// For reference, see: https://docs.microsoft.com/en-us/windows/desktop/inputdev/virtual-key-codes
 const Input::KeyMapping Input::sKeyMap{
 	{ "A", 0x41 },
 	{ "B", 0x42 },
@@ -34,7 +35,10 @@ const Input::KeyMapping Input::sKeyMap{
 	{"Left Arrow", 0x25},
 	{"Up Arrow", 0x26},
 	{"Right Arrow", 0x27},
-	{"Down Arrow", 0x28}
+	{"Down Arrow", 0x28},
+
+	{"Enter", 0x0D},
+	{"enter", 0x0D}
 };
 
 Input::Input()

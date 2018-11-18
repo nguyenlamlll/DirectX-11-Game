@@ -21,13 +21,16 @@ namespace DirectXCore
 		// Initialization and management
 		void Initialize(HWND window, int width, int height);
 
-		void CreateSoundAndMusic(const wchar_t* soundFileName);
 		DeviceResources* GetDeviceResource() { return m_deviceResources.get(); }
+
+		void CreateSoundAndMusic(const wchar_t* soundFileName, Sound** returnSound);
 		void CreateCamera(Camera** returnCamera);
 		void CreateTilemap(const wchar_t * tilemapSpriteName, TileMap** returnTilemap);
 		void CreateSprite(const wchar_t* spriteName, Sprite** returnSprite);
 
 		void CreateText(const wchar_t* fontPath, const wchar_t* content, Text** returnText);
+
+		void InitializeWithScene(int index);
 
 		void SwitchToScene(wchar_t* name);
 		void SwitchToScene(int index);
