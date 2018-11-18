@@ -13,7 +13,7 @@ namespace DirectXCore
 		Animation(Sprite *_sprite, int _rows, int _collums, float _timePerFrame, float _scale = 1.0f);
 		Animation(int _rows, int _collums, float _timePerFrame, float _timeScale = 1.0f);
 		Animation(Renderer* mainRenderer, int _rows, int _collums, float _timePerFrame, float _timeScale, bool _loop);
-		void ResetAnimation(int _rows, int _collums);
+		void ResetAnimation(const wchar_t * _charPath,int _rows, int _collums);
 		void Update(float _deltaTime);
 		void Render();
 		~Animation();

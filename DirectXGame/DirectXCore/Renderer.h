@@ -14,7 +14,7 @@ namespace DirectXCore
 		Renderer(DeviceResources* _deviceResource, Sprite* _sprite);
 		Renderer(DeviceResources* _deviceResource, const wchar_t* _charPath);
 		Renderer(DeviceResources* _deviceResource, const wchar_t* _charPath,Sprite* _sprite);
-		void LoadTexture(DeviceResources* _deviceResource, const wchar_t* _charPath);
+		void LoadTexture(const wchar_t* _charPath);
 		void Render();
 		void Render(SimpleMath::Vector3 _newPos);
 		void Render(SimpleMath::Vector3 _newPos, SimpleMath::Vector3 _newRot, SimpleMath::Vector3 _newScl);
@@ -23,6 +23,7 @@ namespace DirectXCore
 		RECT* GetRECT() { return spriterect; }
 		~Renderer();
 	private:
+		DeviceResources* deviceResource;
 		Microsoft::WRL::ComPtr<ID3D11ShaderResourceView> m_texture;
 		std::unique_ptr<CommonStates> m_states;
 		std::unique_ptr<SpriteBatch> m_spriteBatch;

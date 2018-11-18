@@ -68,7 +68,8 @@ DirectXCore::Animation::Animation(Renderer * mainRenderer, int _rows, int _collu
 	frameCount = _rows * _collums;
 }
 
-void Animation::ResetAnimation(int _rows, int _collums) {
+void Animation::ResetAnimation(const wchar_t * _charPath, int _rows, int _collums) {
+	mainrender->LoadTexture(_charPath);
 	animationFrameRects.clear();
 	frameWidth = (mainrender->GetRECT()->right - mainrender->GetRECT()->left) / _collums;
 	frameHeight = (mainrender->GetRECT()->bottom - mainrender->GetRECT()->top) / _rows;

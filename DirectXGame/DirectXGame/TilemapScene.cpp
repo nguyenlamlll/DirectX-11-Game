@@ -40,21 +40,21 @@ void TilemapScene::UpdateScene(float elapsedTime)
 	if (collide && first) {
 		if (newGameObject->GetComponent<Rigidbody>() != NULL) {
 			newGameObject->GetComponent<Rigidbody>()->SetKinematic(true);
+			//CHANGES CURRENT STATE TO "STAND"
 			//newGameObject->GetComponent<State>()->SetState("stand");
-			newGameObject->GetComponent<Renderer>()->LoadTexture(m_dxBase->GetDeviceResource(), L"Resources/start2.png");
-			newGameObject->GetComponent<Animation>()->ResetAnimation(1, 6);
+			newGameObject->GetComponent<Animation>()->ResetAnimation(L"Resources/start2.png", 1, 6);
 		}
 		first = false;
 	}
 	if (m_dxBase->GetInputManager()->IsKeyDown("D")) {
+		//CHANGES CURRENT STATE TO "SHOOT"
 		//newGameObject->GetComponent<State>()->SetState("shoot");
-		newGameObject->GetComponent<Renderer>()->LoadTexture(m_dxBase->GetDeviceResource(), L"Resources/stand_attack.png");
-		newGameObject->GetComponent<Animation>()->ResetAnimation(1, 2);
+		newGameObject->GetComponent<Animation>()->ResetAnimation(L"Resources/stand_attack.png", 1, 2);
 	}
 	else if (m_dxBase->GetInputManager()->IsKeyDown("A")) {
+		// CHANGES CURRENT STAGE TO "RUN"
 		//newGameObject->GetComponent<State>()->SetState("run");
-		newGameObject->GetComponent<Renderer>()->LoadTexture(m_dxBase->GetDeviceResource(), L"Resources/run.png");
-		newGameObject->GetComponent<Animation>()->ResetAnimation(1, 11);
+		newGameObject->GetComponent<Animation>()->ResetAnimation(L"Resources/run.png", 1, 11);
 	}
 
 	for (size_t i = 0; i < gameObjectList->size(); i++) gameObjectList->at(i)->Update();
@@ -88,14 +88,16 @@ void TilemapScene::LoadScene()
 	newGameObject->AddComponent<Collider>(new Collider(newGameObject, newGameObject->GetTransform()));
 	newGameObject->AddComponent<Animation>(new Animation(newGameObject->GetComponent<Renderer>(), 1, 11, 1.0f, 1.0f, true));
 	std::vector<std::string>* stringStates = new std::vector<std::string>();
+	// ADDING STATES TO GAMEOBJECT ( IN BETA )
 	stringStates->push_back("jump");
 	stringStates->push_back("run");
 	stringStates->push_back("shoot");
 	stringStates->push_back("stand");
 	newGameObject->AddComponent<State>(new State(newGameObject, *stringStates));
+
+
 	//newGameObject->GetComponent<State>()->SetState("jump");
-	newGameObject->GetComponent<Renderer>()->LoadTexture(m_dxBase->GetDeviceResource(), L"Resources/jump.png");
-	newGameObject->GetComponent<Animation>()->ResetAnimation(1, 7);
+	newGameObject->GetComponent<Animation>()->ResetAnimation(L"Resources/jump.png", 1, 7);
 
 	gameObjectList->insert(gameObjectList->end(), tilemap->GetListGameObjects()->begin(), tilemap->GetListGameObjects()->end());
 	//gameObjectList->insert(gameObjectList->end(), newGameObject);
