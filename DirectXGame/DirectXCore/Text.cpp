@@ -18,6 +18,7 @@ Text::Text(DeviceResources* _deviceResource, const wchar_t* _fontPath, const wch
 	m_screenPosition.y = _deviceResource->GetOutputSize().bottom / 2;
 
 	m_origin = m_font->MeasureString(m_content) / 2.f;
+
 }
 
 Text::~Text()
@@ -27,7 +28,7 @@ Text::~Text()
 void Text::RenderText()
 {
 	m_spriteBatch->Begin();
-	m_font->DrawString(m_spriteBatch.get(), m_content, m_screenPosition, Colors::White, 0.f, m_origin);
+	m_font->DrawString(m_spriteBatch.get(), m_content, m_screenPosition, m_color, 0.f, m_origin);
 	m_spriteBatch->End();
 }
 

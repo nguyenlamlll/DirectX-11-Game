@@ -26,11 +26,27 @@ void TilemapScene::UpdateScene(float elapsedTime)
 		}
 	}
 	if (collide) {
-		if(sprite->GetComponent<Rigidbody>()!=NULL) sprite->GetComponent<Rigidbody>()->SetKinematic(true);
+		if (sprite->GetComponent<Rigidbody>() != NULL) sprite->GetComponent<Rigidbody>()->SetKinematic(true);
 	}
 	for (size_t i = 0; i < gameObjectList->size(); i++) gameObjectList->at(i)->Update();
 	tilemap->Update();
-	camera->SetPosition(camera->GetPosition() + Vector3(2.f, 0, 0));
+
+	if (m_dxBase->GetInputManager()->IsKeyDown("D"))
+	{
+		sprite->GetTransform()->SetPosition(sprite->GetTransform()->GetPosition() + Vector3(3.f, 0, 0));
+		camera->SetPosition(camera->GetPosition() + Vector3(6.f, 0, 0));
+	}
+	else
+	{
+	}
+	if (m_dxBase->GetInputManager()->IsKeyDown("A"))
+	{
+		sprite->GetTransform()->SetPosition(sprite->GetTransform()->GetPosition() + Vector3(-3.f, 0, 0));
+		camera->SetPosition(camera->GetPosition() + Vector3(-6.f, 0, 0));
+	}
+	else
+	{
+	}
 }
 
 void TilemapScene::RenderScene()
