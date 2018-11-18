@@ -6,8 +6,9 @@ Animation::Animation()
 {
 }
 
-Animation::Animation(int _rows, int _collums, Sprite* _sprite, float _timePerFrame, float _scale)
+Animation::Animation(Sprite* _sprite, int _rows, int _collums, float _timePerFrame, float _scale)
 {
+	attachedGameObject = _sprite;
 	mainSprite = _sprite;
 	timePerFrame = _timePerFrame;
 	scale = _scale;
@@ -30,8 +31,10 @@ Animation::Animation(int _rows, int _collums, Sprite* _sprite, float _timePerFra
 	mainSprite->SetSpriteRect(animationFrameRects[0]);
 	frameCount = _rows * _collums;
 
-	DirectX::SimpleMath::Vector3* newCenter = new DirectX::SimpleMath::Vector3(frameWidth / 2, frameHeight / 2, 1);
-	mainSprite->SetCenter(*newCenter);
+	//DirectX::SimpleMath::Vector3* newCenter = new DirectX::SimpleMath::Vector3(frameWidth / 2, frameHeight / 2, 0);
+	//mainSprite->SetCenter(*newCenter);
+	mainSprite->SetCenter(Vector3(0, 0, 0));
+	mainSprite->GetTransform()->SetScale(Vector3(frameWidth, frameHeight, 1));
 }
 
 void Animation::Update(float _deltaTime)
@@ -48,7 +51,7 @@ void Animation::Update(float _deltaTime)
 
 void Animation::Render()
 {
-	mainSprite->Render();
+	//mainSprite->Render();
 }
 
 

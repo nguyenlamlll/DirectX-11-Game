@@ -14,7 +14,7 @@ Transform::Transform(Vector3 _pos = Vector3(0,0,0), Vector3 _rot = Vector3(0,0,0
 	SetScale(_scl);
 }
 
-void Transform::SetWorldToCameraPosition(Vector3 _cameraShift) {
+void Transform::SetWorldToScreenPosition(Vector3 _cameraShift) {
 	screenPosition = position + _cameraShift;
 }
 
@@ -29,6 +29,12 @@ void DirectXCore::Transform::SetRotation(Vector3 _newRotation)
 	rotation.x = _newRotation.x;
 	rotation.y = _newRotation.y;
 	rotation.z = _newRotation.z;
+}
+void Transform::SetScreenScale(Vector3 _newScreenScale)
+{
+	screenScale.x = _newScreenScale.x;
+	screenScale.y = _newScreenScale.y;
+	screenScale.z = _newScreenScale.z;
 }
 void Transform::SetScale(Vector3 _newScale) {
 	scale.x = _newScale.x;

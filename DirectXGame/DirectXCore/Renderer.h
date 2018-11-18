@@ -14,8 +14,9 @@ namespace DirectXCore
 		Renderer(DeviceResources* _deviceResource, Sprite* _sprite);
 		Renderer(DeviceResources* _deviceResource, const wchar_t* _charPath);
 		Renderer(DeviceResources* _deviceResource, const wchar_t* _charPath,Sprite* _sprite);
-		void Render() ;
-		void Render(DirectX::SimpleMath::Vector3 _newPos);
+		void Render();
+		void Render(SimpleMath::Vector3 _newPos);
+		void Render(SimpleMath::Vector3 _newPos, SimpleMath::Vector3 _newRot, SimpleMath::Vector3 _newScl);
 		void Reset();
 		void SetRECT(RECT _newRECT);
 		RECT* GetRECT() { return spriterect; }

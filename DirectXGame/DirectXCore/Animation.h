@@ -5,11 +5,11 @@
 
 namespace DirectXCore 
 {
-	class Animation
+	class Animation : public Component
 	{
 	public:
 		Animation();
-		Animation(int _rows, int _collums, Sprite* _sprite, float _timePerFrame, float _scale = 1.0f);
+		Animation(Sprite *_sprite, int _rows, int _collums, float _timePerFrame, float _scale = 1.0f);
 		void Update(float _deltaTime);
 		void Render();
 		~Animation();

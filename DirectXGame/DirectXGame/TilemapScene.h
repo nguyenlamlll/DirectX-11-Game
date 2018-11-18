@@ -4,6 +4,7 @@
 #include "GameObject.h"
 #include "Rigidbody.h"
 #include "Renderer.h"
+#include "Animation.h"
 
 class TilemapScene :
 	public DirectXCore::Scene

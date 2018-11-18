@@ -22,7 +22,9 @@ Sprite::Sprite(DirectXCore::DeviceResources * _deviceResource, const wchar_t * _
 	if (!GetComponent<Renderer>()) {
 		AddComponent<Renderer>(new Renderer(_deviceResource, _charPath, this));
 		SetSpriteRect(GetComponent<Renderer>()->GetRECT());
+		spriterect = GetComponent<Renderer>()->GetRECT();
 	}
+	transform->SetScreenScale(SimpleMath::Vector3(spriterect->right, spriterect->bottom, 1));
 }
 
 
@@ -32,8 +34,6 @@ Sprite::~Sprite()
 
 void Sprite::Update()
 {
-	Rigidbody *rigidBody = GetComponent<Rigidbody>();
-	if (rigidBody) if (!rigidBody->IsKinematic()) rigidBody->Move(SimpleMath::Vector3(0, 9.8f*rigidBody->GetMass().y, 0), 0.4f);
 	for (size_t i = 0; i < componentList->size(); i++)
 	{
 		componentList->at(i)->Update();
@@ -62,10 +62,3 @@ void Sprite::SetSpriteRect(RECT * _newSpriteRect)
 	spriterect->right = _newSpriteRect->right;
 }
 
-Vector3 Sprite::GetWorldToScreenScale()
-{
-	Vector3 screenScale = this->GetTransform()->GetScale();
-	screenScale.x += spriterect->right / 2;
-	screenScale.y += spriterect->bottom / 2;
-	return screenScale;
-}

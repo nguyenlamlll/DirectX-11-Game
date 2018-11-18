@@ -116,7 +116,7 @@ void TileMap::Render()
 
 					Sprite* sprite = tilesetSheet[layer->GetTileTilesetIndex(n, m)];
 					DirectX::SimpleMath::Vector3 currentPosition((n * tileDataWidth) + worldToScreenPosition.x, (m * tileDataHeight) + worldToScreenPosition.y, 1);
-					if (mainCamera->IsContain(currentPosition, sprite->GetWorldToScreenScale()))
+					if (mainCamera->IsContain(currentPosition, sprite->GetTransform()->GetScreenScale()))
 					{
 						sprite->GetComponent<Renderer>()->SetRECT(*listTileID[tileID]);
 						sprite->GetComponent<Renderer>()->Render(currentPosition);

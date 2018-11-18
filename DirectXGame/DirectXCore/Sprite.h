@@ -15,7 +15,6 @@ namespace DirectXCore
 		~Sprite();
 		void Update() override;
 		void Render();
-		void Render(DirectX::SimpleMath::Vector3 _newPosition);
 
 
 		void SetSpriteRect(RECT* _newSpriteRect);
@@ -23,7 +22,6 @@ namespace DirectXCore
 		void SetCenter(DirectX::SimpleMath::Vector3 _pivot) { pivot = _pivot; }
 		DirectX::SimpleMath::Vector3 GetCenter() { return pivot; }
 
-		Vector3 GetWorldToScreenScale();
 
 	private:
 		DirectX::SimpleMath::Vector3 pivot;
