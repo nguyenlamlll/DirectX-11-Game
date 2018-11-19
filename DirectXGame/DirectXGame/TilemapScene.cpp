@@ -47,6 +47,19 @@ void TilemapScene::UpdateScene(float elapsedTime)
 	else
 	{
 	}
+
+	if (m_dxBase->GetInputManager()->IsKeyDown("J"))
+	{
+		//Sprite* bullet;
+		//m_dxBase->CreateSprite(L"Resources/Weapons/SingleShot.png", &bullet);
+		//auto characterPosition = sprite->GetTransform()->GetPosition();
+		//bullet->GetTransform()->SetPosition(Vector3(400.f, 100.f, 0));
+		//bulletSprites.push_back(bullet);
+	}
+	for (size_t i = 0; i < bulletSprites.size(); i++)
+	{
+		/*bulletSprites.at(i)->GetTransform()->SetPosition(bulletSprites.at(i)->GetTransform()->GetPosition() + Vector3(2.f, 0, 0));*/
+	}
 }
 
 void TilemapScene::RenderScene()
@@ -78,6 +91,11 @@ void TilemapScene::LoadScene()
 	sprite->AddComponent<Renderer>(new Renderer(m_dxBase->GetDeviceResource(), L"Resources/Rockman.png", sprite));
 	gameObjectList->insert(gameObjectList->end(), tilemap->GetListGameObjects()->begin(), tilemap->GetListGameObjects()->end());
 	gameObjectList->insert(gameObjectList->end(), sprite);
+
+	bulletSprites = std::vector<Sprite*>();
+
+	m_dxBase->CreateSoundAndMusic(L"Resources/Music/10 Blizzard Buffalo.wav", &m_backgroundMusic);
+	m_backgroundMusic->Play();
 }
 
 void TilemapScene::UnloadScene()

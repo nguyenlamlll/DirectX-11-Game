@@ -13,14 +13,16 @@ Sound::Sound(DirectX::AudioEngine* audioEngine, const wchar_t* fileName)
 
 Sound::~Sound()
 {
-	m_soundEffect.reset();
+	m_soundInstance->Pause();
+	//m_soundEffect.reset();
 }
 
 void DirectXCore::Sound::Play()
 {
 	if (m_soundEffect)
 	{
-		m_soundEffect->Play();
+		m_soundInstance = m_soundEffect->CreateInstance();
+		m_soundInstance->Play();
 	}
 }
 
