@@ -18,7 +18,7 @@ void TilemapScene::UpdateScene(float elapsedTime)
 	Vector3 worldToScreenShift = Vector3(camera->GetBound().right / 2 - camera->GetPosition().x, camera->GetBound().bottom / 2 - camera->GetPosition().y, 0);
 	newGameObject->GetTransform()->SetWorldToScreenPosition(worldToScreenShift);
 
-	newGameObject->GetComponent<Animation>()->Update(0.11f);
+	newGameObject->GetComponent<Animation>()->Update(elapsedTime);
 	newGameObject->GetComponent<Collider>()->SetColliderScale(Vector3(46, 46, 1));
 	newGameObject->GetComponent<Collider>()->SetColliderPosition(newGameObject->GetTransform()->GetPosition());
 	Rigidbody *rigidBody = newGameObject->GetComponent<Rigidbody>();
@@ -37,14 +37,11 @@ void TilemapScene::UpdateScene(float elapsedTime)
 			if (colType || colType2) collide = true;
 		}
 	}
-	if (collide && first) {
-		if (newGameObject->GetComponent<Rigidbody>() != NULL) {
-			newGameObject->GetComponent<Rigidbody>()->SetKinematic(true);
-			//CHANGES CURRENT STATE TO "STAND"
-			//newGameObject->GetComponent<State>()->SetState("stand");
-			newGameObject->GetComponent<Animation>()->ResetAnimation(L"Resources/start2.png", 1, 6);
-		}
-		first = false;
+	if (collide && !newGameObject->GetComponent<Rigidbody>()->IsKinematic()) {
+		newGameObject->GetComponent<Rigidbody>()->SetKinematic(true);
+		//CHANGES CURRENT STATE TO "STAND"
+		//newGameObject->GetComponent<State>()->SetState("stand");
+		newGameObject->GetComponent<Animation>()->ResetAnimation(L"Resources/start2.png", 1, 6);
 	}
 	if (m_dxBase->GetInputManager()->IsKeyDown("D")) {
 		//CHANGES CURRENT STATE TO "SHOOT"
@@ -86,7 +83,7 @@ void TilemapScene::LoadScene()
 	newGameObject->AddComponent<Renderer>(new Renderer(m_dxBase->GetDeviceResource(), L"Resources/run.png"));
 	newGameObject->AddComponent<Rigidbody>(new Rigidbody(newGameObject));
 	newGameObject->AddComponent<Collider>(new Collider(newGameObject, newGameObject->GetTransform()));
-	newGameObject->AddComponent<Animation>(new Animation(newGameObject->GetComponent<Renderer>(), 1, 11, 1.0f, 1.0f, true));
+	newGameObject->AddComponent<Animation>(new Animation(newGameObject->GetComponent<Renderer>(), 1, 11, 0.1f, 1.0f, true));
 	std::vector<std::string>* stringStates = new std::vector<std::string>();
 	// ADDING STATES TO GAMEOBJECT ( IN BETA )
 	stringStates->push_back("jump");
