@@ -23,6 +23,7 @@ namespace DirectXCore
 		std::map<int, Sprite*> tilesetSheet;
 		std::map<int, RECT*> listTileID;
 		std::map<int, Vector3> listRECTPositions;
+		std::vector<GameObject*> listRenderers;
 		Camera* mainCamera;
 		DirectXCore::DeviceResources* deviceResource;
 		std::vector<GameObject*>* gameObjectList;

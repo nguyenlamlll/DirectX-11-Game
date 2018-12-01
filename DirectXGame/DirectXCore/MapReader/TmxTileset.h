@@ -79,6 +79,9 @@ namespace Tmx
         // about the image of the tileset.
         const Tmx::Image* GetImage() const { return image; }
 
+		//Returns an image got inside the tileset
+        const Tmx::Image* GetImageInTileset() const { return imageInTileset; }
+
         // Returns a a single tile of the set.
         const Tmx::Tile *GetTile(int index) const;
 
@@ -100,6 +103,7 @@ namespace Tmx
         
         Tmx::TileOffset* tileOffset;
         Tmx::Image* image;
+        Tmx::Image* imageInTileset;
 
         std::vector< Tmx::Terrain* > terrainTypes;
         std::vector< Tmx::Tile* > tiles;

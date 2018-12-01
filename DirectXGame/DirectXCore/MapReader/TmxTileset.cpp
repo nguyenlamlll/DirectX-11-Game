@@ -49,6 +49,7 @@ namespace Tmx
         , spacing(0)
         , tileOffset(NULL)
         , image(NULL)
+		, imageInTileset(NULL)
         , tiles()
     {
     }
@@ -68,6 +69,11 @@ namespace Tmx
             delete image;
             image = NULL;
         }
+		if (imageInTileset)
+		{
+			delete imageInTileset;
+			imageInTileset = NULL;
+		}
 
         // Iterate through all of the terrain types in the tileset and delete each of them.
         vector< Terrain* >::iterator ttIter;
@@ -152,11 +158,17 @@ namespace Tmx
 
         // Parse the image.
         const tinyxml2::XMLNode *imageNode = tilesetNode->FirstChildElement("image");
+        const tinyxml2::XMLNode *imageNode2 = tilesetNode->FirstChild()->NextSibling()->FirstChild()->ToElement();
         if (imageNode) 
         {
             image = new Image();
             image->Parse(imageNode);
         }
+		if (imageNode2)
+		{
+			imageInTileset = new Image();
+			imageInTileset->Parse(imageNode2);
+		}
 
         // Iterate through all of the tile elements and parse each.
         const tinyxml2::XMLNode *tileNode = tilesetNode->FirstChildElement("tile");

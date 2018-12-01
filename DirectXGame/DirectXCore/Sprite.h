@@ -14,7 +14,7 @@ namespace DirectXCore
 		Sprite(DirectXCore::DeviceResources* _deviceResource, const wchar_t* _charPath, float _scale = 1.0f);
 		~Sprite();
 		void LoadTexture(const wchar_t* _charPath);
-		void Update() override;
+		void Update(float _deltaTime) override;
 		void Render();
 
 

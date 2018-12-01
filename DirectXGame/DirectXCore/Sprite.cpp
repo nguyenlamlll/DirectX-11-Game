@@ -37,7 +37,7 @@ void DirectXCore::Sprite::LoadTexture(const wchar_t * _charPath)
 
 }
 
-void Sprite::Update()
+void Sprite::Update(float _deltaTime)
 {
 	/*for (size_t i = 0; i < componentList->size(); i++)
 	{
@@ -62,9 +62,9 @@ void Sprite::Render()
 void Sprite::SetSpriteRect(RECT * _newSpriteRect)
 {
 	//GetComponent<Renderer>()->SetRECT(*_newSpriteRect);
-	/*spriterect->top = _newSpriteRect->top;
+	spriterect->top = _newSpriteRect->top;
 	spriterect->bottom = _newSpriteRect->bottom;
 	spriterect->left = _newSpriteRect->left;
-	spriterect->right = _newSpriteRect->right;*/
+	spriterect->right = _newSpriteRect->right;
 }
 
