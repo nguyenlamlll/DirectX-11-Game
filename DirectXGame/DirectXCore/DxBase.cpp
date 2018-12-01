@@ -44,15 +44,17 @@ void DxBase::Initialize(HWND window, int width, int height)
 	m_timer.SetFixedTimeStep(true);
 	m_timer.SetTargetElapsedSeconds(1.0 / 60);
 	*/
+	m_timer.SetFixedTimeStep(true);
+	m_timer.SetTargetElapsedSeconds(1.0 / 60);
 }
 
 void DirectXCore::DxBase::CreateCamera(Camera** returnCamera)
 {
-	mainCamera = new Camera(m_deviceResources->GetOutputSize().right / 2, m_deviceResources->GetOutputSize().bottom/2);
+	mainCamera = new Camera(m_deviceResources->GetOutputSize().right / 2, m_deviceResources->GetOutputSize().bottom / 2);
 	*returnCamera = mainCamera;
 }
 
-void DirectXCore::DxBase::CreateTilemap(const wchar_t * tilemapSpriteName,TileMap** returnTilemap)
+void DirectXCore::DxBase::CreateTilemap(const wchar_t * tilemapSpriteName, TileMap** returnTilemap)
 {
 	//CreateCamera();
 	tilemap = new TileMap(m_deviceResources.get(), tilemapSpriteName);
@@ -68,6 +70,12 @@ void DirectXCore::DxBase::CreateSprite(const wchar_t * spriteName, Sprite** retu
 void DirectXCore::DxBase::CreateText(const wchar_t * fontPath, const wchar_t * content, Text ** returnText)
 {
 	*returnText = new Text(m_deviceResources.get(), fontPath, content);
+}
+
+void DirectXCore::DxBase::InitializeWithScene(int index)
+{
+	m_activeScene = m_scenes[index];
+	m_activeScene->LoadScene();
 }
 
 #pragma region Frame Update
@@ -96,7 +104,7 @@ void DxBase::Update(StepTimer const& timer)
 	//{
 	//	mainCamera->SetPosition(mainCamera->GetPosition() + DirectX::SimpleMath::Vector2(0.4f, 0.4f));
 	//}
-	
+
 
 	//BoundingBox _bdBox, _bdBox2;
 	//_bdBox.Center = DirectX::SimpleMath::Vector3(0, 0, 0);
@@ -105,7 +113,7 @@ void DxBase::Update(StepTimer const& timer)
 	//_bdBox2.Extents = DirectX::SimpleMath::Vector3(1, 1, 1);
 	//ContainmentType containtype = _bdBox.Contains(_bdBox2);
 
-	if (m_activeScene) 
+	if (m_activeScene)
 	{
 		m_activeScene->UpdateScene(elapsedTime);
 	}
@@ -157,7 +165,7 @@ void DxBase::Clear()
 	auto renderTarget = m_deviceResources->GetRenderTargetView();
 	auto depthStencil = m_deviceResources->GetDepthStencilView();
 
-	context->ClearRenderTargetView(renderTarget, DirectX::Colors::CornflowerBlue);
+	context->ClearRenderTargetView(renderTarget, DirectX::Colors::Black);
 	context->ClearDepthStencilView(depthStencil, D3D11_CLEAR_DEPTH | D3D11_CLEAR_STENCIL, 1.0f, 0);
 	context->OMSetRenderTargets(1, &renderTarget, depthStencil);
 
@@ -256,16 +264,17 @@ void DirectXCore::DxBase::InitializeScenes()
 }
 
 // Load every sound we're asked to.
-void DirectXCore::DxBase::CreateSoundAndMusic(const wchar_t* soundFileName)
+void DirectXCore::DxBase::CreateSoundAndMusic(const wchar_t* soundFileName, Sound** returnSound)
 {
-	auto sound = new Sound(m_audioEngine.get(), soundFileName);
-	sound->Play();
+	*returnSound = new Sound(m_audioEngine.get(), soundFileName);
 }
 
 
 
 void DirectXCore::DxBase::SwitchToScene(int index)
 {
+	m_activeScene->UnloadScene();
+
 	m_activeScene = m_scenes[index];
 	m_activeScene->LoadScene();
 }
