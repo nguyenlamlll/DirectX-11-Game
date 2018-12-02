@@ -9,25 +9,36 @@ DirectXCore::GameObject::GameObject()
 	componentList = new std::vector<Component*>();
 }
 
-void DirectXCore::GameObject::Update()
+void DirectXCore::GameObject::PreUpdate(float _deltaTime)
 {
-	Vector3* colliderCenter = new Vector3(transform->GetPosition().x + transform->GetScale().x, transform->GetPosition().y + transform->GetScale().y, 1);
-	Rigidbody *rigidBody = GetComponent<Rigidbody>();
-	if (rigidBody) GetTransform()->SetPosition(GetTransform()->GetPosition()+rigidBody->GetVelocity());
-	Collider *collider = GetComponent<Collider>();
-	/*if (collider)
-	{
-		collider->SetColliderTransform(transform);
-	}*/
 	for (size_t i = 0; i < componentList->size(); i++)
 	{
-		componentList->at(i)->Update();
+		componentList->at(i)->PreUpdate(_deltaTime);
+	}
+}
+
+void DirectXCore::GameObject::Update(float _deltaTime)
+{
+	for (size_t i = 0; i < componentList->size(); i++)
+	{
+		componentList->at(i)->Update(_deltaTime);
+	}
+}
+
+void DirectXCore::GameObject::LateUpdate(float _deltaTime)
+{
+	for (size_t i = 0; i < componentList->size(); i++)
+	{
+		componentList->at(i)->LateUpdate(_deltaTime);
 	}
 }
 
 void DirectXCore::GameObject::Render()
 {
-
+	for (size_t i = 0; i < componentList->size(); i++)
+	{
+		componentList->at(i)->Render();
+	}
 }
 
 void DirectXCore::GameObject::OnCollisionEnter()

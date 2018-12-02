@@ -11,7 +11,9 @@ namespace DirectXCore
 	{
 	public:
 		GameObject();
-		virtual void Update();
+		virtual void PreUpdate(float _deltaTime);
+		virtual void Update(float _deltaTime);
+		virtual void LateUpdate(float _deltaTime);
 		virtual void Render();
 		GameObject* GetGameObject() { return this; }
 		Transform* GetTransform() { return transform; }

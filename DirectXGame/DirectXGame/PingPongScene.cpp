@@ -29,105 +29,105 @@ float bounceAngle = 0.0f;
 bool padNotHit = false;
 void PingPongScene::UpdateScene(float elapsedTime)
 {
-	bool isLeftPadDown, isLeftPadUp;
-	if (m_dxBase->GetInputManager()->IsKeyDown("S"))
-	{
-		isLeftPadDown = true;
-		Vector2 currentPosition = m_leftPad->GetTransform()->GetPosition();
-		MoveSprite(m_leftPad, Vector3(currentPosition.x, currentPosition.y + SPEED * elapsedTime, 0));
-	}
-	else 
-	{
-		isLeftPadDown = false;
-	}
-	if (m_dxBase->GetInputManager()->IsKeyDown("W"))
-	{
-		isLeftPadUp = true;
-		Vector2 currentPosition = m_leftPad->GetTransform()->GetPosition();
-		MoveSprite(m_leftPad, Vector3(currentPosition.x, currentPosition.y - SPEED * elapsedTime, 0));
-	}
-	else
-	{
-		isLeftPadUp = false;
-	}
+	//bool isLeftPadDown, isLeftPadUp;
+	//if (m_dxBase->GetInputManager()->IsKeyDown("S"))
+	//{
+	//	isLeftPadDown = true;
+	//	Vector2 currentPosition = m_leftPad->GetTransform()->GetPosition();
+	//	MoveSprite(m_leftPad, Vector3(currentPosition.x, currentPosition.y + SPEED * elapsedTime, 0));
+	//}
+	//else 
+	//{
+	//	isLeftPadDown = false;
+	//}
+	//if (m_dxBase->GetInputManager()->IsKeyDown("W"))
+	//{
+	//	isLeftPadUp = true;
+	//	Vector2 currentPosition = m_leftPad->GetTransform()->GetPosition();
+	//	MoveSprite(m_leftPad, Vector3(currentPosition.x, currentPosition.y - SPEED * elapsedTime, 0));
+	//}
+	//else
+	//{
+	//	isLeftPadUp = false;
+	//}
 
-	bool isRightPadDown, isRightPadUp;
-	if (m_isRightPadMoveDown)
-	{
-		isRightPadDown = true;
-		Vector2 currentPosition = m_rightPad->GetTransform()->GetPosition();
-		MoveSprite(m_rightPad, Vector3(currentPosition.x, currentPosition.y + SPEED * elapsedTime, 0));
-	}
-	else
-	{
-		isRightPadDown = false;
-	}
-	if (m_isRightPadMoveUp)
-	{
-		isRightPadUp = true;
-		Vector2 currentPosition = m_rightPad->GetTransform()->GetPosition();
-		MoveSprite(m_rightPad, Vector3(currentPosition.x, currentPosition.y - SPEED * elapsedTime, 0));
-	}
-	else
-	{
-		isRightPadUp = false;
-	}
+	//bool isRightPadDown, isRightPadUp;
+	//if (m_isRightPadMoveDown)
+	//{
+	//	isRightPadDown = true;
+	//	Vector2 currentPosition = m_rightPad->GetTransform()->GetPosition();
+	//	MoveSprite(m_rightPad, Vector3(currentPosition.x, currentPosition.y + SPEED * elapsedTime, 0));
+	//}
+	//else
+	//{
+	//	isRightPadDown = false;
+	//}
+	//if (m_isRightPadMoveUp)
+	//{
+	//	isRightPadUp = true;
+	//	Vector2 currentPosition = m_rightPad->GetTransform()->GetPosition();
+	//	MoveSprite(m_rightPad, Vector3(currentPosition.x, currentPosition.y - SPEED * elapsedTime, 0));
+	//}
+	//else
+	//{
+	//	isRightPadUp = false;
+	//}
 
-	Vector2 ballCurrentPosition = m_ball->GetTransform()->GetPosition();
-	Vector2 rightPadCurrentPosition = m_rightPad->GetTransform()->GetPosition();
-	Vector2 leftPadCurrentPosition = m_leftPad->GetTransform()->GetPosition();
-	if (hitRight == true)
-	{
-		MoveSprite(m_ball.get(), Vector3(
-			ballCurrentPosition.x - SPEED * 0.75 * elapsedTime,
-			ballCurrentPosition.y + bounceAngle * elapsedTime,
-			0
-		));
-		if (ballCurrentPosition.y <= leftPadCurrentPosition.y - 40 || 
-			ballCurrentPosition.y >= leftPadCurrentPosition.y + 40)
-		{
-			// Keep moving
-		}
-		else
-		{
-			if ((ballCurrentPosition.x - BALL_RADIUS) <= (leftPadCurrentPosition.x + PIXELS_TO_LONG_EDGE))
-			{
-				hitRight = false;
-				hitLeft = true;
-				if (isLeftPadDown)
-				{
-					bounceAngle = SPEED * 0.2;
-				}
-				if (isLeftPadUp)
-				{
-					bounceAngle = -SPEED * 0.2;
-				}
-			}
-		}
+	//Vector2 ballCurrentPosition = m_ball->GetTransform()->GetPosition();
+	//Vector2 rightPadCurrentPosition = m_rightPad->GetTransform()->GetPosition();
+	//Vector2 leftPadCurrentPosition = m_leftPad->GetTransform()->GetPosition();
+	//if (hitRight == true)
+	//{
+	//	MoveSprite(m_ball.get(), Vector3(
+	//		ballCurrentPosition.x - SPEED * 0.75 * elapsedTime,
+	//		ballCurrentPosition.y + bounceAngle * elapsedTime,
+	//		0
+	//	));
+	//	if (ballCurrentPosition.y <= leftPadCurrentPosition.y - 40 || 
+	//		ballCurrentPosition.y >= leftPadCurrentPosition.y + 40)
+	//	{
+	//		// Keep moving
+	//	}
+	//	else
+	//	{
+	//		if ((ballCurrentPosition.x - BALL_RADIUS) <= (leftPadCurrentPosition.x + PIXELS_TO_LONG_EDGE))
+	//		{
+	//			hitRight = false;
+	//			hitLeft = true;
+	//			if (isLeftPadDown)
+	//			{
+	//				bounceAngle = SPEED * 0.2;
+	//			}
+	//			if (isLeftPadUp)
+	//			{
+	//				bounceAngle = -SPEED * 0.2;
+	//			}
+	//		}
+	//	}
 
-	}
-	if (hitLeft == true)
-	{
-		MoveSprite(m_ball.get(), Vector3(
-			ballCurrentPosition.x + SPEED * 0.75 * elapsedTime,
-			ballCurrentPosition.y + bounceAngle * elapsedTime,
-			0
-		));
+	//}
+	//if (hitLeft == true)
+	//{
+	//	MoveSprite(m_ball.get(), Vector3(
+	//		ballCurrentPosition.x + SPEED * 0.75 * elapsedTime,
+	//		ballCurrentPosition.y + bounceAngle * elapsedTime,
+	//		0
+	//	));
 
-		if ((ballCurrentPosition.x + BALL_RADIUS) >= (rightPadCurrentPosition.x - PIXELS_TO_LONG_EDGE))
-		{
-			hitRight = true;
-			hitLeft = false;
-			if (isRightPadDown)
-			{
-				bounceAngle = SPEED * 0.2;
-			}
-			if (isRightPadUp)
-			{
-				bounceAngle = -SPEED * 0.2;
-			}
-		}
-	}
+	//	if ((ballCurrentPosition.x + BALL_RADIUS) >= (rightPadCurrentPosition.x - PIXELS_TO_LONG_EDGE))
+	//	{
+	//		hitRight = true;
+	//		hitLeft = false;
+	//		if (isRightPadDown)
+	//		{
+	//			bounceAngle = SPEED * 0.2;
+	//		}
+	//		if (isRightPadUp)
+	//		{
+	//			bounceAngle = -SPEED * 0.2;
+	//		}
+	//	}
+	//}
 
 }
 
@@ -140,7 +140,7 @@ void PingPongScene::RenderScene()
 
 void PingPongScene::LoadScene()
 {
-	m_dxBase->CreateSprite(L"Resources\\button.png", &m_leftPad);
+	/*m_dxBase->CreateSprite(L"Resources\\button.png", &m_leftPad);
 	m_leftPad->GetTransform()->SetPosition(Vector3(50, 384, 0));
 
 	m_dxBase->CreateSprite(L"Resources\\button.png", &m_rightPad);
@@ -150,7 +150,7 @@ void PingPongScene::LoadScene()
 	auto temp = m_ball.get();
 	m_dxBase->CreateSprite(L"Resources\\neon-circle.png", &temp);
 	m_ball.reset(temp);
-	m_ball->GetTransform()->SetScale(Vector3(0.5, 0.5, 0));
+	m_ball->GetTransform()->SetScale(Vector3(0.5, 0.5, 0));*/
 }
 
 void PingPongScene::UnloadScene()
@@ -201,5 +201,5 @@ void PingPongScene::OnKeyDown(KeyCode key)
 
 void PingPongScene::MoveSprite(Sprite* sprite, Vector3 newPosition)
 {
-	sprite->GetTransform()->SetPosition(newPosition);
+	//sprite->GetTransform()->SetPosition(newPosition);
 }

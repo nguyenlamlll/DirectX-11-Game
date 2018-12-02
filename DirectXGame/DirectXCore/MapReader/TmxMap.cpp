@@ -34,6 +34,7 @@
 #include "TmxTileLayer.h"
 #include "TmxObjectGroup.h"
 #include "TmxImageLayer.h"
+#include "TmxImage.h"
 
 using std::vector;
 using std::string;
@@ -313,7 +314,11 @@ namespace Tmx
                 tileset->Parse(node->ToElement(), file_path);
 
                 // Add the tileset to the list.
-                tilesets.push_back(tileset);
+                tilesets.push_back(tileset); 
+
+				Tmx::Image *_image = new Tmx::Image();
+				_image->Parse(node->FirstChild()->NextSibling()->FirstChild()->ToElement());
+				
             }
 
             // Iterate through all of the "layer" (tile layer) elements.           

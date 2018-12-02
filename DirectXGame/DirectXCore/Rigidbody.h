@@ -8,9 +8,12 @@ namespace DirectXCore
 	public:
 		Rigidbody();
 		Rigidbody(GameObject* _gameObject);
-		void Update();
+		void PreUpdate(float _deltaTime);
+		void Update(float _deltaTime);
+		void LateUpdate(float _deltaTime);
 		void MovePosition(SimpleMath::Vector3 _newPosition);
-		void Move(SimpleMath::Vector3 _velocity,float _deltaTime);
+		void Move(SimpleMath::Vector3 _velocity, float _deltaTime);
+		void AddForce(SimpleMath::Vector3 _force);
 
 		SimpleMath::Vector3 GetVelocity() { return velocity; }
 		void SetVelocity(SimpleMath::Vector3 _newVelocity) { velocity = _newVelocity; }
@@ -22,7 +25,8 @@ namespace DirectXCore
 		void OnPhysicUpdate(float _delta);
 		~Rigidbody();
 	private:
-		SimpleMath::Vector3 position, velocity, force, impulse,mass,gravity;
+		SimpleMath::Vector3 acceleration,position, velocity, force, impulse, mass, gravity = SimpleMath::Vector3(0, 9.8f, 0);
 		bool kinematic;
+		float accumulatedTime = 0.0f;
 	};
 }
