@@ -2,21 +2,27 @@
 
 #include "stdafx.h"
 #include "Sprite.h"
+#include "Renderer.h"
 
-namespace DirectXCore 
+namespace DirectXCore
 {
-	class Animation
+	class Animation : public Component
 	{
 	public:
 		Animation();
-		Animation(int _rows, int _collums, Sprite* _sprite, float _timePerFrame, float _scale = 1.0f);
+		Animation(Sprite *_sprite, int _rows, int _collums, float _timePerFrame, float _scale = 1.0f);
+		Animation(int _rows, int _collums, float _timePerFrame, float _timeScale = 1.0f);
+		Animation(Renderer* mainRenderer, int _rows, int _collums, float _timePerFrame, float _timeScale, bool _loop);
+		void ResetAnimation(const wchar_t * _charPath,int _rows, int _collums);
 		void Update(float _deltaTime);
 		void Render();
 		~Animation();
+		bool loop;
 	private:
 		int frameIndex = 0, frameCount, frameWidth, frameHeight;
 		std::vector<RECT*> animationFrameRects;
 		Sprite* mainSprite;
+		Renderer* mainrender;
 		float currentFrameTime = 0, timePerFrame = 0, scale = 0;
 	};
 }

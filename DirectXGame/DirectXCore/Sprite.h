@@ -7,15 +7,15 @@
 
 namespace DirectXCore 
 {
-	class Sprite : public GameObject
+	class Sprite : public Component
 	{
 	public:
 		Sprite();
 		Sprite(DirectXCore::DeviceResources* _deviceResource, const wchar_t* _charPath, float _scale = 1.0f);
 		~Sprite();
-		void Update() override;
+		void LoadTexture(const wchar_t* _charPath);
+		void Update(float _deltaTime) override;
 		void Render();
-		void Render(DirectX::SimpleMath::Vector3 _newPosition);
 
 
 		void SetSpriteRect(RECT* _newSpriteRect);
@@ -23,7 +23,6 @@ namespace DirectXCore
 		void SetCenter(DirectX::SimpleMath::Vector3 _pivot) { pivot = _pivot; }
 		DirectX::SimpleMath::Vector3 GetCenter() { return pivot; }
 
-		Vector3 GetWorldToScreenScale();
 
 	private:
 		DirectX::SimpleMath::Vector3 pivot;
