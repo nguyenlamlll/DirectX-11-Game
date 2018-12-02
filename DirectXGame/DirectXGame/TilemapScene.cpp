@@ -14,6 +14,8 @@ TilemapScene::~TilemapScene()
 
 void TilemapScene::UpdateScene(float elapsedTime)
 {
+	newGameObject->GetComponent<Animation>()->Update(elapsedTime);
+	int a = 0;
 	for (size_t i = 0; i < gameObjectList->size(); i++) gameObjectList->at(i)->PreUpdate(elapsedTime);
 	newGameObject->PreUpdate(elapsedTime);
 	if (m_dxBase->GetInputManager()->IsKeyDown("D")) {
@@ -47,12 +49,16 @@ void TilemapScene::UpdateScene(float elapsedTime)
 	{
 		if (newGameObject != gameObjectList->at(i) && gameObjectList->at(i)->GetComponent<Collider>())
 		{
+			if (newGameObject->GetComponent<Collider>()->GetCollider()->Extents.x < gameObjectList->at(i)->GetComponent<Collider>()->GetCollider()->Extents.x && newGameObject->GetTransform()->GetPosition().y < gameObjectList->at(i)->GetTransform()->GetPosition().y)
+				a = 1;
 			bool colType = newGameObject->GetComponent<Collider>()->GetCollider()->Intersects(*gameObjectList->at(i)->GetComponent<Collider>()->GetCollider());
 			bool colType2 = gameObjectList->at(i)->GetComponent<Collider>()->GetCollider()->Intersects(*newGameObject->GetComponent<Collider>()->GetCollider());
 			if (colType || colType2) collide = true;
 		}
 	}
 	if (collide) {
+		if (a == 1)
+			int b = 2;
 		newGameObject->GetComponent<Rigidbody>()->SetVelocity(Vector3(0,0,0));
 		//newGameObject->GetComponent<Rigidbody>()->SetKinematic(true);
 		//CHANGES CURRENT STATE TO "STAND"
@@ -88,10 +94,6 @@ void TilemapScene::LoadScene()
 {
 	gameObjectList = new std::vector<GameObject*>();
 	GameObject *newPCN = new GameObject();
-	//newPCN->AddComponent<Renderer>(new Renderer(m_dxBase->GetDeviceResource(), L"Resources/map/map1.png"));
-	//newPCN->GetTransform()->SetScreenScale(Vector3(6000, 6000, 0));
-	////newPCN->GetTransform()->SetScale(Vector3(2.f, 2.f, 2.f));
-	//newPCN->GetTransform()->SetPosition(Vector3(0, -125, 0));
 	m_dxBase->CreateCamera(&camera);
 	tilemap = new TileMap(m_dxBase->GetDeviceResource(), L"Resources/map.tmx");
 	tilemap->SetCamera(camera);
@@ -100,7 +102,7 @@ void TilemapScene::LoadScene()
 	newGameObject->AddComponent<Renderer>(new Renderer(m_dxBase->GetDeviceResource(), L"Resources/rockman.png"));
 	newGameObject->AddComponent<Rigidbody>(new Rigidbody(newGameObject));
 	newGameObject->AddComponent<Collider>(new Collider(newGameObject, newGameObject->GetTransform()));
-	//newGameObject->AddComponent<Animation>(new Animation(newGameObject->GetComponent<Renderer>(), 1, 11, 0.1f, 1.0f, true));
+	newGameObject->AddComponent<Animation>(new Animation(newGameObject->GetComponent<Renderer>(), 1, 11, 0.1f, 1.0f, true));
 	std::vector<std::string>* stringStates = new std::vector<std::string>();
 	// ADDING STATES TO GAMEOBJECT ( IN BETA )
 	stringStates->push_back("jump");
@@ -111,7 +113,7 @@ void TilemapScene::LoadScene()
 
 
 	//newGameObject->GetComponent<State>()->SetState("jump");
-	//newGameObject->GetComponent<Animation>()->ResetAnimation(L"Resources/jump.png", 1, 7);
+	newGameObject->GetComponent<Animation>()->ResetAnimation(L"Resources/jump.png", 1, 7);
 
 	gameObjectList->insert(gameObjectList->end(), tilemap->GetListGameObjects()->begin(), tilemap->GetListGameObjects()->end());
 	//gameObjectList->insert(gameObjectList->end(), newGameObject);

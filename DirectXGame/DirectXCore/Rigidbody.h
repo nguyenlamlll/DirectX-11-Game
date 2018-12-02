@@ -13,6 +13,7 @@ namespace DirectXCore
 		void LateUpdate(float _deltaTime);
 		void MovePosition(SimpleMath::Vector3 _newPosition);
 		void Move(SimpleMath::Vector3 _velocity, float _deltaTime);
+		void AddForce(SimpleMath::Vector3 _force);
 
 		SimpleMath::Vector3 GetVelocity() { return velocity; }
 		void SetVelocity(SimpleMath::Vector3 _newVelocity) { velocity = _newVelocity; }

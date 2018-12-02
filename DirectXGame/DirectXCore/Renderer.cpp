@@ -71,7 +71,7 @@ void DirectXCore::Renderer::LoadTexture(const wchar_t * _charPath)
 	spriterect->bottom = spriteDesc.Height;
 	spriterect->right = spriteDesc.Width;
 
-	sprite->SetSpriteRect(spriterect);
+	//sprite->SetSpriteRect(spriterect);
 }
 
 void DirectXCore::Renderer::Render()
