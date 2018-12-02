@@ -11,36 +11,46 @@ TilemapScene::TilemapScene(DxBase* dxBase)
 TilemapScene::~TilemapScene()
 {
 }
-
+bool firstTime = false;
 void TilemapScene::UpdateScene(float elapsedTime)
 {
 	newGameObject->GetComponent<Animation>()->Update(elapsedTime);
 	int a = 0;
 	for (size_t i = 0; i < gameObjectList->size(); i++) gameObjectList->at(i)->PreUpdate(elapsedTime);
 	newGameObject->PreUpdate(elapsedTime);
-	if (m_dxBase->GetInputManager()->IsKeyDown("D")) {
-		//CHANGES CURRENT STATE TO "SHOOT"
-		//newGameObject->GetComponent<State>()->SetState("shoot");
-		//newGameObject->GetComponent<Animation>()->ResetAnimation(L"Resources/stand_attack.png", 1, 2);
+	if (m_dxBase->GetInputManager()->IsKeyDown("D")) 
+	{
+		// CHANGES CURRENT STAGE TO "RUN"
+		newGameObject->GetComponent<State>()->SetState("run");
+		newGameObject->GetComponent<Animation>()->ResetAnimation(L"Resources/run.png", 1, 11);
 		camera->SetPosition(camera->GetPosition() + Vector3(30, 0, 0));
+		newGameObject->GetTransform()->SetPosition(newGameObject->GetTransform()->GetPosition() + Vector3(15, 0, 0));
 	}
-	if (m_dxBase->GetInputManager()->IsKeyDown("A")) {
+	if (m_dxBase->GetInputManager()->IsKeyDown("A")) 
+	{
 		// CHANGES CURRENT STAGE TO "RUN"
-		//newGameObject->GetComponent<State>()->SetState("run");
-		//newGameObject->GetComponent<Animation>()->ResetAnimation(L"Resources/run.png", 1, 11);
+		newGameObject->GetComponent<State>()->SetState("run");
+		newGameObject->GetComponent<Animation>()->ResetAnimation(L"Resources/run.png", 1, 11);
 		camera->SetPosition(camera->GetPosition() + Vector3(-30, 0, 0));
+		newGameObject->GetTransform()->SetPosition(newGameObject->GetTransform()->GetPosition() + Vector3(-15, 0, 0));
 	}
-	if (m_dxBase->GetInputManager()->IsKeyDown("W")) {
+	if (m_dxBase->GetInputManager()->IsKeyDown("W")) 
+	{
 		// CHANGES CURRENT STAGE TO "RUN"
-		//newGameObject->GetComponent<State>()->SetState("run");
-		//newGameObject->GetComponent<Animation>()->ResetAnimation(L"Resources/run.png", 1, 11);
+		newGameObject->GetComponent<State>()->SetState("run");
+		newGameObject->GetComponent<Animation>()->ResetAnimation(L"Resources/run.png", 1, 11);
 		camera->SetPosition(camera->GetPosition() + Vector3(0, -30, 0));
 	}
-	if (m_dxBase->GetInputManager()->IsKeyDown("S")) {
-		// CHANGES CURRENT STAGE TO "RUN"
-		//newGameObject->GetComponent<State>()->SetState("run");
-		//newGameObject->GetComponent<Animation>()->ResetAnimation(L"Resources/run.png", 1, 11);
+	if (m_dxBase->GetInputManager()->IsKeyDown("S")) 
+	{
+
 		camera->SetPosition(camera->GetPosition() + Vector3(0, 30, 0));
+	}
+	if (m_dxBase->GetInputManager()->IsKeyDown("J"))
+	{
+		//CHANGES CURRENT STATE TO "SHOOT"
+		newGameObject->GetComponent<State>()->SetState("shoot");
+		newGameObject->GetComponent<Animation>()->ResetAnimation(L"Resources/stand_attack.png", 1, 2);
 	}
 
 	newGameObject->GetComponent<Collider>()->SetColliderScale(Vector3(46, 46, 1));
@@ -61,9 +71,14 @@ void TilemapScene::UpdateScene(float elapsedTime)
 			int b = 2;
 		newGameObject->GetComponent<Rigidbody>()->SetVelocity(Vector3(0,0,0));
 		//newGameObject->GetComponent<Rigidbody>()->SetKinematic(true);
-		//CHANGES CURRENT STATE TO "STAND"
-		//newGameObject->GetComponent<State>()->SetState("stand");
-		//newGameObject->GetComponent<Animation>()->ResetAnimation(L"Resources/start2.png", 1, 6);
+
+		if (firstTime == false) 
+		{
+			//CHANGES CURRENT STATE TO "STAND"
+			newGameObject->GetComponent<State>()->SetState("stand");
+			newGameObject->GetComponent<Animation>()->ResetAnimation(L"Resources/stand2.png", 1, 4);
+			firstTime = true;
+		}
 	}
 
 	for (size_t i = 0; i < gameObjectList->size(); i++) gameObjectList->at(i)->Update(elapsedTime);
@@ -102,7 +117,7 @@ void TilemapScene::LoadScene()
 	newGameObject->AddComponent<Renderer>(new Renderer(m_dxBase->GetDeviceResource(), L"Resources/rockman.png"));
 	newGameObject->AddComponent<Rigidbody>(new Rigidbody(newGameObject));
 	newGameObject->AddComponent<Collider>(new Collider(newGameObject, newGameObject->GetTransform()));
-	newGameObject->AddComponent<Animation>(new Animation(newGameObject->GetComponent<Renderer>(), 1, 11, 0.1f, 1.0f, true));
+	newGameObject->AddComponent<Animation>(new Animation(newGameObject->GetComponent<Renderer>(), 1, 11, 0.25f, 1.0f, true));
 	std::vector<std::string>* stringStates = new std::vector<std::string>();
 	// ADDING STATES TO GAMEOBJECT ( IN BETA )
 	stringStates->push_back("jump");
@@ -112,7 +127,7 @@ void TilemapScene::LoadScene()
 	newGameObject->AddComponent<State>(new State(newGameObject, *stringStates));
 
 
-	//newGameObject->GetComponent<State>()->SetState("jump");
+	newGameObject->GetComponent<State>()->SetState("jump");
 	newGameObject->GetComponent<Animation>()->ResetAnimation(L"Resources/jump.png", 1, 7);
 
 	gameObjectList->insert(gameObjectList->end(), tilemap->GetListGameObjects()->begin(), tilemap->GetListGameObjects()->end());
