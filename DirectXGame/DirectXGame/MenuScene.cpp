@@ -89,6 +89,7 @@ void MenuScene::UpdateScene(float elapsedTime)
 	{
 
 	}
+
 }
 
 void MenuScene::RenderScene()
@@ -98,6 +99,7 @@ void MenuScene::RenderScene()
 	m_OptionModeText->RenderText();
 
 	//m_logoSprite->Render();
+	logoGameObject->Render();
 }
 
 void MenuScene::LoadScene()
@@ -117,6 +119,11 @@ void MenuScene::LoadScene()
 
 	//m_dxBase->CreateSprite(L"Resources/Megaman_x3_logo.jpg", &m_logoSprite);
 	//m_logoSprite->GetTransform()->SetPosition(Vector3(500, 200, 0));
+
+	logoGameObject = new GameObject();
+	logoGameObject->GetTransform()->SetPosition(Vector3(600.f, 200.f, 0));
+	logoGameObject->GetTransform()->SetScale(Vector3(0.4f, 0.4f, 0.4f));
+	logoGameObject->AddComponent<Renderer>(new Renderer(m_dxBase->GetDeviceResource(), L"Resources/Megaman_x3_logo.jpg"));
 }
 
 void MenuScene::UnloadScene()
@@ -140,5 +147,9 @@ void MenuScene::UnloadScene()
 	{
 		
 		delete m_introductionMusic;
+	}
+	if (logoGameObject)
+	{
+		delete logoGameObject;
 	}
 }
