@@ -34,11 +34,15 @@ private:
 
 	DirectXCore::TileMap* tilemap;
 	DirectXCore::Sprite* sprite;
+	std::vector<DirectXCore::Sprite*> bulletSprites;
+
 	DirectXCore::GameObject* newGameObject;
 	DirectXCore::Camera* camera;
 
 	std::vector<DirectXCore::GameObject*>* gameObjectList;
 	bool collide = false;
+
+	DirectXCore::Sound* m_backgroundMusic;
 	bool first = true;
 };
 

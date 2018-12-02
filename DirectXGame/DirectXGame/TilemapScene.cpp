@@ -131,6 +131,9 @@ void TilemapScene::LoadScene()
 	newGameObject->GetComponent<Animation>()->ResetAnimation(L"Resources/jump.png", 1, 7);
 
 	gameObjectList->insert(gameObjectList->end(), tilemap->GetListGameObjects()->begin(), tilemap->GetListGameObjects()->end());
+
+	m_dxBase->CreateSoundAndMusic(L"Resources/Music/09 Blast Hornet.wav", &m_backgroundMusic);
+	m_backgroundMusic->Play();
 	//gameObjectList->insert(gameObjectList->end(), newGameObject);
 	//gameObjectList->insert(gameObjectList->end(), newPCN);
 }

@@ -38,5 +38,9 @@ private:
 	DirectXCore::Text* m_GameStartText;
 	DirectXCore::Text* m_PassWordText;
 	DirectXCore::Text* m_OptionModeText;
+
+	DirectXCore::GameObject* m_logoGameObject;
+	DirectXCore::Camera* m_camera;
+	DirectXCore::TileMap* m_tilemap;
 };
 
