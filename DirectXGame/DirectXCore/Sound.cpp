@@ -27,3 +27,4 @@ void DirectXCore::Sound::Play()
 void DirectXCore::Sound::Loop()
 {
 }
+
