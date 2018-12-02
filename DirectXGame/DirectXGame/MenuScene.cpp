@@ -80,6 +80,7 @@ void MenuScene::UpdateScene(float elapsedTime)
 		break;
 	}
 	}
+	m_logoGameObject->Update(elapsedTime);
 
 	if (m_dxBase->GetInputManager()->IsKeyDown("Enter"))
 	{
@@ -89,7 +90,6 @@ void MenuScene::UpdateScene(float elapsedTime)
 	{
 
 	}
-
 }
 
 void MenuScene::RenderScene()
@@ -99,7 +99,9 @@ void MenuScene::RenderScene()
 	m_OptionModeText->RenderText();
 
 	//m_logoSprite->Render();
-	logoGameObject->Render();
+	Vector3 worldToScreenShift = Vector3(m_camera->GetBound().right / 2 - m_camera->GetPosition().x, m_camera->GetBound().bottom / 2 - m_camera->GetPosition().y, 0);
+	m_logoGameObject->GetTransform()->SetWorldToScreenPosition(worldToScreenShift);
+	m_logoGameObject->Render();
 }
 
 void MenuScene::LoadScene()
@@ -120,10 +122,14 @@ void MenuScene::LoadScene()
 	//m_dxBase->CreateSprite(L"Resources/Megaman_x3_logo.jpg", &m_logoSprite);
 	//m_logoSprite->GetTransform()->SetPosition(Vector3(500, 200, 0));
 
-	logoGameObject = new GameObject();
-	logoGameObject->GetTransform()->SetPosition(Vector3(600.f, 200.f, 0));
-	logoGameObject->GetTransform()->SetScale(Vector3(0.4f, 0.4f, 0.4f));
-	logoGameObject->AddComponent<Renderer>(new Renderer(m_dxBase->GetDeviceResource(), L"Resources/Megaman_x3_logo.jpg"));
+	m_dxBase->CreateCamera(&m_camera);
+	m_tilemap = new TileMap(m_dxBase->GetDeviceResource(), L"Resources/untitled.tmx");
+	m_tilemap->SetCamera(m_camera);
+
+	m_logoGameObject = new GameObject();
+	m_logoGameObject->GetTransform()->SetPosition(Vector3(115.f, 10.f, 0));
+	m_logoGameObject->GetTransform()->SetScale(Vector3(0.4f, 0.4f, 0.4f));
+	m_logoGameObject->AddComponent<Renderer>(new Renderer(m_dxBase->GetDeviceResource(), L"Resources/Megaman_x3_logo.jpg"));
 }
 
 void MenuScene::UnloadScene()
@@ -145,11 +151,11 @@ void MenuScene::UnloadScene()
 
 	if (m_introductionMusic)
 	{
-		
+
 		delete m_introductionMusic;
 	}
-	if (logoGameObject)
+	if (m_logoGameObject)
 	{
-		delete logoGameObject;
+		delete m_logoGameObject;
 	}
 }
