@@ -36,7 +36,8 @@ TileMap::TileMap(DirectXCore::DeviceResources *_deviceResource, const wchar_t * 
 		thisRenderer = new Renderer(_deviceResource, spritePath);
 		GameObject* renderingThing = new GameObject();
 		renderingThing->AddComponent<Renderer>(new Renderer(_deviceResource, spritePath));
-		renderingThing->GetTransform()->SetScreenScale(Vector3(tileset->GetImageInTileset()->GetWidth(),tileset->GetImageInTileset()->GetHeight(),0));
+		renderingThing->GetTransform()->SetScreenScale(Vector3(1,1,1));
+		renderingThing->GetTransform()->SetScale(Vector3(tileset->GetImageInTileset()->GetWidth(),tileset->GetImageInTileset()->GetHeight(),1));
 		listRenderers.push_back(renderingThing);
 	}
 	for (int i = 0; i < tilemap->GetNumTileLayers(); i++)

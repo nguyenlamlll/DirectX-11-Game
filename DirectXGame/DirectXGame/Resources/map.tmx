@@ -30,10 +30,10 @@
   </data>
  </layer>
  <objectgroup id="11" name="BackLayer">
-  <object id="235" gid="1" x="0" y="-120" width="1472" height="1530"/>
-  <object id="236" gid="2" x="1475.39" y="-123.246" width="1472" height="1530"/>
-  <object id="237" gid="3" x="2941.33" y="-123.246" width="1472" height="1530"/>
-  <object id="238" gid="4" x="4417.7" y="645.152" width="1472" height="757"/>
+  <object id="235" gid="1" x="0" y="-100" width="1472" height="1530"/>
+  <object id="236" gid="2" x="1475.39" y="-100" width="1472" height="1530"/>
+  <object id="237" gid="3" x="2941.33" y="-100" width="1472" height="1530"/>
+  <object id="238" gid="4" x="4413" y="660" width="1472" height="757"/>
  </objectgroup>
  <objectgroup id="9" name="Static">
   <object id="6" x="1" y="591" width="187" height="31"/>

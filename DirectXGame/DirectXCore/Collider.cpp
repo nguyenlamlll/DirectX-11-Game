@@ -20,7 +20,16 @@ DirectXCore::Collider::Collider(GameObject * _attachedGameObject, Vector3 _pos, 
 	attachedGameObject = _attachedGameObject;
 }
 
+void DirectXCore::Collider::PreUpdate(float _deltaTime)
+{
+}
+
 void DirectXCore::Collider::Update(float _deltaTime)
+{
+	//if (attachedGameObject) SetColliderTransform(attachedGameObject->GetTransform());
+}
+
+void DirectXCore::Collider::LateUpdate(float _deltaTime)
 {
 	if (attachedGameObject) SetColliderTransform(attachedGameObject->GetTransform());
 }

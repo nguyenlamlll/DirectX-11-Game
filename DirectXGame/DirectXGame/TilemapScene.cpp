@@ -14,15 +14,15 @@ TilemapScene::~TilemapScene()
 bool firstTime = false;
 void TilemapScene::UpdateScene(float elapsedTime)
 {
-	newGameObject->GetComponent<Animation>()->Update(elapsedTime);
 	int a = 0;
 	for (size_t i = 0; i < gameObjectList->size(); i++) gameObjectList->at(i)->PreUpdate(elapsedTime);
-	newGameObject->PreUpdate(elapsedTime);
 	if (m_dxBase->GetInputManager()->IsKeyDown("D")) 
 	{
 		// CHANGES CURRENT STAGE TO "RUN"
-		newGameObject->GetComponent<State>()->SetState("run");
-		newGameObject->GetComponent<Animation>()->ResetAnimation(L"Resources/run.png", 1, 11);
+		if (newGameObject->GetComponent<State>()->GetState()!="run") {
+			newGameObject->GetComponent<State>()->SetState("run");
+			newGameObject->GetComponent<Animation>()->ResetAnimation(L"Resources/run.png", 1, 11);
+		}
 		camera->SetPosition(camera->GetPosition() + Vector3(30, 0, 0));
 		newGameObject->GetTransform()->SetPosition(newGameObject->GetTransform()->GetPosition() + Vector3(15, 0, 0));
 	}
@@ -53,8 +53,6 @@ void TilemapScene::UpdateScene(float elapsedTime)
 		newGameObject->GetComponent<Animation>()->ResetAnimation(L"Resources/stand_attack.png", 1, 2);
 	}
 
-	newGameObject->GetComponent<Collider>()->SetColliderScale(Vector3(46, 46, 1));
-	newGameObject->GetComponent<Collider>()->SetColliderPosition(newGameObject->GetTransform()->GetPosition());
 	for (size_t i = 0; i < gameObjectList->size(); i++)
 	{
 		if (newGameObject != gameObjectList->at(i) && gameObjectList->at(i)->GetComponent<Collider>())
@@ -63,7 +61,10 @@ void TilemapScene::UpdateScene(float elapsedTime)
 				a = 1;
 			bool colType = newGameObject->GetComponent<Collider>()->GetCollider()->Intersects(*gameObjectList->at(i)->GetComponent<Collider>()->GetCollider());
 			bool colType2 = gameObjectList->at(i)->GetComponent<Collider>()->GetCollider()->Intersects(*newGameObject->GetComponent<Collider>()->GetCollider());
-			if (colType || colType2) collide = true;
+			if (colType || colType2) {
+				GameObject*asd = gameObjectList->at(i);
+				collide = true;
+			}
 		}
 	}
 	if (collide) {
@@ -86,7 +87,6 @@ void TilemapScene::UpdateScene(float elapsedTime)
 	//tilemap->Update();
 
 	for (size_t i = 0; i < gameObjectList->size(); i++) gameObjectList->at(i)->LateUpdate(elapsedTime);
-	newGameObject->LateUpdate(elapsedTime);
 }
 
 void TilemapScene::RenderScene()
@@ -114,6 +114,8 @@ void TilemapScene::LoadScene()
 	tilemap->SetCamera(camera);
 	newGameObject = new GameObject();
 	newGameObject->GetTransform()->SetPosition(Vector3(100, 0, 0));
+	newGameObject->GetTransform()->SetScale(Vector3(32, 32, 1));
+	newGameObject->GetTransform()->SetScreenScale(Vector3(1, 1, 1));
 	newGameObject->AddComponent<Renderer>(new Renderer(m_dxBase->GetDeviceResource(), L"Resources/rockman.png"));
 	newGameObject->AddComponent<Rigidbody>(new Rigidbody(newGameObject));
 	newGameObject->AddComponent<Collider>(new Collider(newGameObject, newGameObject->GetTransform()));
@@ -134,7 +136,7 @@ void TilemapScene::LoadScene()
 
 	m_dxBase->CreateSoundAndMusic(L"Resources/Music/09 Blast Hornet.wav", &m_backgroundMusic);
 	m_backgroundMusic->Play();
-	//gameObjectList->insert(gameObjectList->end(), newGameObject);
+	gameObjectList->insert(gameObjectList->end(), newGameObject);
 	//gameObjectList->insert(gameObjectList->end(), newPCN);
 }
 
