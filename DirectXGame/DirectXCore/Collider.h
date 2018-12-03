@@ -10,7 +10,9 @@ namespace DirectXCore
 		Collider();
 		Collider(GameObject* _attachedGameObject, Transform* _gameObjectTransform);
 		Collider(GameObject* _attachedGameObject,Vector3 _pos,Vector3 _rot, Vector3 _scl);
+		void PreUpdate(float _deltaTime);
 		void Update(float _deltaTime);
+		void LateUpdate(float _deltaTime);
 
 		BoundingBox* GetCollider() { return collider; }
 		Vector3 GetColliderPosition() { return collider->Center; }

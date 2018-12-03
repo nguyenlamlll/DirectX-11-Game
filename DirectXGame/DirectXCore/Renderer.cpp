@@ -77,7 +77,7 @@ void DirectXCore::Renderer::LoadTexture(const wchar_t * _charPath)
 void DirectXCore::Renderer::Render()
 {
 	m_spriteBatch->Begin(DirectX::SpriteSortMode_Deferred, m_states->NonPremultiplied());
-	m_spriteBatch->Draw(m_texture.Get(), attachedGameObject->GetTransform()->GetWorldToScreenPosition(), spriterect, Colors::White, 0.f, pivot, attachedGameObject->GetTransform()->GetScale());
+	m_spriteBatch->Draw(m_texture.Get(), attachedGameObject->GetTransform()->GetWorldToScreenPosition(), spriterect, Colors::White, 0.f, pivot, attachedGameObject->GetTransform()->GetScreenScale());
 	m_spriteBatch->End();
 }
 
