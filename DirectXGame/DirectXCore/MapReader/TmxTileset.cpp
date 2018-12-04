@@ -158,16 +158,19 @@ namespace Tmx
 
         // Parse the image.
         const tinyxml2::XMLNode *imageNode = tilesetNode->FirstChildElement("image");
-        const tinyxml2::XMLNode *imageNode2 = tilesetNode->FirstChild()->NextSibling()->FirstChild()->ToElement();
         if (imageNode) 
         {
             image = new Image();
             image->Parse(imageNode);
         }
-		if (imageNode2)
+		if (!(tilesetNode->FirstChild()->NextSibling() == NULL)) 
 		{
-			imageInTileset = new Image();
-			imageInTileset->Parse(imageNode2);
+			const tinyxml2::XMLNode *imageNode2 = tilesetNode->FirstChild()->NextSibling()->FirstChild()->ToElement();
+			if (imageNode2)
+			{
+				imageInTileset = new Image();
+				imageInTileset->Parse(imageNode2);
+			}
 		}
 
         // Iterate through all of the tile elements and parse each.

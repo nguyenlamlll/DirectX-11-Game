@@ -16,68 +16,80 @@ void TilemapScene::UpdateScene(float elapsedTime)
 {
 	int a = 0;
 	for (size_t i = 0; i < gameObjectList->size(); i++) gameObjectList->at(i)->PreUpdate(elapsedTime);
-	if (m_dxBase->GetInputManager()->IsKeyDown("D")) 
+	if (m_dxBase->GetInputManager()->IsKeyDown("D"))
 	{
 		// CHANGES CURRENT STAGE TO "RUN"
-		if (newGameObject->GetComponent<State>()->GetState()!="run") {
+		if (newGameObject->GetComponent<State>()->GetState() != "run") {
 			newGameObject->GetComponent<State>()->SetState("run");
-			newGameObject->GetComponent<Animation>()->ResetAnimation(L"Resources/run.png", 1, 11);
+			newGameObject->GetComponent<Animation>()->ResetAnimation(L"Resources/Animations/run.png", 1, 11);
 		}
 		camera->SetPosition(camera->GetPosition() + Vector3(30, 0, 0));
 		newGameObject->GetTransform()->SetPosition(newGameObject->GetTransform()->GetPosition() + Vector3(15, 0, 0));
 	}
-	if (m_dxBase->GetInputManager()->IsKeyDown("A")) 
+	if (m_dxBase->GetInputManager()->IsKeyDown("A"))
 	{
 		// CHANGES CURRENT STAGE TO "RUN"
 		newGameObject->GetComponent<State>()->SetState("run");
-		newGameObject->GetComponent<Animation>()->ResetAnimation(L"Resources/run.png", 1, 11);
+		newGameObject->GetComponent<Animation>()->ResetAnimation(L"Resources/Animations/run.png", 1, 11);
 		camera->SetPosition(camera->GetPosition() + Vector3(-30, 0, 0));
 		newGameObject->GetTransform()->SetPosition(newGameObject->GetTransform()->GetPosition() + Vector3(-15, 0, 0));
 	}
-	if (m_dxBase->GetInputManager()->IsKeyDown("W")) 
+	if (m_dxBase->GetInputManager()->IsKeyDown("W"))
 	{
 		// CHANGES CURRENT STAGE TO "RUN"
 		newGameObject->GetComponent<State>()->SetState("run");
-		newGameObject->GetComponent<Animation>()->ResetAnimation(L"Resources/run.png", 1, 11);
+		newGameObject->GetComponent<Animation>()->ResetAnimation(L"Resources/Animations/run.png", 1, 11);
 		camera->SetPosition(camera->GetPosition() + Vector3(0, -30, 0));
 	}
-	if (m_dxBase->GetInputManager()->IsKeyDown("S")) 
+	if (m_dxBase->GetInputManager()->IsKeyDown("S"))
 	{
-
 		camera->SetPosition(camera->GetPosition() + Vector3(0, 30, 0));
 	}
 	if (m_dxBase->GetInputManager()->IsKeyDown("J"))
 	{
 		//CHANGES CURRENT STATE TO "SHOOT"
 		newGameObject->GetComponent<State>()->SetState("shoot");
-		newGameObject->GetComponent<Animation>()->ResetAnimation(L"Resources/stand_attack.png", 1, 2);
+		newGameObject->GetComponent<Animation>()->ResetAnimation(L"Resources/Animations/stand_attack.png", 1, 2);
 	}
-
+	if (m_dxBase->GetInputManager()->IsKeyDown("K")) 
+	{
+		newGameObject->GetComponent<Rigidbody>()->AddForce(Vector3(0, -2, 0));
+	}
+	if (m_dxBase->GetInputManager()->IsKeyDown("L")) 
+	{
+		newGameObject->GetComponent<Rigidbody>()->AddForce(Vector3(3, 0, 0));
+	}
 	for (size_t i = 0; i < gameObjectList->size(); i++)
 	{
 		if (newGameObject != gameObjectList->at(i) && gameObjectList->at(i)->GetComponent<Collider>())
 		{
-			if (newGameObject->GetComponent<Collider>()->GetCollider()->Extents.x < gameObjectList->at(i)->GetComponent<Collider>()->GetCollider()->Extents.x && newGameObject->GetTransform()->GetPosition().y < gameObjectList->at(i)->GetTransform()->GetPosition().y)
-				a = 1;
 			bool colType = newGameObject->GetComponent<Collider>()->GetCollider()->Intersects(*gameObjectList->at(i)->GetComponent<Collider>()->GetCollider());
 			bool colType2 = gameObjectList->at(i)->GetComponent<Collider>()->GetCollider()->Intersects(*newGameObject->GetComponent<Collider>()->GetCollider());
 			if (colType || colType2) {
-				GameObject*asd = gameObjectList->at(i);
+				Vector3 normal = Vector3();
+				if (newGameObject->GetComponent<Collider>()->GetCollider()->Extents.x < gameObjectList->at(i)->GetComponent<Collider>()->GetCollider()->Extents.x) {
+					if (newGameObject->GetTransform()->GetPosition().y < gameObjectList->at(i)->GetTransform()->GetPosition().y)
+						normal = Vector3(0, -1, 0);
+					else normal = Vector3(0, 1, 0);
+				}
+				if (newGameObject->GetComponent<Collider>()->GetCollider()->Extents.y < gameObjectList->at(i)->GetComponent<Collider>()->GetCollider()->Extents.y)
+				{
+					if (newGameObject->GetTransform()->GetPosition().x < gameObjectList->at(i)->GetTransform()->GetPosition().x)
+						normal = Vector3(-1, 0, 0);
+					else normal = Vector3(1, 0, 0);
+				}
 				collide = true;
 			}
 		}
 	}
 	if (collide) {
-		if (a == 1)
-			int b = 2;
-		newGameObject->GetComponent<Rigidbody>()->SetVelocity(Vector3(0,0,0));
-		//newGameObject->GetComponent<Rigidbody>()->SetKinematic(true);
-
-		if (firstTime == false) 
+		//newGameObject->GetComponent<Rigidbody>()->SetVelocity(Vector3(0, 0, 0));
+		newGameObject->GetComponent<Rigidbody>()->AddForce(newGameObject->GetComponent<Rigidbody>()->GetVelocity()*-1);
+		if (firstTime == false)
 		{
 			//CHANGES CURRENT STATE TO "STAND"
 			newGameObject->GetComponent<State>()->SetState("stand");
-			newGameObject->GetComponent<Animation>()->ResetAnimation(L"Resources/stand2.png", 1, 4);
+			newGameObject->GetComponent<Animation>()->ResetAnimation(L"Resources/Animations/stand2.png", 1, 4);
 			firstTime = true;
 		}
 	}
@@ -130,7 +142,7 @@ void TilemapScene::LoadScene()
 
 
 	newGameObject->GetComponent<State>()->SetState("jump");
-	newGameObject->GetComponent<Animation>()->ResetAnimation(L"Resources/jump.png", 1, 7);
+	newGameObject->GetComponent<Animation>()->ResetAnimation(L"Resources/Animations/jump.png", 1, 7);
 
 	gameObjectList->insert(gameObjectList->end(), tilemap->GetListGameObjects()->begin(), tilemap->GetListGameObjects()->end());
 

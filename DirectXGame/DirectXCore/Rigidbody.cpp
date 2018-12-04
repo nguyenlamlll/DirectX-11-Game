@@ -45,7 +45,7 @@ void DirectXCore::Rigidbody::Update(float _deltaTime)
 void DirectXCore::Rigidbody::LateUpdate(float _deltaTime)
 {
 	if (!kinematic && attachedGameObject)	
-		attachedGameObject->GetTransform()->SetPosition(attachedGameObject->GetTransform()->GetPosition() + velocity + force);
+		attachedGameObject->GetTransform()->SetPosition(attachedGameObject->GetTransform()->GetPosition() + velocity*_deltaTime);
 }
 
 void DirectXCore::Rigidbody::MovePosition(SimpleMath::Vector3 _newPosition)
@@ -61,6 +61,12 @@ void DirectXCore::Rigidbody::Move(SimpleMath::Vector3 _velocity, float _deltaTim
 	velocity.z = _velocity.z / GetMass().z*_deltaTime;
 }
 
+void DirectXCore::Rigidbody::AddForce(SimpleMath::Vector3 _force)
+{
+	velocity += _force;
+	//force = _force;
+}
+
 
 Rigidbody::~Rigidbody()
 {
@@ -68,7 +74,8 @@ Rigidbody::~Rigidbody()
 
 void DirectXCore::Rigidbody::OnPhysicUpdate(float _delta)
 {
-	velocity += gravity * _delta;
+	force.Lerp(force, Vector3(0, 0, 0), _delta);
+	velocity += gravity ;
 	//position += velocity;
 }
 

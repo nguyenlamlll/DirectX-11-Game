@@ -315,10 +315,6 @@ namespace Tmx
 
                 // Add the tileset to the list.
                 tilesets.push_back(tileset); 
-
-				Tmx::Image *_image = new Tmx::Image();
-				_image->Parse(node->FirstChild()->NextSibling()->FirstChild()->ToElement());
-				
             }
 
             // Iterate through all of the "layer" (tile layer) elements.           
