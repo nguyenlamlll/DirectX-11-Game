@@ -15,6 +15,7 @@ bool firstTime = false;
 void TilemapScene::UpdateScene(float elapsedTime)
 {
 	int a = 0;
+	Vector3 normal = Vector3();
 	for (size_t i = 0; i < gameObjectList->size(); i++) gameObjectList->at(i)->PreUpdate(elapsedTime);
 	if (m_dxBase->GetInputManager()->IsKeyDown("D"))
 	{
@@ -51,14 +52,17 @@ void TilemapScene::UpdateScene(float elapsedTime)
 		newGameObject->GetComponent<State>()->SetState("shoot");
 		newGameObject->GetComponent<Animation>()->ResetAnimation(L"Resources/Animations/stand_attack.png", 1, 2);
 	}
-	if (m_dxBase->GetInputManager()->IsKeyDown("K")) 
+	if (m_dxBase->GetInputManager()->IsKeyDown("K"))
 	{
 		newGameObject->GetComponent<Rigidbody>()->AddForce(Vector3(0, -2, 0));
 	}
-	if (m_dxBase->GetInputManager()->IsKeyDown("L")) 
+	if (m_dxBase->GetInputManager()->IsKeyDown("L"))
 	{
-		newGameObject->GetComponent<Rigidbody>()->AddForce(Vector3(3, 0, 0));
+		newGameObject->GetComponent<Rigidbody>()->AddForce(Vector3(-0.5f, 0, 0));
 	}
+	collide = false;
+	if (newGameObject->GetComponent<Rigidbody>()->GetVelocity().x < -10)
+		int p = 1;
 	for (size_t i = 0; i < gameObjectList->size(); i++)
 	{
 		if (newGameObject != gameObjectList->at(i) && gameObjectList->at(i)->GetComponent<Collider>())
@@ -66,25 +70,39 @@ void TilemapScene::UpdateScene(float elapsedTime)
 			bool colType = newGameObject->GetComponent<Collider>()->GetCollider()->Intersects(*gameObjectList->at(i)->GetComponent<Collider>()->GetCollider());
 			bool colType2 = gameObjectList->at(i)->GetComponent<Collider>()->GetCollider()->Intersects(*newGameObject->GetComponent<Collider>()->GetCollider());
 			if (colType || colType2) {
-				Vector3 normal = Vector3();
+				Collider* asdasd = gameObjectList->at(i)->GetComponent<Collider>();
 				if (newGameObject->GetComponent<Collider>()->GetCollider()->Extents.x < gameObjectList->at(i)->GetComponent<Collider>()->GetCollider()->Extents.x) {
 					if (newGameObject->GetTransform()->GetPosition().y < gameObjectList->at(i)->GetTransform()->GetPosition().y)
-						normal = Vector3(0, -1, 0);
-					else normal = Vector3(0, 1, 0);
+					{
+						if (normal.y == 0) normal += Vector3(0, -1, 0);
+						else;
+					}
+					else
+					{
+						if (normal.y == 0) normal += Vector3(0, 1, 0);
+						else;
+					}
 				}
 				if (newGameObject->GetComponent<Collider>()->GetCollider()->Extents.y < gameObjectList->at(i)->GetComponent<Collider>()->GetCollider()->Extents.y)
 				{
 					if (newGameObject->GetTransform()->GetPosition().x < gameObjectList->at(i)->GetTransform()->GetPosition().x)
-						normal = Vector3(-1, 0, 0);
-					else normal = Vector3(1, 0, 0);
+					{
+						if (normal.x == 0)normal += Vector3(-1, 0, 0);
+						else;
+					}
+					else
+					{
+						if (normal.x == 0)normal += Vector3(1, 0, 0);
+						else;
+					}
 				}
 				collide = true;
 			}
 		}
 	}
 	if (collide) {
-		//newGameObject->GetComponent<Rigidbody>()->SetVelocity(Vector3(0, 0, 0));
-		newGameObject->GetComponent<Rigidbody>()->AddForce(newGameObject->GetComponent<Rigidbody>()->GetVelocity()*-1);
+		Vector3 newVec = newGameObject->GetComponent<Rigidbody>()->GetVelocity()*normal;
+		newGameObject->GetComponent<Rigidbody>()->AddForce(newVec);
 		if (firstTime == false)
 		{
 			//CHANGES CURRENT STATE TO "STAND"
@@ -122,7 +140,7 @@ void TilemapScene::LoadScene()
 	gameObjectList = new std::vector<GameObject*>();
 	GameObject *newPCN = new GameObject();
 	m_dxBase->CreateCamera(&camera);
-	tilemap = new TileMap(m_dxBase->GetDeviceResource(), L"Resources/map.tmx");
+	tilemap = new TileMap(m_dxBase->GetDeviceResource(), L"Resources/BlastHornetMap.tmx");
 	tilemap->SetCamera(camera);
 	newGameObject = new GameObject();
 	newGameObject->GetTransform()->SetPosition(Vector3(100, 0, 0));

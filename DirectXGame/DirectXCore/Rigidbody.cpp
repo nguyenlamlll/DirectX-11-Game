@@ -74,8 +74,6 @@ Rigidbody::~Rigidbody()
 
 void DirectXCore::Rigidbody::OnPhysicUpdate(float _delta)
 {
-	force.Lerp(force, Vector3(0, 0, 0), _delta);
-	velocity += gravity ;
-	//position += velocity;
+	AddForce(gravity);
 }
 
