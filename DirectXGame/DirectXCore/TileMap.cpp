@@ -85,6 +85,9 @@ TileMap::TileMap(DirectXCore::DeviceResources *_deviceResource, const wchar_t * 
 				listRenderers.at(j)->GetTransform()->SetPosition(Vector3(object->GetX(),object->GetY(),0));
 			}
 		}
+		else if (objectGroup->GetName() == "Stage" || objectGroup->GetName() == "HeadGunner") {
+
+		}
 		else {
 			for (size_t j = 0; j < objectGroup->GetNumObjects(); j++)
 			{
