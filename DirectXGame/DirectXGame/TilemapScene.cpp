@@ -58,7 +58,7 @@ void TilemapScene::UpdateScene(float elapsedTime)
 	}
 	if (m_dxBase->GetInputManager()->IsKeyDown("L"))
 	{
-		newGameObject->GetComponent<Rigidbody>()->AddForce(Vector3(-0.5f, 0, 0));
+		newGameObject->GetComponent<Rigidbody>()->AddForce(Vector3(2.5f, 0, 0));
 	}
 	collide = false;
 	if (newGameObject->GetComponent<Rigidbody>()->GetVelocity().x < -10)
