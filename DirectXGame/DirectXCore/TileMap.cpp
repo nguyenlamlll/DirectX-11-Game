@@ -110,8 +110,8 @@ void DirectXCore::TileMap::Update()
 void TileMap::Render()
 {
 	Vector3 worldToScreenShift = Vector3(
-		mainCamera->GetBound().right / 2 - mainCamera->GetPosition().x, 
-		mainCamera->GetBound().bottom / 2 - mainCamera->GetPosition().y, 
+		mainCamera->GetWidth() / 2 - mainCamera->GetPosition().x, 
+		mainCamera->GetHeight() / 2 - mainCamera->GetPosition().y, 
 		0);
 	worldToScreenPosition = position + worldToScreenShift;
 
