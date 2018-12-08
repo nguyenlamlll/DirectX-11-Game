@@ -98,6 +98,7 @@ void TilemapScene::UpdateScene(float elapsedTime)
 				}
 				collide = true;
 			}
+			else normal = Vector3(0, 0, 0);
 		}
 	}
 	if (collide) {

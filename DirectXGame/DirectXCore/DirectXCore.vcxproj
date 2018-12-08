@@ -23,7 +23,7 @@
     <ProjectGuid>{F4EF043E-507B-464D-BC4D-CF882E0F4DFF}</ProjectGuid>
     <Keyword>Win32Proj</Keyword>
     <RootNamespace>DirectXCore</RootNamespace>
-    <WindowsTargetPlatformVersion>10.0.17134.0</WindowsTargetPlatformVersion>
+    <WindowsTargetPlatformVersion>10.0.17763.0</WindowsTargetPlatformVersion>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
