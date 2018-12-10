@@ -15,30 +15,33 @@ TileMap::TileMap(DirectXCore::DeviceResources *_deviceResource, const wchar_t * 
 	std::wstring ws(path);
 	std::string pathstr(ws.begin(), ws.end());
 	tilemap->ParseFile(pathstr);
-	position.x = 0;
-	position.y = 0;
-	position.z = 0;
+	position = Vector3(0, 0, 0);
+	scale = Vector3(2, 2, 1);
 	worldToScreenPosition = position;
+
+	RECT* newRegion = new RECT();
+	newRegion->left = newRegion->top = 0;
+	newRegion->right = tilemap->GetWidth()*tilemap->GetTileWidth()*scale.x;
+	newRegion->bottom = tilemap->GetHeight()*tilemap->GetTileHeight()*scale.y;
+
+	thisQuad = new QuadTree(newRegion, 1, 2);
 
 	for (size_t i = 0; i < tilemap->GetNumTilesets(); i++)
 	{
 		const Tmx::Tileset *tileset = tilemap->GetTileset(i);
-		int as= tileset->GetTileWidth();
+		int as = tileset->GetTileWidth();
 		std::string username = "Resources/" + tileset->GetImage()->GetSource();// old tilemap
 		//std::string username = "Resources/" + tileset->GetImageInTileset()->GetSource();// new tilemap
 		std::wstring wideusername;
 		for (int i = 0; i < username.length(); ++i) wideusername += wchar_t(username[i]);
 		const wchar_t* spritePath = wideusername.c_str();
 
-
-		Sprite *tileSet = new Sprite(_deviceResource, spritePath);
-		tilesetSheet.insert(std::pair<int, Sprite*>(i, tileSet));
-		//tileSet->AddComponent<Renderer>(new Renderer(_deviceResource,spritePath));
 		thisRenderer = new Renderer(_deviceResource, spritePath);
+		thisRenderer->SetPivot(Vector3(tileset->GetTileWidth() / 2, tileset->GetTileHeight() / 2, 0));
 		GameObject* renderingThing = new GameObject();
 		renderingThing->AddComponent<Renderer>(new Renderer(_deviceResource, spritePath));
-		renderingThing->GetTransform()->SetScreenScale(Vector3(1,1,1));
-		renderingThing->GetTransform()->SetScale(Vector3(tileset->GetImage()->GetWidth(),tileset->GetImage()->GetHeight(),1));// old tilemap
+		renderingThing->GetTransform()->SetScreenScale(scale);
+		renderingThing->GetTransform()->SetScale(Vector3(tileset->GetImage()->GetWidth(), tileset->GetImage()->GetHeight(), 1));// old tilemap
 		//renderingThing->GetTransform()->SetScale(Vector3(tileset->GetImageInTileset()->GetWidth(),tileset->GetImageInTileset()->GetHeight(),1)); // new tilemap
 		listRenderers.push_back(renderingThing);
 	}
@@ -82,18 +85,23 @@ TileMap::TileMap(DirectXCore::DeviceResources *_deviceResource, const wchar_t * 
 		if (objectGroup->GetName() == "BackLayer") {
 			for (size_t j = 0; j < objectGroup->GetNumObjects(); j++) {
 				Tmx::Object *object = objectGroup->GetObjects().at(j);
-				listRenderers.at(j)->GetTransform()->SetPosition(Vector3(object->GetX(),object->GetY(),0));
+				listRenderers.at(j)->GetTransform()->SetPosition(Vector3(object->GetX(), object->GetY(), 0));
 			}
 		}
-		else {
+		else if (objectGroup->GetName() == "Stage")
+		{
+
+		}
+		else if(objectGroup->GetName() == "Wall") {
 			for (size_t j = 0; j < objectGroup->GetNumObjects(); j++)
 			{
 				Tmx::Object *object = objectGroup->GetObjects().at(j);
 				GameObject *gameObject = new GameObject();
-				gameObject->GetTransform()->SetPosition(position + Vector3(object->GetX(), object->GetY(), 0));
-				gameObject->GetTransform()->SetScale(Vector3(object->GetWidth(), object->GetHeight(), 1));
+				gameObject->GetTransform()->SetPosition((position + Vector3(object->GetX() + object->GetWidth() / 2, object->GetY() + object->GetHeight() / 2, 0))*scale);
+				gameObject->GetTransform()->SetScale(Vector3(object->GetWidth()*scale.x, object->GetHeight()*scale.y, 1));
 				gameObject->AddComponent<Collider>(new Collider(gameObject, gameObject->GetTransform()));
 				gameObjectList->push_back(gameObject);
+				thisQuad->Insert(gameObject);
 			}
 		}
 	}
@@ -107,8 +115,8 @@ void DirectXCore::TileMap::Update()
 void TileMap::Render()
 {
 	Vector3 worldToScreenShift = Vector3(
-		mainCamera->GetBound().right / 2 - mainCamera->GetPosition().x, 
-		mainCamera->GetBound().bottom / 2 - mainCamera->GetPosition().y, 
+		mainCamera->GetWidth() / 2 - mainCamera->GetPosition().x,
+		mainCamera->GetHeight() / 2 - mainCamera->GetPosition().y,
 		0);
 	worldToScreenPosition = position + worldToScreenShift;
 
@@ -129,26 +137,16 @@ void TileMap::Render()
 				{
 					//tile index
 					int tileID = layer->GetTileId(n, m);
-
-					Sprite* sprite = tilesetSheet[layer->GetTileTilesetIndex(n, m)];
-					DirectX::SimpleMath::Vector3 currentPosition((n * tileDataWidth) + worldToScreenPosition.x, (m * tileDataHeight) + worldToScreenPosition.y, 1);
-					if (mainCamera->IsContain(currentPosition, Vector3(32, 32, 1))) {
+					//Sprite* sprite = tilesetSheet[layer->GetTileTilesetIndex(n, m)];
+					DirectX::SimpleMath::Vector3 currentPosition(((n * tileDataWidth) + tileDataWidth / 2), ((m * tileDataHeight) + tileDataHeight / 2), 0);
+					currentPosition *= scale;
+					currentPosition += worldToScreenPosition;
+					if (mainCamera->IsContain(currentPosition, Vector3(tileDataWidth*scale.x, tileDataHeight*scale.y, 1))) {
 						thisRenderer->SetRECT(*listTileID[tileID]);
-						thisRenderer->Render(currentPosition);
+						thisRenderer->Render(currentPosition, Vector3(0, 0, 0), scale);
 					}
-					//					if (mainCamera->IsContain(currentPosition, sprite->GetTransform()->GetScreenScale()))
-					//					{
-					//						thisRenderer->SetRECT(*listTileID[tileID]);
-					//						thisRenderer->Render(currentPosition);
-					//						/*sprite->GetComponent<Renderer>()->SetRECT(*listTileID[tileID]);
-					//						sprite->GetComponent<Renderer>()->Render(currentPosition);*/
-					//					}
-					//#if defined(DEBUG) | defined(_DEBUG)
-					//					else
-					//					{
-					//						int placeBreakPointHereToCheckIfCameraIsWorking = 0;
-					//					}
-					//#endif
+					if (m == 30 && n == 0)
+						SimpleMath::Vector3 pl = currentPosition;
 				}
 			}
 		}
@@ -162,6 +160,20 @@ void TileMap::Render()
 	}*/
 #pragma endregion
 
+}
+
+void DirectXCore::TileMap::SetTilemapPosition(SimpleMath::Vector3 _tilemapPosition)
+{
+	position.x = _tilemapPosition.x;
+	position.y = _tilemapPosition.y;
+	position.z = _tilemapPosition.z;
+}
+
+void DirectXCore::TileMap::SetTilemapScale(SimpleMath::Vector3 _scale)
+{
+	scale.x = _scale.x;
+	scale.y = _scale.y;
+	scale.z = _scale.z;
 }
 
 

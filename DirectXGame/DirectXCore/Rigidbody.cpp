@@ -5,6 +5,7 @@ using namespace DirectXCore;
 
 Rigidbody::Rigidbody()
 {
+	move = SimpleMath::Vector3(0, 0, 0);
 	position = SimpleMath::Vector3(0, 0, 0);
 	velocity = SimpleMath::Vector3(0, 0, 0);
 	force = SimpleMath::Vector3(0, 0, 0);
@@ -44,8 +45,9 @@ void DirectXCore::Rigidbody::Update(float _deltaTime)
 
 void DirectXCore::Rigidbody::LateUpdate(float _deltaTime)
 {
-	if (!kinematic && attachedGameObject)	
-		attachedGameObject->GetTransform()->SetPosition(attachedGameObject->GetTransform()->GetPosition() + velocity*_deltaTime);
+	if (!kinematic && attachedGameObject)
+		attachedGameObject->GetTransform()->SetPosition(attachedGameObject->GetTransform()->GetPosition() + (velocity + move)*_deltaTime);
+	move = SimpleMath::Vector3(0, 0, 0);
 }
 
 void DirectXCore::Rigidbody::MovePosition(SimpleMath::Vector3 _newPosition)
@@ -53,12 +55,9 @@ void DirectXCore::Rigidbody::MovePosition(SimpleMath::Vector3 _newPosition)
 	position += _newPosition;
 }
 
-void DirectXCore::Rigidbody::Move(SimpleMath::Vector3 _velocity, float _deltaTime)
+void DirectXCore::Rigidbody::Move(SimpleMath::Vector3 _velocity)
 {
-	//velocity = _velocity;
-	velocity.x = _velocity.x / GetMass().x*_deltaTime;
-	velocity.y = _velocity.y / GetMass().y*_deltaTime;
-	velocity.z = _velocity.z / GetMass().z*_deltaTime;
+	move = _velocity;
 }
 
 void DirectXCore::Rigidbody::AddForce(SimpleMath::Vector3 _force)

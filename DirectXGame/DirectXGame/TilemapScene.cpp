@@ -24,45 +24,35 @@ void TilemapScene::UpdateScene(float elapsedTime)
 			newGameObject->GetComponent<State>()->SetState("run");
 			newGameObject->GetComponent<Animation>()->ResetAnimation(L"Resources/Animations/run.png", 1, 11);
 		}
-		camera->SetPosition(camera->GetPosition() + Vector3(30, 0, 0));
-		newGameObject->GetTransform()->SetPosition(newGameObject->GetTransform()->GetPosition() + Vector3(15, 0, 0));
+		//newGameObject->GetComponent<Rigidbody>()->Move(Vector3(50, 0, 0));
+		newGameObject->GetComponent<Rigidbody>()->AddForce(Vector3(3, 0, 0));
 	}
 	if (m_dxBase->GetInputManager()->IsKeyDown("A"))
 	{
 		// CHANGES CURRENT STAGE TO "RUN"
 		newGameObject->GetComponent<State>()->SetState("run");
 		newGameObject->GetComponent<Animation>()->ResetAnimation(L"Resources/Animations/run.png", 1, 11);
-		camera->SetPosition(camera->GetPosition() + Vector3(-30, 0, 0));
-		newGameObject->GetTransform()->SetPosition(newGameObject->GetTransform()->GetPosition() + Vector3(-15, 0, 0));
+		//newGameObject->GetComponent<Rigidbody>()->Move(Vector3(-50, 0, 0));
+		newGameObject->GetComponent<Rigidbody>()->AddForce(Vector3(-3, 0, 0));
 	}
 	if (m_dxBase->GetInputManager()->IsKeyDown("W"))
 	{
 		// CHANGES CURRENT STAGE TO "RUN"
-		newGameObject->GetComponent<State>()->SetState("run");
-		newGameObject->GetComponent<Animation>()->ResetAnimation(L"Resources/Animations/run.png", 1, 11);
-		camera->SetPosition(camera->GetPosition() + Vector3(0, -30, 0));
+		//newGameObject->GetComponent<State>()->SetState("run");
+		//newGameObject->GetComponent<Animation>()->ResetAnimation(L"Resources/Animations/run.png", 1, 11);
+		newGameObject->GetComponent<Rigidbody>()->SetVelocity(newGameObject->GetComponent<Rigidbody>()->GetVelocity() + Vector3(0, -70, 0));
 	}
 	if (m_dxBase->GetInputManager()->IsKeyDown("S"))
 	{
-		camera->SetPosition(camera->GetPosition() + Vector3(0, 30, 0));
+		camera->SetPosition(camera->GetPosition() + Vector3(0, 10, 0));
 	}
 	if (m_dxBase->GetInputManager()->IsKeyDown("J"))
 	{
 		//CHANGES CURRENT STATE TO "SHOOT"
-		newGameObject->GetComponent<State>()->SetState("shoot");
-		newGameObject->GetComponent<Animation>()->ResetAnimation(L"Resources/Animations/stand_attack.png", 1, 2);
-	}
-	if (m_dxBase->GetInputManager()->IsKeyDown("K"))
-	{
-		newGameObject->GetComponent<Rigidbody>()->AddForce(Vector3(0, -2, 0));
-	}
-	if (m_dxBase->GetInputManager()->IsKeyDown("L"))
-	{
-		newGameObject->GetComponent<Rigidbody>()->AddForce(Vector3(-0.5f, 0, 0));
+		//newGameObject->GetComponent<State>()->SetState("shoot");
+		//newGameObject->GetComponent<Animation>()->ResetAnimation(L"Resources/Animations/stand_attack.png", 1, 2);
 	}
 	collide = false;
-	if (newGameObject->GetComponent<Rigidbody>()->GetVelocity().x < -10)
-		int p = 1;
 	for (size_t i = 0; i < gameObjectList->size(); i++)
 	{
 		if (newGameObject != gameObjectList->at(i) && gameObjectList->at(i)->GetComponent<Collider>())
@@ -71,15 +61,16 @@ void TilemapScene::UpdateScene(float elapsedTime)
 			bool colType2 = gameObjectList->at(i)->GetComponent<Collider>()->GetCollider()->Intersects(*newGameObject->GetComponent<Collider>()->GetCollider());
 			if (colType || colType2) {
 				Collider* asdasd = gameObjectList->at(i)->GetComponent<Collider>();
+				Vector3 asdadasddd = gameObjectList->at(i)->GetTransform()->GetWorldToScreenPosition();
 				if (newGameObject->GetComponent<Collider>()->GetCollider()->Extents.x < gameObjectList->at(i)->GetComponent<Collider>()->GetCollider()->Extents.x) {
 					if (newGameObject->GetTransform()->GetPosition().y < gameObjectList->at(i)->GetTransform()->GetPosition().y)
 					{
-						if (normal.y == 0) normal += Vector3(0, -1, 0);
+						if (normal.y == 0 && newGameObject->GetComponent<Rigidbody>()->GetVelocity().y > 0) normal += Vector3(0, -1, 0);
 						else;
 					}
 					else
 					{
-						if (normal.y == 0) normal += Vector3(0, 1, 0);
+						if (normal.y == 0 && newGameObject->GetComponent<Rigidbody>()->GetVelocity().y < 0) normal += Vector3(0, 1, 0);
 						else;
 					}
 				}
@@ -87,18 +78,17 @@ void TilemapScene::UpdateScene(float elapsedTime)
 				{
 					if (newGameObject->GetTransform()->GetPosition().x < gameObjectList->at(i)->GetTransform()->GetPosition().x)
 					{
-						if (normal.x == 0)normal += Vector3(-1, 0, 0);
+						if (normal.x == 0 && newGameObject->GetComponent<Rigidbody>()->GetVelocity().x > 0) normal += Vector3(-1, 0, 0);
 						else;
 					}
 					else
 					{
-						if (normal.x == 0)normal += Vector3(1, 0, 0);
+						if (normal.x == 0 && newGameObject->GetComponent<Rigidbody>()->GetVelocity().x < 0) normal += Vector3(1, 0, 0);
 						else;
 					}
 				}
 				collide = true;
 			}
-			else normal = Vector3(0, 0, 0);
 		}
 	}
 	if (collide) {
@@ -107,22 +97,25 @@ void TilemapScene::UpdateScene(float elapsedTime)
 		if (firstTime == false)
 		{
 			//CHANGES CURRENT STATE TO "STAND"
-			newGameObject->GetComponent<State>()->SetState("stand");
-			newGameObject->GetComponent<Animation>()->ResetAnimation(L"Resources/Animations/stand2.png", 1, 4);
+			//newGameObject->GetComponent<State>()->SetState("stand");
+			//newGameObject->GetComponent<Animation>()->ResetAnimation(L"Resources/Animations/stand2.png", 1, 4);
 			firstTime = true;
 		}
 	}
+	else normal = Vector3(0, 0, 0);
 
-	for (size_t i = 0; i < gameObjectList->size(); i++) gameObjectList->at(i)->Update(elapsedTime);
-	newGameObject->Update(elapsedTime);
+	//for (size_t i = 0; i < gameObjectList->size(); i++) gameObjectList->at(i)->Update(elapsedTime);
+	tilemap->GetQuadTree()->UpdateWithCamera(camera->GetPosition(), Vector3(500, 500, 1),elapsedTime);
+	//newGameObject->Update(elapsedTime);
 	//tilemap->Update();
 
 	for (size_t i = 0; i < gameObjectList->size(); i++) gameObjectList->at(i)->LateUpdate(elapsedTime);
+	camera->SetPosition(newGameObject->GetTransform()->GetPosition());
 }
 
 void TilemapScene::RenderScene()
 {
-	Vector3 worldToScreenShift = Vector3(camera->GetBound().right / 2 - camera->GetPosition().x, camera->GetBound().bottom / 2 - camera->GetPosition().y, 0);
+	Vector3 worldToScreenShift = Vector3(camera->GetWidth() / 2 - camera->GetPosition().x, camera->GetHeight() / 2 - camera->GetPosition().y, 0);
 	newGameObject->GetTransform()->SetWorldToScreenPosition(worldToScreenShift);
 	tilemap->Render();
 	for (size_t i = 0; i < gameObjectList->size(); i++)
@@ -133,7 +126,7 @@ void TilemapScene::RenderScene()
 			gameObjectList->at(i)->Render();
 		}
 	}
-	newGameObject->Render();
+	//newGameObject->Render();
 }
 
 void TilemapScene::LoadScene()
@@ -144,8 +137,8 @@ void TilemapScene::LoadScene()
 	tilemap = new TileMap(m_dxBase->GetDeviceResource(), L"Resources/BlastHornetMap.tmx");
 	tilemap->SetCamera(camera);
 	newGameObject = new GameObject();
-	newGameObject->GetTransform()->SetPosition(Vector3(100, 0, 0));
-	newGameObject->GetTransform()->SetScale(Vector3(32, 32, 1));
+	newGameObject->GetTransform()->SetPosition(Vector3(0, 0, 0));
+	newGameObject->GetTransform()->SetScale(Vector3(40, 40, 1));
 	newGameObject->GetTransform()->SetScreenScale(Vector3(1, 1, 1));
 	newGameObject->AddComponent<Renderer>(new Renderer(m_dxBase->GetDeviceResource(), L"Resources/rockman.png"));
 	newGameObject->AddComponent<Rigidbody>(new Rigidbody(newGameObject));
@@ -165,10 +158,11 @@ void TilemapScene::LoadScene()
 
 	gameObjectList->insert(gameObjectList->end(), tilemap->GetListGameObjects()->begin(), tilemap->GetListGameObjects()->end());
 
+	//tilemap->SetTilemapPosition(Vector3(0, 774, 0));
+
 	m_dxBase->CreateSoundAndMusic(L"Resources/Music/09 Blast Hornet.wav", &m_backgroundMusic);
 	m_backgroundMusic->Play();
 	gameObjectList->insert(gameObjectList->end(), newGameObject);
-	//gameObjectList->insert(gameObjectList->end(), newPCN);
 }
 
 void TilemapScene::UnloadScene()

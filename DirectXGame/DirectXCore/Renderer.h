@@ -20,6 +20,7 @@ namespace DirectXCore
 		void Render(SimpleMath::Vector3 _newPos, SimpleMath::Vector3 _newRot, SimpleMath::Vector3 _newScl);
 		void Reset();
 		void SetRECT(RECT _newRECT);
+		void SetPivot(SimpleMath::Vector3 _newPivot);
 		RECT* GetRECT() { return spriterect; }
 		~Renderer();
 	private:

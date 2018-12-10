@@ -36,9 +36,9 @@ void DirectXCore::Collider::LateUpdate(float _deltaTime)
 
 void DirectXCore::Collider::SetColliderPosition(Vector3 _newPosition)
 {
-	collider->Center.x = _newPosition.x + collider->Extents.x;
-	collider->Center.y = _newPosition.y + collider->Extents.y;
-	collider->Center.z = _newPosition.z + collider->Extents.z;
+	collider->Center.x = _newPosition.x;
+	collider->Center.y = _newPosition.y;
+	collider->Center.z = _newPosition.z;
 }
 
 void DirectXCore::Collider::SetColliderScale(Vector3 _newScale)

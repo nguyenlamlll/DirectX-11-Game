@@ -26,6 +26,7 @@ DirectXCore::Renderer::Renderer(DeviceResources * _deviceResource, const wchar_t
 	ThrowIfFailed(resource.As(&texture));
 	texture->GetDesc(&spriteDesc);
 	pivot = Vector3(0, 0, 0);
+	pivot = Vector3(spriteDesc.Width / 2, spriteDesc.Height / 2, 0);
 
 	spriterect = new RECT();
 	spriterect->top = spriterect->left = 0;
@@ -46,6 +47,7 @@ DirectXCore::Renderer::Renderer(DeviceResources * _deviceResource, const wchar_t
 	ThrowIfFailed(resource.As(&texture));
 	texture->GetDesc(&spriteDesc);
 	pivot = Vector3(0, 0, 0);
+	pivot = Vector3(spriteDesc.Width / 2, spriteDesc.Height / 2, 0);
 
 	spriterect = new RECT();
 	spriterect->top = spriterect->left = 0;
@@ -107,6 +109,13 @@ void DirectXCore::Renderer::SetRECT(RECT _newRECT)
 	spriterect->bottom = _newRECT.bottom;
 	spriterect->left = _newRECT.left;
 	spriterect->right = _newRECT.right;
+}
+
+void DirectXCore::Renderer::SetPivot(SimpleMath::Vector3 _newPivot)
+{
+	pivot.x = _newPivot.x;
+	pivot.y = _newPivot.y;
+	pivot.z = _newPivot.z;
 }
 
 
