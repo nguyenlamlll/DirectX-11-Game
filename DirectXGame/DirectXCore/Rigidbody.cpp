@@ -36,17 +36,19 @@ void DirectXCore::Rigidbody::PreUpdate(float _deltaTime)
 	//	accumulatedTime -= physicTimeStep;
 	//	OnPhysicUpdate(accumulatedTime);
 	//}
-	OnPhysicUpdate(_deltaTime);
+	AddForce(gravity);
 }
 
 void DirectXCore::Rigidbody::Update(float _deltaTime)
 {
+	velocity = acceleration + move;
+	//velocity += move;
 }
 
 void DirectXCore::Rigidbody::LateUpdate(float _deltaTime)
 {
 	if (!kinematic && attachedGameObject)
-		attachedGameObject->GetTransform()->SetPosition(attachedGameObject->GetTransform()->GetPosition() + (velocity + move)*_deltaTime);
+		attachedGameObject->GetTransform()->SetPosition(attachedGameObject->GetTransform()->GetPosition() + (velocity)*_deltaTime);
 	move = SimpleMath::Vector3(0, 0, 0);
 }
 
@@ -57,12 +59,15 @@ void DirectXCore::Rigidbody::MovePosition(SimpleMath::Vector3 _newPosition)
 
 void DirectXCore::Rigidbody::Move(SimpleMath::Vector3 _velocity)
 {
+	/*if (move.x == 0) move.x = _velocity.x;
+	if (move.y == 0) move.y = _velocity.y;
+	if (move.z == 0) move.z = _velocity.z;*/
 	move = _velocity;
 }
 
 void DirectXCore::Rigidbody::AddForce(SimpleMath::Vector3 _force)
 {
-	velocity += _force;
+	acceleration += _force;
 	//force = _force;
 }
 
@@ -73,6 +78,6 @@ Rigidbody::~Rigidbody()
 
 void DirectXCore::Rigidbody::OnPhysicUpdate(float _delta)
 {
-	AddForce(gravity);
+	
 }
 

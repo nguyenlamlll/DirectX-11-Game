@@ -29,6 +29,7 @@ Animation::Animation(Sprite* _sprite, int _rows, int _collums, float _timePerFra
 			animationFrameRects.emplace_back(rc);
 		}
 	}
+	mainrender->SetPivot(Vector3(frameWidth / 2, frameHeight / 2, 0));
 	mainSprite->SetSpriteRect(animationFrameRects[0]);
 	frameCount = _rows * _collums;
 
@@ -43,7 +44,7 @@ DirectXCore::Animation::Animation(int _rows, int _collums, float _timePerFrame, 
 	loop = true;
 }
 
-DirectXCore::Animation::Animation(Renderer * mainRenderer, int _rows, int _collums, float _timePerFrame, float _timeScale ,bool _loop)
+DirectXCore::Animation::Animation(Renderer * mainRenderer, int _rows, int _collums, float _timePerFrame, float _timeScale, bool _loop)
 {
 	loop = true;
 	mainrender = mainRenderer;
@@ -64,6 +65,7 @@ DirectXCore::Animation::Animation(Renderer * mainRenderer, int _rows, int _collu
 			animationFrameRects.emplace_back(rc);
 		}
 	}
+	mainrender->SetPivot(Vector3(frameWidth / 2, frameHeight / 2, 0));
 	mainrender->SetRECT(*animationFrameRects[0]);
 	frameCount = _rows * _collums;
 }
@@ -86,6 +88,7 @@ void Animation::ResetAnimation(const wchar_t * _charPath, int _rows, int _collum
 			animationFrameRects.emplace_back(rc);
 		}
 	}
+	mainrender->SetPivot(Vector3(frameWidth / 2, frameHeight / 2, 0));
 	mainrender->SetRECT(*animationFrameRects[0]);
 	frameCount = _rows * _collums;
 }

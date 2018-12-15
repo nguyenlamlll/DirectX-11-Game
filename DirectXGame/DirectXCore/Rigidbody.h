@@ -15,6 +15,7 @@ namespace DirectXCore
 		void Move(SimpleMath::Vector3 _velocity);
 		void AddForce(SimpleMath::Vector3 _force);
 
+		SimpleMath::Vector3 GetAcceleration() { return acceleration; }
 		SimpleMath::Vector3 GetVelocity() { return velocity; }
 		void SetVelocity(SimpleMath::Vector3 _newVelocity) { velocity = _newVelocity; }
 		SimpleMath::Vector3 GetMass() { return mass; }

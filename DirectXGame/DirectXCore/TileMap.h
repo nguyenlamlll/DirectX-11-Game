@@ -33,6 +33,7 @@ namespace DirectXCore
 		Camera* mainCamera;
 		DirectXCore::DeviceResources* deviceResource;
 		std::vector<GameObject*>* gameObjectList;
+		std::vector<GameObject*>* sectorObjects;
 		Renderer* thisRenderer;
 		QuadTree* thisQuad;
 	};

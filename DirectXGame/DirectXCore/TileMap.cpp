@@ -16,7 +16,7 @@ TileMap::TileMap(DirectXCore::DeviceResources *_deviceResource, const wchar_t * 
 	std::string pathstr(ws.begin(), ws.end());
 	tilemap->ParseFile(pathstr);
 	position = Vector3(0, 0, 0);
-	scale = Vector3(2, 2, 1);
+	scale = Vector3(4, 4, 1);
 	worldToScreenPosition = position;
 
 	RECT* newRegion = new RECT();
@@ -37,7 +37,8 @@ TileMap::TileMap(DirectXCore::DeviceResources *_deviceResource, const wchar_t * 
 		const wchar_t* spritePath = wideusername.c_str();
 
 		thisRenderer = new Renderer(_deviceResource, spritePath);
-		thisRenderer->SetPivot(Vector3(tileset->GetTileWidth() / 2, tileset->GetTileHeight() / 2, 0));
+		thisRenderer->SetPivot(Vector3(tileset->GetTileWidth() /2, tileset->GetTileHeight() /2, 0));
+		//thisRenderer->SetPivot(Vector3(0, 0, 0));
 		GameObject* renderingThing = new GameObject();
 		renderingThing->AddComponent<Renderer>(new Renderer(_deviceResource, spritePath));
 		renderingThing->GetTransform()->SetScreenScale(scale);
@@ -92,12 +93,12 @@ TileMap::TileMap(DirectXCore::DeviceResources *_deviceResource, const wchar_t * 
 		{
 
 		}
-		else if(objectGroup->GetName() == "Wall") {
+		else if (objectGroup->GetName() == "Wall") {
 			for (size_t j = 0; j < objectGroup->GetNumObjects(); j++)
 			{
 				Tmx::Object *object = objectGroup->GetObjects().at(j);
 				GameObject *gameObject = new GameObject();
-				gameObject->GetTransform()->SetPosition((position + Vector3(object->GetX() + object->GetWidth() / 2, object->GetY() + object->GetHeight() / 2, 0))*scale);
+				gameObject->GetTransform()->SetPosition((position + Vector3(object->GetX() + object->GetWidth() / 2, object->GetY() + object->GetHeight() / 2 , 0))*scale);
 				gameObject->GetTransform()->SetScale(Vector3(object->GetWidth()*scale.x, object->GetHeight()*scale.y, 1));
 				gameObject->AddComponent<Collider>(new Collider(gameObject, gameObject->GetTransform()));
 				gameObjectList->push_back(gameObject);
