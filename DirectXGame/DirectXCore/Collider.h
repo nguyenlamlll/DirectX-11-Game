@@ -14,6 +14,8 @@ namespace DirectXCore
 		void Update(float _deltaTime);
 		void LateUpdate(float _deltaTime);
 
+		void SetCollisionStatus(bool _col) { collided = _col; }
+		bool GetCollisionStatus() { return collided; }
 		BoundingBox* GetCollider() { return collider; }
 		Vector3 GetColliderPosition() { return collider->Center; }
 		Vector3 GetColliderScale() { return collider->Extents * 2; }
@@ -23,6 +25,7 @@ namespace DirectXCore
 		~Collider();
 	private:
 		BoundingBox* collider;
+		bool collided;
 	};
 }
 

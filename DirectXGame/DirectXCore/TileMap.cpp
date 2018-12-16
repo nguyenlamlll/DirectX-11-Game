@@ -37,7 +37,7 @@ TileMap::TileMap(DirectXCore::DeviceResources *_deviceResource, const wchar_t * 
 		const wchar_t* spritePath = wideusername.c_str();
 
 		thisRenderer = new Renderer(_deviceResource, spritePath);
-		thisRenderer->SetPivot(Vector3(tileset->GetTileWidth() /2, tileset->GetTileHeight() /2, 0));
+		thisRenderer->SetPivot(Vector3(tileset->GetTileWidth() /2+5, tileset->GetTileHeight() /2+5, 0));
 		//thisRenderer->SetPivot(Vector3(0, 0, 0));
 		GameObject* renderingThing = new GameObject();
 		renderingThing->AddComponent<Renderer>(new Renderer(_deviceResource, spritePath));
