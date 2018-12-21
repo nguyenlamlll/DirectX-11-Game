@@ -71,30 +71,40 @@ DirectXCore::Animation::Animation(Renderer * mainRenderer, int _rows, int _collu
 }
 
 void Animation::ResetAnimation(const wchar_t * _charPath, int _rows, int _collums) {
-	mainrender->LoadTexture(_charPath);
-	animationFrameRects.clear();
-	frameWidth = (mainrender->GetRECT()->right - mainrender->GetRECT()->left) / _collums;
-	frameHeight = (mainrender->GetRECT()->bottom - mainrender->GetRECT()->top) / _rows;
-
-	for (int i = 0; i < _rows; i++)
+	if (name != _charPath)
 	{
-		for (int j = 0; j < _collums; j++)
+		name = _charPath;
+		mainrender->LoadTexture(_charPath);
+		animationFrameRects.clear();
+		frameWidth = (mainrender->GetRECT()->right - mainrender->GetRECT()->left) / _collums;
+		frameHeight = (mainrender->GetRECT()->bottom - mainrender->GetRECT()->top) / _rows;
+
+		for (int i = 0; i < _rows; i++)
 		{
-			RECT *rc = new RECT();
-			rc->left = frameWidth * j;
-			rc->top = frameHeight * i;
-			rc->right = frameWidth * (j + 1);
-			rc->bottom = frameHeight * (i + 1);
-			animationFrameRects.emplace_back(rc);
+			for (int j = 0; j < _collums; j++)
+			{
+				RECT *rc = new RECT();
+				rc->left = frameWidth * j;
+				rc->top = frameHeight * i;
+				rc->right = frameWidth * (j + 1);
+				rc->bottom = frameHeight * (i + 1);
+				animationFrameRects.emplace_back(rc);
+			}
 		}
+		mainrender->SetPivot(Vector3(frameWidth / 2, frameHeight / 2, 0));
+		mainrender->SetRECT(*animationFrameRects[0]);
+		frameCount = _rows * _collums;
 	}
-	mainrender->SetPivot(Vector3(frameWidth / 2, frameHeight / 2, 0));
-	mainrender->SetRECT(*animationFrameRects[0]);
-	frameCount = _rows * _collums;
+}
+
+void DirectXCore::Animation::PreUpdate(float _deltaTime)
+{
+	Component::PreUpdate(_deltaTime);
 }
 
 void Animation::Update(float _deltaTime)
 {
+	Component::Update(_deltaTime);
 	if (currentFrameTime >= timePerFrame) {
 		currentFrameTime = 0;
 		if (frameIndex < frameCount - 1) frameIndex += 1;
@@ -103,6 +113,11 @@ void Animation::Update(float _deltaTime)
 	}
 	else currentFrameTime += _deltaTime;
 
+}
+
+void DirectXCore::Animation::LateUpdate(float _deltaTime)
+{
+	Component::LateUpdate(_deltaTime);
 }
 
 void Animation::Render()

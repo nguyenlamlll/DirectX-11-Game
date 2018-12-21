@@ -47,11 +47,36 @@ bool DirectXCore::QuadTree::IsContain(Vector3 _position, Vector3 _scale)
 	return iscontain;
 }
 
-void DirectXCore::QuadTree::UpdateWithCamera(Vector3 _position, Vector3 _scale,float _elapsedTime)
+void DirectXCore::QuadTree::UpdateWithCamera(Vector3 _position, Vector3 _scale, float _elapsedTime)
 {
 	if (nodes == NULL && IsContain(_position, _scale)) {
 		for (size_t i = 0; i < this->objectList->size(); i++) this->objectList->at(i)->Update(_elapsedTime);
-		
+	}
+}
+
+void DirectXCore::QuadTree::GetBranchNodesWithCamera(QuadTree* _node, Vector3 _position, Vector3 _scale, float _elapsedTime, std::vector<GameObject*>* _objectLists)
+{
+	if (_node->nodes == NULL && _node->IsContain(_position, _scale)) {
+		_objectLists->insert(_objectLists->end(), _node->objectList->begin(), _node->objectList->end());
+		//return;
+	}
+	else if (_node->nodes != NULL)
+	{
+		for (size_t i = 0; i < _node->nodes->size(); i++)
+			GetBranchNodesWithCamera(_node->nodes->at(i), _position, _scale, _elapsedTime, _objectLists);
+	}
+}
+
+void DirectXCore::QuadTree::ClearTree(QuadTree* _node)
+{
+	if (_node->nodes == NULL) {
+		objectList->clear();
+		return;
+	}
+	else if (_node->nodes != NULL)
+	{
+		for (size_t i = 0; i < _node->nodes->size(); i++)
+			ClearTree(_node->nodes->at(i));
 	}
 }
 
@@ -64,11 +89,11 @@ void DirectXCore::QuadTree::Split()
 		nodes = new std::vector<QuadTree*>;
 		RECT* rect1 = new RECT(), *rect2 = new RECT(), *rect3 = new RECT, *rect4 = new RECT();
 		rect1->left = rect3->left = region->left;
-		rect1->right = rect3->right = rect2->left = rect4->left = region->right / 2 ;
+		rect1->right = rect3->right = rect2->left = rect4->left = region->right / 2;
 		rect2->right = rect4->right = region->right;
 
 		rect1->top = rect2->top = region->top;
-		rect1->bottom = rect2->bottom = rect3->top = rect4->top = region->bottom / 2 ;
+		rect1->bottom = rect2->bottom = rect3->top = rect4->top = region->bottom / 2;
 		rect3->bottom = rect4->bottom = region->bottom;
 
 		nodes->push_back(new QuadTree(rect1, level + 1, maximumLevel));

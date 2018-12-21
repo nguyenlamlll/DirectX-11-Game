@@ -19,12 +19,12 @@ TileMap::TileMap(DirectXCore::DeviceResources *_deviceResource, const wchar_t * 
 	scale = Vector3(4, 4, 1);
 	worldToScreenPosition = position;
 
-	RECT* newRegion = new RECT();
+	newRegion = new RECT();
 	newRegion->left = newRegion->top = 0;
 	newRegion->right = tilemap->GetWidth()*tilemap->GetTileWidth()*scale.x;
 	newRegion->bottom = tilemap->GetHeight()*tilemap->GetTileHeight()*scale.y;
 
-	thisQuad = new QuadTree(newRegion, 1, 2);
+	thisQuad = new QuadTree(newRegion, 1, 5);
 
 	for (size_t i = 0; i < tilemap->GetNumTilesets(); i++)
 	{
@@ -37,7 +37,7 @@ TileMap::TileMap(DirectXCore::DeviceResources *_deviceResource, const wchar_t * 
 		const wchar_t* spritePath = wideusername.c_str();
 
 		thisRenderer = new Renderer(_deviceResource, spritePath);
-		thisRenderer->SetPivot(Vector3(tileset->GetTileWidth() /2+5, tileset->GetTileHeight() /2+5, 0));
+		thisRenderer->SetPivot(Vector3(tileset->GetTileWidth() / 2 + 5, tileset->GetTileHeight() / 2 + 5, 0));
 		//thisRenderer->SetPivot(Vector3(0, 0, 0));
 		GameObject* renderingThing = new GameObject();
 		renderingThing->AddComponent<Renderer>(new Renderer(_deviceResource, spritePath));
@@ -93,16 +93,30 @@ TileMap::TileMap(DirectXCore::DeviceResources *_deviceResource, const wchar_t * 
 		{
 
 		}
-		else if (objectGroup->GetName() == "Wall") {
+		else if (objectGroup->GetName() == "Wall")
+		{
 			for (size_t j = 0; j < objectGroup->GetNumObjects(); j++)
 			{
 				Tmx::Object *object = objectGroup->GetObjects().at(j);
 				GameObject *gameObject = new GameObject();
-				gameObject->GetTransform()->SetPosition((position + Vector3(object->GetX() + object->GetWidth() / 2, object->GetY() + object->GetHeight() / 2 , 0))*scale);
+				gameObject->GetTransform()->SetPosition((position + Vector3(object->GetX() + object->GetWidth() / 2, object->GetY() + object->GetHeight() / 2, 0))*scale);
 				gameObject->GetTransform()->SetScale(Vector3(object->GetWidth()*scale.x, object->GetHeight()*scale.y, 1));
 				gameObject->AddComponent<Collider>(new Collider(gameObject, gameObject->GetTransform()));
+				gameObject->SetTag("Wall");
 				gameObjectList->push_back(gameObject);
 				thisQuad->Insert(gameObject);
+			}
+		}
+		else if (objectGroup->GetName() == "Enemies")
+		{
+			for (size_t j = 0; j < objectGroup->GetNumObjects(); j++)
+			{
+				Tmx::Object *object = objectGroup->GetObjects().at(j);
+				GameObject *enemyObject = new GameObject();
+				enemyObject->SetTag("Enemy");
+				enemyObject->GetTransform()->SetPosition((position + Vector3(object->GetX() + object->GetWidth() / 2, object->GetY() + object->GetHeight() / 2, 0))*scale);
+				gameObjectList->push_back(enemyObject);
+				thisQuad->Insert(enemyObject);
 			}
 		}
 	}
@@ -146,8 +160,6 @@ void TileMap::Render()
 						thisRenderer->SetRECT(*listTileID[tileID]);
 						thisRenderer->Render(currentPosition, Vector3(0, 0, 0), scale);
 					}
-					if (m == 30 && n == 0)
-						SimpleMath::Vector3 pl = currentPosition;
 				}
 			}
 		}

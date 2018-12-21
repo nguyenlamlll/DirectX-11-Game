@@ -76,11 +76,11 @@ bool DirectXCore::Input::IsKeyDown(const char * keyName) const
 bool DirectXCore::Input::IsKeyUp(KeyCode key) const
 {
 	auto state = m_keyStates[key];
-	return state;
+	return !state;
 }
 
 bool DirectXCore::Input::IsKeyUp(const char * keyName) const
 {
 	const KeyCode keyCode = sKeyMap.at(keyName);
-	return m_keyStates[keyCode];
+	return !m_keyStates[keyCode];
 }

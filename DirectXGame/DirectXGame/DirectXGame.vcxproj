@@ -129,9 +129,14 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="Bullet.cpp" />
     <ClCompile Include="CatScene.cpp" />
+    <ClCompile Include="Elevator.cpp" />
+    <ClCompile Include="Enemy.cpp" />
     <ClCompile Include="Main.cpp" />
     <ClCompile Include="MenuScene.cpp" />
+    <ClCompile Include="Player.cpp" />
+    <ClCompile Include="ShurikenBoss.cpp" />
     <ClCompile Include="TilemapScene.cpp" />
     <ClCompile Include="PingPongScene.cpp" />
   </ItemGroup>
@@ -144,10 +149,15 @@
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="Bullet.h" />
     <ClInclude Include="CatScene.h" />
+    <ClInclude Include="Elevator.h" />
+    <ClInclude Include="Enemy.h" />
     <ClInclude Include="MenuScene.h" />
     <ClInclude Include="PingPongScene.h" />
+    <ClInclude Include="Player.h" />
     <ClInclude Include="resource.h" />
+    <ClInclude Include="ShurikenBoss.h" />
     <ClInclude Include="TilemapScene.h" />
   </ItemGroup>
   <ItemGroup>

@@ -22,6 +22,7 @@ namespace DirectXCore
 		void SetTilemapScale(SimpleMath::Vector3 _scale);
 		QuadTree* GetQuadTree() { return thisQuad; }
 		std::vector<GameObject*>* GetListGameObjects() { return gameObjectList; }
+		RECT* GetRegion() { return newRegion; }
 		~TileMap();
 	private:
 		DirectX::SimpleMath::Vector3 position,worldToScreenPosition,scale;
@@ -36,6 +37,7 @@ namespace DirectXCore
 		std::vector<GameObject*>* sectorObjects;
 		Renderer* thisRenderer;
 		QuadTree* thisQuad;
+		RECT* newRegion;
 	};
 }
 

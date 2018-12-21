@@ -15,219 +15,154 @@ TilemapScene::~TilemapScene()
 bool firstTime = false;
 void TilemapScene::UpdateScene(float elapsedTime)
 {
-	int a = 0;
+	sceneQuadTree->ClearTree(sceneQuadTree);
+	for (size_t i = 0; i < gameObjectList->size(); i++) sceneQuadTree->Insert(gameObjectList->at(i));
+	//if (m_dxBase->GetInputManager()->IsKeyDown("W"))camera->SetPosition(camera->GetPosition() + Vector3(0, -50, 0));
+	//if (m_dxBase->GetInputManager()->IsKeyDown("A"))camera->SetPosition(camera->GetPosition() + Vector3(-50, 0, 0));
+	//if (m_dxBase->GetInputManager()->IsKeyDown("S"))camera->SetPosition(camera->GetPosition() + Vector3(0, 50, 0));
+	//if (m_dxBase->GetInputManager()->IsKeyDown("D"))camera->SetPosition(camera->GetPosition() + Vector3(50, 0, 0));
+	std::vector<DirectXCore::GameObject*>* objlist = new  std::vector<DirectXCore::GameObject*>();
+	//currentQuadTree->GetBranchNodesWithCamera(tilemap->GetQuadTree(), camera->GetPosition(), Vector3(500, 500, 1), elapsedTime, objlist);
+	sceneQuadTree->GetBranchNodesWithCamera(tilemap->GetQuadTree(), camera->GetPosition(), Vector3(400, 400, 1), elapsedTime, objlist);
+	//tilemap->GetQuadTree()->GetBranchNodesWithCamera(tilemap->GetQuadTree(), camera->GetPosition(), Vector3(500, 500, 1), elapsedTime, objlist);
 	Vector3 normal = Vector3(0, 0, 0);
 	for (size_t i = 0; i < gameObjectList->size(); i++) gameObjectList->at(i)->PreUpdate(elapsedTime);
-	if (m_dxBase->GetInputManager()->IsKeyDown("D"))
+	if (currentTimer > 0.3f)
 	{
-		//newGameObject->GetComponent<Rigidbody>()->Move(Vector3(100, 0, 0));
-		newGameObject->GetComponent<Rigidbody>()->AddForce(Vector3(3, 0, 0));
-		//camera->SetPosition(camera->GetPosition() + Vector3(10, 0, 0));
+		currentTimer = 0;
 	}
-	if (m_dxBase->GetInputManager()->IsKeyDown("A"))
+	else currentTimer += elapsedTime;
+	/*for (size_t i = 0; i < objlist->size(); i++)
 	{
-		//newGameObject->GetComponent<Rigidbody>()->Move(Vector3(-100, 0, 0));
-		newGameObject->GetComponent<Rigidbody>()->AddForce(Vector3(-3, 0, 0));
-		//camera->SetPosition(camera->GetPosition() + Vector3(-10, 0, 0));
-	}
-	if (m_dxBase->GetInputManager()->IsKeyDown("W"))
-	{
-		// CHANGES CURRENT STAGE TO "RUN"
-		//newGameObject->GetComponent<Rigidbody>()->SetVelocity(newGameObject->GetComponent<Rigidbody>()->GetVelocity() + Vector3(0, -40, 0));
-		newGameObject->GetComponent<Rigidbody>()->AddForce(Vector3(0, -50, 0));
-		//camera->SetPosition(camera->GetPosition() + Vector3(0, -10, 0));
-	}
-	if (m_dxBase->GetInputManager()->IsKeyDown("S"))
-	{
-		//camera->SetPosition(camera->GetPosition() + Vector3(0, 10, 0));
-	}
+		if (objlist->at(i)->GetComponent<Collider>())
+		{
+			for (size_t j = 0; j < objlist->size(); j++)
+			{
+				if (objlist->at(j)->GetComponent<Collider>() && objlist->at(j) != objlist->at(i))
+				{
+					bool colType = objlist->at(j)->GetComponent<Collider>()->GetCollider()->Intersects(*objlist->at(i)->GetComponent<Collider>()->GetCollider());
+					if (colType)
+					{
+						float distanceX = objlist->at(j)->GetTransform()->GetPosition().x - objlist->at(i)->GetTransform()->GetPosition().x;
+						float distanceY = objlist->at(j)->GetTransform()->GetPosition().y - objlist->at(i)->GetTransform()->GetPosition().y;
+						float extentDistanceX = objlist->at(j)->GetComponent<Collider>()->GetCollider()->Extents.x + objlist->at(i)->GetComponent<Collider>()->GetCollider()->Extents.x;
+						float extentDistanceY = objlist->at(j)->GetComponent<Collider>()->GetCollider()->Extents.y + objlist->at(i)->GetComponent<Collider>()->GetCollider()->Extents.y;
 
-	newGameObject->GetComponent<Collider>()->SetCollisionStatus(false);
-	for (size_t i = 0; i < gameObjectList->size(); i++)
-	{
-		if (newGameObject != gameObjectList->at(i) && gameObjectList->at(i)->GetComponent<Collider>())
-		{
-			gameObjectList->at(i)->GetComponent<Collider>()->SetCollisionStatus(false);
-			bool colType = newGameObject->GetComponent<Collider>()->GetCollider()->Intersects(*gameObjectList->at(i)->GetComponent<Collider>()->GetCollider());
-			if (colType) {
-				//if (newGameObject->GetComponent<Rigidbody>()->GetVelocity().y > 0)
-				//{
-				//	float distance = abs(newGameObject->GetTransform()->GetPosition().x - gameObjectList->at(i)->GetTransform()->GetPosition().x) ;
-				//	float extentDistance = gameObjectList->at(i)->GetComponent<Collider>()->GetCollider()->Extents.x + gameObjectList->at(i)->GetComponent<Collider>()->GetCollider()->Extents.x;
-				//	//float distanceX = abs(newGameObject->GetTransform()->GetPosition().y - gameObjectList->at(i)->GetTransform()->GetPosition().y);
-				//	//float extentDistanceX = gameObjectList->at(i)->GetComponent<Collider>()->GetCollider()->Extents.y + gameObjectList->at(i)->GetComponent<Collider>()->GetCollider()->Extents.y;
-				//	if (distance <= extentDistance-20) normal += Vector3(0, -1, 0);
-				//}
-				//else if (newGameObject->GetComponent<Rigidbody>()->GetVelocity().y < 0)
-				//{
-				//	float distance = abs(newGameObject->GetTransform()->GetPosition().x - gameObjectList->at(i)->GetTransform()->GetPosition().x);
-				//	float extentDistance = gameObjectList->at(i)->GetComponent<Collider>()->GetCollider()->Extents.x + gameObjectList->at(i)->GetComponent<Collider>()->GetCollider()->Extents.x;
-				//	//float distanceX = abs(newGameObject->GetTransform()->GetPosition().y - gameObjectList->at(i)->GetTransform()->GetPosition().y);
-				//	//float extentDistanceX = gameObjectList->at(i)->GetComponent<Collider>()->GetCollider()->Extents.y + gameObjectList->at(i)->GetComponent<Collider>()->GetCollider()->Extents.y;
-				//	if (distance <= extentDistance-20) normal += Vector3(0, 1, 0);
-				//}
-				//if (newGameObject->GetComponent<Rigidbody>()->GetVelocity().x > 0)
-				//{
-				//	float distance = abs(newGameObject->GetTransform()->GetPosition().y - gameObjectList->at(i)->GetTransform()->GetPosition().y);
-				//	float extentDistance = newGameObject->GetComponent<Collider>()->GetCollider()->Extents.y + gameObjectList->at(i)->GetComponent<Collider>()->GetCollider()->Extents.y;
-				//	if (distance < extentDistance-20) normal += Vector3(-1, 0, 0);
-				//}
-				//else if (newGameObject->GetComponent<Rigidbody>()->GetVelocity().x > 0)
-				//{
-				//	float distance = abs(newGameObject->GetTransform()->GetPosition().y - gameObjectList->at(i)->GetTransform()->GetPosition().y);
-				//	float extentDistance = newGameObject->GetComponent<Collider>()->GetCollider()->Extents.y + gameObjectList->at(i)->GetComponent<Collider>()->GetCollider()->Extents.y;
-				//	if (distance < extentDistance - 20) normal += Vector3(-1, 0, 0);
-				//}
-				/*if (newGameObject->GetTransform()->GetPosition().y < gameObjectList->at(i)->GetTransform()->GetPosition().y)
-				{
-					if (normal.y == 0 && newGameObject->GetComponent<Rigidbody>()->GetVelocity().y > 0) {
-						if (newGameObject->GetTransform()->GetPosition().x + newGameObject->GetComponent<Collider>()->GetCollider()->Extents.x < gameObjectList->at(i)->GetTransform()->GetPosition().x + gameObjectList->at(i)->GetComponent<Collider>()->GetCollider()->Extents.x
-							|| newGameObject->GetTransform()->GetPosition().x - newGameObject->GetComponent<Collider>()->GetCollider()->Extents.x > gameObjectList->at(i)->GetTransform()->GetPosition().x - gameObjectList->at(i)->GetComponent<Collider>()->GetCollider()->Extents.x)
-							normal += Vector3(0, -1, 0);
-					}
-					else;
-				}
-				else if (newGameObject->GetTransform()->GetPosition().y > gameObjectList->at(i)->GetTransform()->GetPosition().y)
-				{
-					if (normal.y == 0 && newGameObject->GetComponent<Rigidbody>()->GetVelocity().y < 0 && newGameObject->GetComponent<Collider>()->GetCollider()->Extents.x < gameObjectList->at(i)->GetComponent<Collider>()->GetCollider()->Extents.x) normal += Vector3(0, 1, 0);
-					else;
-				}
-				if (newGameObject->GetTransform()->GetPosition().x < gameObjectList->at(i)->GetTransform()->GetPosition().x)
-				{
-					if (normal.x == 0 && newGameObject->GetComponent<Rigidbody>()->GetVelocity().x > 0)
-					{
-						if (newGameObject->GetTransform()->GetPosition().y + newGameObject->GetComponent<Collider>()->GetCollider()->Extents.y < gameObjectList->at(i)->GetTransform()->GetPosition().y + gameObjectList->at(i)->GetComponent<Collider>()->GetCollider()->Extents.y);
-						else normal += Vector3(-1, 0, 0);
-					}
-					else;
-				}
-				else if (newGameObject->GetTransform()->GetPosition().x > gameObjectList->at(i)->GetTransform()->GetPosition().x)
-				{
-					if (normal.x == 0 && newGameObject->GetComponent<Rigidbody>()->GetVelocity().x < 0 && newGameObject->GetComponent<Collider>()->GetCollider()->Extents.y < gameObjectList->at(i)->GetComponent<Collider>()->GetCollider()->Extents.y) normal += Vector3(1, 0, 0);
-					else;
-				}*/
-				float distanceX = newGameObject->GetTransform()->GetPosition().x - gameObjectList->at(i)->GetTransform()->GetPosition().x;
-				float distanceY = newGameObject->GetTransform()->GetPosition().y - gameObjectList->at(i)->GetTransform()->GetPosition().y;
-				float extentDistanceX = newGameObject->GetComponent<Collider>()->GetCollider()->Extents.x + gameObjectList->at(i)->GetComponent<Collider>()->GetCollider()->Extents.x;
-				float extentDistanceY = newGameObject->GetComponent<Collider>()->GetCollider()->Extents.y + gameObjectList->at(i)->GetComponent<Collider>()->GetCollider()->Extents.y;
+						if (objlist->at(j)->GetComponent<Rigidbody>())
+						{
+							if (abs(distanceX) < extentDistanceX)
+							{
+								if (abs(distanceX) < extentDistanceX * 9 / 10)
+								{
+									if ((objlist->at(j)->GetComponent<Rigidbody>()->GetAcceleration().y > 0 || objlist->at(j)->GetComponent<Rigidbody>()->GetMovingVector().y > 0) && distanceY < 0)
+										normal = (normal.y >= 0) ? normal + Vector3(0, -1, 0) : normal;
+									else if ((objlist->at(j)->GetComponent<Rigidbody>()->GetAcceleration().y < 0 || objlist->at(j)->GetComponent<Rigidbody>()->GetMovingVector().y < 0) && distanceY > 0)
+										normal = (normal.y <= 0) ? normal + Vector3(0, 1, 0) : normal;
+								}
+							}
+							else;
+							if (abs(distanceY) < extentDistanceY)
+							{
+								if (abs(distanceY) < extentDistanceY * 8.5f / 10)
+								{
+									if ((objlist->at(j)->GetComponent<Rigidbody>()->GetAcceleration().x > 0 || objlist->at(j)->GetComponent<Rigidbody>()->GetMovingVector().x > 0) && distanceX < 0)
+										normal = (normal.x >= 0) ? normal + Vector3(-1, 0, 0) : normal;
+									else if ((objlist->at(j)->GetComponent<Rigidbody>()->GetAcceleration().x < 0 || objlist->at(j)->GetComponent<Rigidbody>()->GetMovingVector().x < 0) && distanceX > 0)
+										normal = (normal.x <= 0) ? normal + Vector3(1, 0, 0) : normal;
+								}
+							}
+							else;
+						}
 
-				if (abs(distanceX) < extentDistanceX)
-				{
-					if (abs(distanceX) < extentDistanceX * 9 / 10)
-					{
-						if (newGameObject->GetComponent<Rigidbody>()->GetAcceleration().y > 0 && distanceY < 0)
-							normal = (normal.y >= 0) ? normal + Vector3(0, -1, 0) : normal;
-						else if (newGameObject->GetComponent<Rigidbody>()->GetAcceleration().y < 0 && distanceY > 0)
-							normal = (normal.y <= 0) ? normal + Vector3(0, 1, 0) : normal;
+						objlist->at(i)->GetComponent<Collider>()->SetCollisionStatus(true);
+						objlist->at(j)->GetComponent<Collider>()->SetCollisionStatus(true);
+						objlist->at(j)->GetComponent<Collider>()->OnCollisionEnter(objlist->at(i)->GetComponent<Collider>(), normal);
+						objlist->at(i)->GetComponent<Collider>()->OnCollisionEnter(newPlayer->GetComponent<Collider>(), normal*-1);
 					}
 				}
-				else;
-				if (abs(distanceY) < extentDistanceY)
-				{
-					if (abs(distanceY) < extentDistanceY * 8.5f / 10)
-					{
-						if (newGameObject->GetComponent<Rigidbody>()->GetAcceleration().x > 0 && distanceX < 0)
-							normal = (normal.x >= 0) ? normal + Vector3(-1, 0, 0) : normal;
-						else if (newGameObject->GetComponent<Rigidbody>()->GetAcceleration().x < 0 && distanceX > 0)
-							normal = (normal.x <= 0) ? normal + Vector3(1, 0, 0) : normal;
-					}
-				}
-				else;
-				gameObjectList->at(i)->GetComponent<Collider>()->SetCollisionStatus(true);
-				newGameObject->GetComponent<Collider>()->SetCollisionStatus(true);
-				Vector3 objectVec = newGameObject->GetComponent<Rigidbody>()->GetAcceleration();
-				objectVec.x = (normal.x > 0) ? -objectVec.x : objectVec.x;
-				objectVec.y = (normal.y > 0) ? -objectVec.y : objectVec.y;
-				Vector3 newVec = objectVec * normal + newGameObject->GetComponent<Rigidbody>()->GetVelocity();
-				//newGameObject->GetComponent<Rigidbody>()->SetVelocity(newVec);
-				newGameObject->GetComponent<Rigidbody>()->AddForce(objectVec*normal);
-			}
-		}
-	}
-	for (size_t i = 0; i < gameObjectList->size(); i++) gameObjectList->at(i)->Update(elapsedTime);
-	/*if (newGameObject->GetComponent<Collider>()->GetCollisionStatus())
-	{
-		if (normal.x != 0 && normal.y == 0)
-		{
-			if (newGameObject->GetComponent<State>())
-			{
-				if (newGameObject->GetComponent<State>()->GetState() != "sweep")
-				{
-					newGameObject->GetComponent<State>()->SetState("sweep");
-					newGameObject->GetComponent<Animation>()->ResetAnimation((normal.x < 0) ? L"Resources/Animations/sweep_wall.png" : L"Resources/Animations/sweep_wall_flip.png", 1, 3);
-				}
-			}
-		}
-		else if (normal.y != 0 && normal.x == 0)
-		{
-			if (m_dxBase->GetInputManager()->IsKeyDown("A") || m_dxBase->GetInputManager()->IsKeyDown("D"))
-			{
-				if (newGameObject->GetComponent<State>())
-				{
-					if (newGameObject->GetComponent<State>()->GetState() != "run") {
-						newGameObject->GetComponent<State>()->SetState("run");
-						newGameObject->GetComponent<Animation>()->ResetAnimation((newGameObject->GetComponent<Rigidbody>()->GetVelocity().x > 0) ? L"Resources/Animations/run.png" : L"Resources/Animations/run_flip.png", 1, 11);
-					}
-				}
-			}
-			else
-			{
-				if (newGameObject->GetComponent<State>())
-				{
-					if (newGameObject->GetComponent<State>()->GetState() != "stand") {
-						newGameObject->GetComponent<State>()->SetState("stand");
-						newGameObject->GetComponent<Animation>()->ResetAnimation(L"Resources/Animations/stand.png", 1, 4);
-					}
-				}
-			}
-		}
-	}
-	else
-	{
-		if (newGameObject->GetComponent<State>())
-		{
-			if (newGameObject->GetComponent<State>()->GetState() != "jump")
-			{
-				newGameObject->GetComponent<State>()->SetState("jump");
-				newGameObject->GetComponent<Animation>()->ResetAnimation(L"Resources/Animations/jump.png", 1, 7);
 			}
 		}
 	}*/
-	if (newGameObject->GetComponent<Collider>()->GetCollisionStatus())
+	for (size_t i = 0; i < gameObjectList->size(); i++)
 	{
-		if (newGameObject->GetComponent<Rigidbody>()->GetVelocity().x != 0)
+		if (gameObjectList->at(i)->GetComponent<Collider>())
 		{
-			if (newGameObject->GetComponent<State>())
+			gameObjectList->at(i)->GetComponent<Collider>()->SetCollisionStatus(false);
+			if (gameObjectList->at(i)->GetTag() == "Wall" || gameObjectList->at(i)->GetTag() == "Elevator")
 			{
-				if (newGameObject->GetComponent<State>()->GetState() != "run") {
-					newGameObject->GetComponent<State>()->SetState("run");
-					newGameObject->GetComponent<Animation>()->ResetAnimation((newGameObject->GetComponent<Rigidbody>()->GetVelocity().x > 0) ? L"Resources/Animations/run.png" : L"Resources/Animations/run_flip.png", 1, 11);
+				bool colType = newPlayer->GetComponent<Collider>()->GetCollider()->Intersects(*gameObjectList->at(i)->GetComponent<Collider>()->GetCollider());
+				if (colType)
+				{
+					float distanceX = newPlayer->GetTransform()->GetPosition().x - gameObjectList->at(i)->GetTransform()->GetPosition().x;
+					float distanceY = newPlayer->GetTransform()->GetPosition().y - gameObjectList->at(i)->GetTransform()->GetPosition().y;
+					float extentDistanceX = newPlayer->GetComponent<Collider>()->GetCollider()->Extents.x + gameObjectList->at(i)->GetComponent<Collider>()->GetCollider()->Extents.x;
+					float extentDistanceY = newPlayer->GetComponent<Collider>()->GetCollider()->Extents.y + gameObjectList->at(i)->GetComponent<Collider>()->GetCollider()->Extents.y;
+
+					if (abs(distanceX) < extentDistanceX)
+					{
+						if (abs(distanceX) < extentDistanceX * 9 / 10)
+						{
+							if ((newPlayer->GetComponent<Rigidbody>()->GetAcceleration().y > 0 || newPlayer->GetComponent<Rigidbody>()->GetMovingVector().y > 0) && distanceY < 0)
+								normal = (normal.y >= 0) ? normal + Vector3(0, -1, 0) : normal;
+							else if ((newPlayer->GetComponent<Rigidbody>()->GetAcceleration().y < 0 || newPlayer->GetComponent<Rigidbody>()->GetMovingVector().y < 0) && distanceY > 0)
+								normal = (normal.y <= 0) ? normal + Vector3(0, 1, 0) : normal;
+						}
+					}
+					else;
+					if (abs(distanceY) < extentDistanceY)
+					{
+						if (abs(distanceY) < extentDistanceY * 8.5f / 10)
+						{
+							if ((newPlayer->GetComponent<Rigidbody>()->GetAcceleration().x > 0 || newPlayer->GetComponent<Rigidbody>()->GetMovingVector().x > 0) && distanceX < 0)
+								normal = (normal.x >= 0) ? normal + Vector3(-1, 0, 0) : normal;
+							else if ((newPlayer->GetComponent<Rigidbody>()->GetAcceleration().x < 0 || newPlayer->GetComponent<Rigidbody>()->GetMovingVector().x < 0) && distanceX > 0)
+								normal = (normal.x <= 0) ? normal + Vector3(1, 0, 0) : normal;
+						}
+					}
+					else;
+
+					gameObjectList->at(i)->GetComponent<Collider>()->SetCollisionStatus(true);
+					newPlayer->GetComponent<Collider>()->OnCollisionEnter(gameObjectList->at(i)->GetComponent<Collider>(), normal);
+					gameObjectList->at(i)->GetComponent<Collider>()->OnCollisionEnter(newPlayer->GetComponent<Collider>(), normal*-1);
+					if (gameObjectList->at(i)->GetTag() == "Elevator")
+					{
+						if (gameObjectList->at(i)->GetTransform()->GetPosition().y > 1760)
+						{
+							gameObjectList->at(i)->GetTransform()->SetPosition(gameObjectList->at(i)->GetTransform()->GetPosition() + Vector3(0, -5.0f, 0));
+							newPlayer->GetTransform()->SetPosition(newPlayer->GetTransform()->GetPosition() + Vector3(0, -5.0f, 0));
+						}
+					}
+				}
+			}
+			else if (gameObjectList->at(i)->GetTag() == "Enemy")
+			{
+				for (size_t j = 0; j < gameObjectList->size(); j++)
+				{
+					if (gameObjectList->at(j)->GetComponent<Collider>())
+					{
+						if (gameObjectList->at(j)->GetTag() == "bullet")
+						{
+							bool colType = gameObjectList->at(j)->GetComponent<Collider>()->GetCollider()->Intersects(*gameObjectList->at(i)->GetComponent<Collider>()->GetCollider());
+							if (colType)
+							{
+								gameObjectList->erase(gameObjectList->begin() + j);
+							}
+						}
+					}
 				}
 			}
 		}
-	}
-	else
-	{
-		if (newGameObject->GetComponent<State>())
-		{
-			if (newGameObject->GetComponent<State>()->GetState() != "jump")
-			{
-				newGameObject->GetComponent<State>()->SetState("jump");
-				newGameObject->GetComponent<Animation>()->ResetAnimation(L"Resources/Animations/jump.png", 1, 7);
-			}
-		}
-	}
-	//tilemap->GetQuadTree()->UpdateWithCamera(camera->GetPosition(), Vector3(500, 500, 1), elapsedTime);
 
+	}
+	for (size_t i = 0; i < gameObjectList->size(); i++) gameObjectList->at(i)->Update(elapsedTime);
 	for (size_t i = 0; i < gameObjectList->size(); i++) gameObjectList->at(i)->LateUpdate(elapsedTime);
-
-	camera->SetPosition(newGameObject->GetTransform()->GetPosition());
+	camera->SetPosition(newPlayer->GetTransform()->GetPosition());
+	delete objlist;
 }
 
 void TilemapScene::RenderScene()
 {
 	Vector3 worldToScreenShift = Vector3(camera->GetWidth() / 2 - camera->GetPosition().x, camera->GetHeight() / 2 - camera->GetPosition().y, 0);
-	newGameObject->GetTransform()->SetWorldToScreenPosition(worldToScreenShift);
 	tilemap->Render();
 	for (size_t i = 0; i < gameObjectList->size(); i++)
 	{
@@ -237,42 +172,47 @@ void TilemapScene::RenderScene()
 			gameObjectList->at(i)->Render();
 		}
 	}
-	//newGameObject->Render();
 }
 
 void TilemapScene::LoadScene()
 {
-	gameObjectList = new std::vector<GameObject*>();
-	GameObject *newPCN = new GameObject();
 	m_dxBase->CreateCamera(&camera);
 	tilemap = new TileMap(m_dxBase->GetDeviceResource(), L"Resources/BlastHornetMap.tmx");
 	tilemap->SetCamera(camera);
-	newGameObject = new GameObject();
-	newGameObject->GetTransform()->SetPosition(Vector3(50, 3500, 0));
-	newGameObject->GetTransform()->SetScale(Vector3(120, 120, 1));
-	newGameObject->GetTransform()->SetScreenScale(Vector3(3, 3, 1));
-	newGameObject->AddComponent<Renderer>(new Renderer(m_dxBase->GetDeviceResource(), L"Resources/rockman.png"));
-	newGameObject->AddComponent<Rigidbody>(new Rigidbody(newGameObject));
-	newGameObject->AddComponent<Collider>(new Collider(newGameObject, newGameObject->GetTransform()));
-	newGameObject->AddComponent<Animation>(new Animation(newGameObject->GetComponent<Renderer>(), 1, 11, 0.1f, 1.0f, true));
-	std::vector<std::string>* stringStates = new std::vector<std::string>();
-	stringStates->push_back("jump");
-	stringStates->push_back("run");
-	stringStates->push_back("runflip");
-	stringStates->push_back("shoot");
-	stringStates->push_back("ground");
-	stringStates->push_back("stand");
-	stringStates->push_back("sweep");
-	stringStates->push_back("sweepflip");
-	newGameObject->AddComponent<State>(new State(newGameObject, *stringStates));
-
-	gameObjectList->insert(gameObjectList->end(), tilemap->GetListGameObjects()->begin(), tilemap->GetListGameObjects()->end());
-
-	//tilemap->SetTilemapPosition(Vector3(0, 774, 0));
+	gameObjectList = new std::vector<GameObject*>();
 
 	m_dxBase->CreateSoundAndMusic(L"Resources/Music/09 Blast Hornet.wav", &m_backgroundMusic);
 	m_backgroundMusic->Play();
-	gameObjectList->insert(gameObjectList->end(), newGameObject);
+
+	newPlayer = new Player(m_dxBase);
+	newPlayer->SetTag("Player");
+	gameObjectList->insert(gameObjectList->end(), newPlayer);
+	//sceneQuadTree->Insert(newPlayer);
+	ShurikenBoss* newShuikenBoss = new ShurikenBoss(m_dxBase, Vector3(9760, 4500, 0), Vector3(0, 0, 0), Vector3(1, 1, 1));
+	gameObjectList->insert(gameObjectList->end(), newShuikenBoss);
+
+	for (size_t i = 0; i < tilemap->GetListGameObjects()->size(); i++)
+	{
+		if (tilemap->GetListGameObjects()->at(i)->GetTag() == "Enemy")
+		{
+			Enemy* newEnemy = new Enemy(m_dxBase, tilemap->GetListGameObjects()->at(i)->GetTransform()->GetPosition());
+			newEnemy->GetTransform()->SetScreenScale(Vector3(2, 2, 0));
+			newEnemy->SetTag("Enemy");
+			tilemap->GetListGameObjects()->at(i) = newEnemy;
+		}
+	}
+	gameObjectList->insert(gameObjectList->end(), tilemap->GetListGameObjects()->begin(), tilemap->GetListGameObjects()->end());
+	tilemap->GetQuadTree()->ClearTree(tilemap->GetQuadTree());
+	sceneQuadTree = new QuadTree(tilemap->GetRegion(), 1, 6);
+	for (size_t i = 0; i < gameObjectList->size(); i++)
+	{
+		sceneQuadTree->Insert(gameObjectList->at(i));
+		tilemap->GetQuadTree()->Insert(gameObjectList->at(i));
+	}
+	camera->SetPosition(newPlayer->GetTransform()->GetPosition());
+	Elevator* newElevator = new Elevator(m_dxBase);
+	gameObjectList->insert(gameObjectList->end(), newElevator);
+	sceneQuadTree->Insert(newElevator);
 }
 
 void TilemapScene::UnloadScene()

@@ -3,9 +3,10 @@
 #include "Sprite.h"
 #include "Animation.h"
 #include "Input.h"
+#include "GameObject.h"
+#include "QuadTree.h"
 
-
-namespace DirectXCore 
+namespace DirectXCore
 {
 	class Scene
 	{
@@ -20,7 +21,12 @@ namespace DirectXCore
 
 		virtual void OnKeyUp(KeyCode) = 0;
 		virtual void OnKeyDown(KeyCode) = 0;
-	};
 
+		std::vector<DirectXCore::GameObject*>* GetGameObjectList() { return gameObjectList; }
+		virtual void InsertGameObject(GameObject* _gameObject);
+	protected:
+		std::vector<DirectXCore::GameObject*>* gameObjectList;
+		QuadTree* sceneQuadTree;
+	};
 }
 

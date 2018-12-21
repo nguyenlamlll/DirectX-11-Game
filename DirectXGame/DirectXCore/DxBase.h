@@ -60,6 +60,8 @@ namespace DirectXCore
 		
 		// Properties
 		void GetDefaultSize(int& width, int& height) const;
+		//Get current Scene
+		Scene* GetCurrentScene() { return m_activeScene; }
 
 	private:
 		void Update(StepTimer const& timer);

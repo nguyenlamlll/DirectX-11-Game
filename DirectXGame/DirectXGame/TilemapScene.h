@@ -6,6 +6,12 @@
 #include "Renderer.h"
 #include "Animation.h"
 #include "State.h"
+#include "Player.h"
+#include "Enemy.h"
+#include "Bullet.h"
+#include "QuadTree.h"
+#include "ShurikenBoss.h"
+#include "Elevator.h"
 
 class TilemapScene :
 	public DirectXCore::Scene
@@ -36,13 +42,18 @@ private:
 	DirectXCore::Sprite* sprite;
 	std::vector<DirectXCore::Sprite*> bulletSprites;
 
-	DirectXCore::GameObject* newGameObject;
 	DirectXCore::Camera* camera;
 
-	std::vector<DirectXCore::GameObject*>* gameObjectList;
+	
 	bool collide = false;
 
 	DirectXCore::Sound* m_backgroundMusic;
 	bool first = true;
+
+	Player* newPlayer;
+
+	float currentTimer = 0;
+
+	QuadTree* currentQuadTree;
 };
 

@@ -22,10 +22,14 @@ namespace DirectXCore
 		void SetColliderPosition(Vector3 _newPosition);
 		void SetColliderScale(Vector3 _newScale);
 		void SetColliderTransform(Transform* _newTransform);
+		void OnCollisionEnter(Collider* _other,SimpleMath::Vector3 _normal);
+		void SetTrigger(bool _trigger) { isTrigger = _trigger; }
+		bool IsTrigger() { return isTrigger; }
 		~Collider();
 	private:
 		BoundingBox* collider;
 		bool collided;
+		bool isTrigger;
 	};
 }
 

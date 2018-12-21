@@ -16,6 +16,9 @@ namespace DirectXCore
 		void AddForce(SimpleMath::Vector3 _force);
 
 		SimpleMath::Vector3 GetAcceleration() { return acceleration; }
+		SimpleMath::Vector3 GetMovingVector() { return move; }
+		void SetGravity(SimpleMath::Vector3 _newGravity);
+		SimpleMath::Vector3 GetGravity() { return gravity; }
 		SimpleMath::Vector3 GetVelocity() { return velocity; }
 		void SetVelocity(SimpleMath::Vector3 _newVelocity) { velocity = _newVelocity; }
 		SimpleMath::Vector3 GetMass() { return mass; }
@@ -26,7 +29,7 @@ namespace DirectXCore
 		void OnPhysicUpdate(float _delta);
 		~Rigidbody();
 	private:
-		SimpleMath::Vector3 move,acceleration,position, velocity, force, impulse, mass, gravity = SimpleMath::Vector3(0, 9.8f, 0);
+		SimpleMath::Vector3 move,acceleration,position, velocity, force, impulse, mass, gravity = SimpleMath::Vector3(0, 20.8f, 0);
 		bool kinematic;
 		float accumulatedTime = 0.0f;
 	};

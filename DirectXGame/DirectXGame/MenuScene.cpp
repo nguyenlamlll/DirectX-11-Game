@@ -15,6 +15,7 @@ MenuScene::~MenuScene()
 
 void MenuScene::UpdateScene(float elapsedTime)
 {
+	// TIMER
 	if (m_currentTimer >= 0.5f) {
 		m_currentTimer = 0;
 		isAcceptingPress = true;
@@ -22,7 +23,7 @@ void MenuScene::UpdateScene(float elapsedTime)
 	else m_currentTimer += elapsedTime;
 
 
-	if (m_dxBase->GetInputManager()->IsKeyUp("S") && isAcceptingPress)
+	if (m_dxBase->GetInputManager()->IsKeyDown("S") && isAcceptingPress)
 	{
 		if (m_currentlySelectedOption >= 3)
 		{
@@ -39,7 +40,7 @@ void MenuScene::UpdateScene(float elapsedTime)
 
 	}
 
-	if (m_dxBase->GetInputManager()->IsKeyUp("W") && isAcceptingPress)
+	if (m_dxBase->GetInputManager()->IsKeyDown("W") && isAcceptingPress)
 	{
 		if (m_currentlySelectedOption <= 1)
 		{
