@@ -33,8 +33,23 @@ void DirectXCore::QuadTree::Insert(GameObject * _object)
 		if (nodes->at(3)->IsContain(_object->GetTransform()->GetPosition(), _object->GetTransform()->GetScale()))
 			nodes->at(3)->Insert(_object);
 	}
-	if (this->IsContain(_object->GetTransform()->GetPosition(), _object->GetTransform()->GetScale()))
-		objectList->push_back(_object);
+	else if (this->IsContain(_object->GetTransform()->GetPosition(), _object->GetTransform()->GetScale()))	objectList->push_back(_object);
+}
+
+void DirectXCore::QuadTree::Insert(GameObject * _object, bool mobile)
+{
+	if (nodes)
+	{
+		if (mobile || nodes->at(0)->IsContain(_object->GetTransform()->GetPosition(), _object->GetTransform()->GetScale()))
+			nodes->at(0)->Insert(_object, mobile);
+		if (mobile || nodes->at(1)->IsContain(_object->GetTransform()->GetPosition(), _object->GetTransform()->GetScale()))
+			nodes->at(1)->Insert(_object, mobile);
+		if (mobile || nodes->at(2)->IsContain(_object->GetTransform()->GetPosition(), _object->GetTransform()->GetScale()))
+			nodes->at(2)->Insert(_object, mobile);
+		if (mobile || nodes->at(3)->IsContain(_object->GetTransform()->GetPosition(), _object->GetTransform()->GetScale()))
+			nodes->at(3)->Insert(_object, mobile);
+	}
+	else if (mobile || this->IsContain(_object->GetTransform()->GetPosition(), _object->GetTransform()->GetScale())) 	objectList->push_back(_object);
 }
 
 bool DirectXCore::QuadTree::IsContain(Vector3 _position, Vector3 _scale)
@@ -56,6 +71,7 @@ void DirectXCore::QuadTree::UpdateWithCamera(Vector3 _position, Vector3 _scale, 
 
 void DirectXCore::QuadTree::GetBranchNodesWithCamera(QuadTree* _node, Vector3 _position, Vector3 _scale, float _elapsedTime, std::vector<GameObject*>* _objectLists)
 {
+	//Vector3 regionVec = Vector3(_node->region->right - _node->region->left, _node->region->bottom - _node->region->top, 0);
 	if (_node->nodes == NULL && _node->IsContain(_position, _scale)) {
 		_objectLists->insert(_objectLists->end(), _node->objectList->begin(), _node->objectList->end());
 		//return;
@@ -67,16 +83,21 @@ void DirectXCore::QuadTree::GetBranchNodesWithCamera(QuadTree* _node, Vector3 _p
 	}
 }
 
-void DirectXCore::QuadTree::ClearTree(QuadTree* _node)
+void DirectXCore::QuadTree::ClearTree()
 {
-	if (_node->nodes == NULL) {
+	if (this->nodes == NULL) {
 		objectList->clear();
-		return;
 	}
-	else if (_node->nodes != NULL)
+	else 
 	{
-		for (size_t i = 0; i < _node->nodes->size(); i++)
-			ClearTree(_node->nodes->at(i));
+		this->nodes->at(0)->ClearTree();
+		this->nodes->at(1)->ClearTree();
+		this->nodes->at(2)->ClearTree();
+		this->nodes->at(3)->ClearTree();
+	/*	ClearTree(this->nodes->at(0));
+		ClearTree(this->nodes->at(1));
+		ClearTree(this->nodes->at(2));
+		ClearTree(this->nodes->at(3));*/
 	}
 }
 

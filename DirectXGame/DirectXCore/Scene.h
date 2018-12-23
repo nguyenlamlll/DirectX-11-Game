@@ -23,7 +23,6 @@ namespace DirectXCore
 		virtual void OnKeyDown(KeyCode) = 0;
 
 		std::vector<DirectXCore::GameObject*>* GetGameObjectList() { return gameObjectList; }
-		virtual void InsertGameObject(GameObject* _gameObject);
 	protected:
 		std::vector<DirectXCore::GameObject*>* gameObjectList;
 		QuadTree* sceneQuadTree;

@@ -34,7 +34,7 @@ namespace DirectXCore
 			componentList->push_back(_component);
 			ReferenceGameObject();
 		}
-		virtual void OnCollisionEnter();
+		virtual void OnCollisionEnter(Collider* _other, Vector3 _normal);
 		~GameObject();
 	protected:
 		std::string tag;

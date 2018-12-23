@@ -130,7 +130,6 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="Bullet.cpp" />
-    <ClCompile Include="CatScene.cpp" />
     <ClCompile Include="Elevator.cpp" />
     <ClCompile Include="Enemy.cpp" />
     <ClCompile Include="Main.cpp" />
@@ -138,7 +137,6 @@
     <ClCompile Include="Player.cpp" />
     <ClCompile Include="ShurikenBoss.cpp" />
     <ClCompile Include="TilemapScene.cpp" />
-    <ClCompile Include="PingPongScene.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\DirectXCore\DirectXCore.vcxproj">

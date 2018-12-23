@@ -17,6 +17,7 @@ public:
 	void PreUpdate(float _deltaTime) override;
 	void Update(float _deltaTime) override;
 	void LateUpdate(float _deltaTime) override;
+	void OnCollisionEnter(Collider* _other, Vector3 _normal) override;
 	~Player();
 private:
 	std::shared_ptr<DirectXCore::DxBase> m_dxBase;

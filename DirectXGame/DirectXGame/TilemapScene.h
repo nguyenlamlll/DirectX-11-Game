@@ -40,7 +40,6 @@ private:
 
 	DirectXCore::TileMap* tilemap;
 	DirectXCore::Sprite* sprite;
-	std::vector<DirectXCore::Sprite*> bulletSprites;
 
 	DirectXCore::Camera* camera;
 
@@ -55,5 +54,6 @@ private:
 	float currentTimer = 0;
 
 	QuadTree* currentQuadTree;
+
 };
 

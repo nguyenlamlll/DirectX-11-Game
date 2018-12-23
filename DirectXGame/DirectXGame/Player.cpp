@@ -21,6 +21,7 @@ Player::Player(std::shared_ptr<DirectXCore::DxBase> _m_dxBase)
 	stringStates->push_back("sweep");
 	stringStates->push_back("sweepflip");
 	this->AddComponent<State>(new State(this, *stringStates));
+	//this->GetComponent<Rigidbody>()->SetGravity(Vector3(0, 0, 0));
 }
 
 void Player::PreUpdate(float _deltaTime)
@@ -51,6 +52,8 @@ void Player::PreUpdate(float _deltaTime)
 	lastFrameAcc = this->GetComponent<Rigidbody>()->GetAcceleration();
 	lastFrameMove = this->GetComponent<Rigidbody>()->GetMovingVector();
 	this->GetComponent<Collider>()->SetCollisionStatus(false);
+	if (lastFrameMove.x > 0) transform->SetRotation(Vector3(transform->GetRotation().x, 0, transform->GetRotation().z));
+	else if (lastFrameMove.x < 0) transform->SetRotation(Vector3(transform->GetRotation().x, 360, transform->GetRotation().z));
 }
 
 void Player::Update(float _deltaTime)
@@ -60,9 +63,9 @@ void Player::Update(float _deltaTime)
 	{
 		if (m_dxBase->GetInputManager()->IsKeyDown("L"))
 		{
-			Bullet* asd = new Bullet(L"Resources/Animations/bullet/lv2.png", m_dxBase, this->GetTransform()->GetPosition() + Vector3(100, 0, 0), Vector3(2, 2, 2), Vector3(5, 0, 0));
-			asd->SetTag("bullet");
-			m_dxBase->GetCurrentScene()->InsertGameObject(asd);
+			Bullet* asd = new Bullet(L"Resources/Animations/bullet/lv2.png", m_dxBase, this->GetTransform()->GetPosition() + Vector3(100, 0, 0), Vector3(2, 2, 2), Vector3(lastFrameMove.x > 0 ? 5 : -5, 0, 0));
+			asd->SetTag("PlayerBullet");
+			m_dxBase->GetCurrentScene()->GetGameObjectList()->insert(m_dxBase->GetCurrentScene()->GetGameObjectList()->end(), asd);
 			currentCountTimer = 0;
 		}
 	}
@@ -170,18 +173,18 @@ void Player::Update(float _deltaTime)
 	{
 		if (this->GetComponent<Rigidbody>()->GetVelocity().y != 0)
 		{
-			animationString = (lastFrameMove.x != 0) ? ((lastFrameMove.x > 0) ? L"Resources/Animations/sweep_wall.png" : L"Resources/Animations/sweep_wall_flip.png") : L"Resources/Animations/jump.png";
+			animationString = (lastFrameMove.x != 0) ? (L"Resources/Animations/sweep_wall.png") : L"Resources/Animations/jump.png";
 			animationCount = (this->GetComponent<Rigidbody>()->GetMovingVector().x == 0 && lastFrameMove.x != 0) ? 3 : 7;
 		}
 		else
 		{
-			animationString = (this->GetComponent<Rigidbody>()->GetMovingVector().x != 0) ? ((this->GetComponent<Rigidbody>()->GetMovingVector().x > 0) ? L"Resources/Animations/run.png" : L"Resources/Animations/run_flip.png") : L"Resources/Animations/stand.png";
+			animationString = (this->GetComponent<Rigidbody>()->GetMovingVector().x != 0) ? L"Resources/Animations/run.png" : L"Resources/Animations/stand.png";
 			animationCount = (this->GetComponent<Rigidbody>()->GetMovingVector().x != 0) ? 11 : 4;
 		}
 	}
 	else
 	{
-		animationString = (this->GetComponent<Rigidbody>()->GetMovingVector().x > 0) ? L"Resources/Animations/jump.png" : L"Resources/Animations/jump_flip.png";
+		animationString = L"Resources/Animations/jump.png";
 		animationCount = 7;
 	}
 	this->GetComponent<Animation>()->ResetAnimation(animationString, 1, animationCount);
@@ -190,6 +193,12 @@ void Player::Update(float _deltaTime)
 void Player::LateUpdate(float _deltaTime)
 {
 	GameObject::LateUpdate(_deltaTime);
+}
+
+void Player::OnCollisionEnter(Collider* _other, Vector3 _normal)
+{
+	if (_other->GetAttachedGameObject()->GetTag() == "Wall" || _other->GetAttachedGameObject()->GetTag() == "Elevator")
+		GameObject::OnCollisionEnter(_other, _normal);
 }
 
 

@@ -119,6 +119,18 @@ TileMap::TileMap(DirectXCore::DeviceResources *_deviceResource, const wchar_t * 
 				thisQuad->Insert(enemyObject);
 			}
 		}
+		else if (objectGroup->GetName() == "Shuriken")
+		{
+			for (size_t j = 0; j < objectGroup->GetNumObjects(); j++)
+			{
+				Tmx::Object *object = objectGroup->GetObjects().at(j);
+				GameObject *enemyObject = new GameObject();
+				enemyObject->SetTag("Shuriken");
+				enemyObject->GetTransform()->SetPosition((position + Vector3(object->GetX() + object->GetWidth() / 2, object->GetY() + object->GetHeight() / 2, 0))*scale);
+				gameObjectList->push_back(enemyObject);
+				thisQuad->Insert(enemyObject);
+			}
+		}
 	}
 }
 

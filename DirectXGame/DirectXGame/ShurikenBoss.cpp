@@ -19,11 +19,13 @@ ShurikenBoss::ShurikenBoss(std::shared_ptr<DirectXCore::DxBase> _m_dxBase, Simpl
 	stringStates->push_back("shoot");
 	stringStates->push_back("stand");
 	this->AddComponent<State>(new State(this, *stringStates));
+	direction = Vector3(0, -200.0f, 0);
 }
 
 void ShurikenBoss::PreUpdate(float _deltaTime)
 {
 	GameObject::PreUpdate(_deltaTime);
+	this->GetComponent<Rigidbody>()->Move(direction);
 }
 
 void ShurikenBoss::Update(float _deltaTime)
@@ -42,6 +44,21 @@ void ShurikenBoss::Update(float _deltaTime)
 void ShurikenBoss::LateUpdate(float _deltaTime)
 {
 	GameObject::LateUpdate(_deltaTime);
+}
+
+void ShurikenBoss::OnCollisionEnter(Collider * _other, Vector3 _normal)
+{
+	if (_other->GetAttachedGameObject()->GetTag() == "Wall")
+	{
+		if (_normal.y < 0)
+		{
+			if (_normal.x == 0) direction = Vector3(0, -200, 0);
+			//if (_normal.x < 0) if (direction.x > 0) this->GetComponent<Rigidbody>()->Move(Vector3(-200, 0, 0));
+			//if (_normal.x > 0) if (direction.x < 0) this->GetComponent<Rigidbody>()->Move(Vector3(200, 0, 0));
+
+		}
+		else if (_normal.y > 0) direction = Vector3(0, 200, 0);
+	}
 }
 
 

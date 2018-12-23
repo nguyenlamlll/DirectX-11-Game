@@ -78,22 +78,23 @@ void DirectXCore::Renderer::LoadTexture(const wchar_t * _charPath)
 
 void DirectXCore::Renderer::Render()
 {
+	DirectX::SpriteEffects effect = (attachedGameObject->GetTransform()->GetRotation().y == 0) ? DirectX::SpriteEffects_None : DirectX::SpriteEffects_FlipHorizontally;
 	m_spriteBatch->Begin(DirectX::SpriteSortMode_Deferred, m_states->NonPremultiplied());
-	m_spriteBatch->Draw(m_texture.Get(), attachedGameObject->GetTransform()->GetWorldToScreenPosition(), spriterect, Colors::White, 0.f, pivot, attachedGameObject->GetTransform()->GetScreenScale());
+	m_spriteBatch->Draw(m_texture.Get(), attachedGameObject->GetTransform()->GetWorldToScreenPosition(), spriterect, Colors::White, 0.f, pivot, attachedGameObject->GetTransform()->GetScreenScale(), effect);
 	m_spriteBatch->End();
 }
 
 void DirectXCore::Renderer::Render(SimpleMath::Vector3 _newPos)
 {
 	m_spriteBatch->Begin(DirectX::SpriteSortMode_Deferred, m_states->NonPremultiplied());
-	m_spriteBatch->Draw(m_texture.Get(), _newPos, spriterect, Colors::White, 0.f, pivot, Vector3(1, 1, 1));
+	m_spriteBatch->Draw(m_texture.Get(), _newPos, spriterect, Colors::White, 0.f, pivot, attachedGameObject->GetTransform()->GetScreenScale(), DirectX::SpriteEffects_None);
 	m_spriteBatch->End();
 }
 
 void DirectXCore::Renderer::Render(SimpleMath::Vector3 _newPos, SimpleMath::Vector3 _newRot, SimpleMath::Vector3 _newScl)
 {
 	m_spriteBatch->Begin(DirectX::SpriteSortMode_Deferred, m_states->NonPremultiplied());
-	m_spriteBatch->Draw(m_texture.Get(), _newPos, spriterect, Colors::White, 0.f, pivot, _newScl);
+	m_spriteBatch->Draw(m_texture.Get(), _newPos, spriterect, Colors::White, 0.f, pivot, _newScl, DirectX::SpriteEffects_None);
 	m_spriteBatch->End();
 }
 

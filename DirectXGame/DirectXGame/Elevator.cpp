@@ -10,7 +10,7 @@ Elevator::Elevator(std::shared_ptr<DirectXCore::DxBase> _m_dxBase)
 {
 	m_dxBase = _m_dxBase;
 	this->GetTransform()->SetPosition(Vector3(3590, 3810, 0));
-	this->GetTransform()->SetScale(Vector3(200, 100, 1));
+	this->GetTransform()->SetScale(Vector3(200, 50, 1));
 	this->GetTransform()->SetScreenScale(Vector3(3, 3, 1));
 	this->AddComponent<Renderer>(new Renderer(m_dxBase->GetDeviceResource(), L"Resources/rockman.png"));
 	this->AddComponent<Collider>(new Collider(this, this->GetTransform()));

@@ -15,48 +15,40 @@ TilemapScene::~TilemapScene()
 bool firstTime = false;
 void TilemapScene::UpdateScene(float elapsedTime)
 {
-	sceneQuadTree->ClearTree(sceneQuadTree);
+	sceneQuadTree->ClearTree();
 	for (size_t i = 0; i < gameObjectList->size(); i++) sceneQuadTree->Insert(gameObjectList->at(i));
 	//if (m_dxBase->GetInputManager()->IsKeyDown("W"))camera->SetPosition(camera->GetPosition() + Vector3(0, -50, 0));
 	//if (m_dxBase->GetInputManager()->IsKeyDown("A"))camera->SetPosition(camera->GetPosition() + Vector3(-50, 0, 0));
 	//if (m_dxBase->GetInputManager()->IsKeyDown("S"))camera->SetPosition(camera->GetPosition() + Vector3(0, 50, 0));
 	//if (m_dxBase->GetInputManager()->IsKeyDown("D"))camera->SetPosition(camera->GetPosition() + Vector3(50, 0, 0));
 	std::vector<DirectXCore::GameObject*>* objlist = new  std::vector<DirectXCore::GameObject*>();
-	//currentQuadTree->GetBranchNodesWithCamera(tilemap->GetQuadTree(), camera->GetPosition(), Vector3(500, 500, 1), elapsedTime, objlist);
-	sceneQuadTree->GetBranchNodesWithCamera(tilemap->GetQuadTree(), camera->GetPosition(), Vector3(400, 400, 1), elapsedTime, objlist);
-	//tilemap->GetQuadTree()->GetBranchNodesWithCamera(tilemap->GetQuadTree(), camera->GetPosition(), Vector3(500, 500, 1), elapsedTime, objlist);
-	Vector3 normal = Vector3(0, 0, 0);
-	for (size_t i = 0; i < gameObjectList->size(); i++) gameObjectList->at(i)->PreUpdate(elapsedTime);
-	if (currentTimer > 0.3f)
+	sceneQuadTree->GetBranchNodesWithCamera(sceneQuadTree, camera->GetPosition(), Vector3(100, 100, 1), elapsedTime, objlist);
+	for (size_t i = 0; i < objlist->size(); i++) objlist->at(i)->PreUpdate(elapsedTime);
+	/*for (size_t i = 0; i < listMobileGameObjects->size(); i++)
 	{
-		currentTimer = 0;
-	}
-	else currentTimer += elapsedTime;
-	/*for (size_t i = 0; i < objlist->size(); i++)
-	{
-		if (objlist->at(i)->GetComponent<Collider>())
+		if (listMobileGameObjects->at(i)->GetComponent<Collider>() && listMobileGameObjects->at(i)->GetTag()=="Player")
 		{
 			for (size_t j = 0; j < objlist->size(); j++)
 			{
-				if (objlist->at(j)->GetComponent<Collider>() && objlist->at(j) != objlist->at(i))
+				if (objlist->at(j)->GetComponent<Collider>())
 				{
-					bool colType = objlist->at(j)->GetComponent<Collider>()->GetCollider()->Intersects(*objlist->at(i)->GetComponent<Collider>()->GetCollider());
+					bool colType = objlist->at(j)->GetComponent<Collider>()->GetCollider()->Intersects(*listMobileGameObjects->at(i)->GetComponent<Collider>()->GetCollider());
 					if (colType)
 					{
-						float distanceX = objlist->at(j)->GetTransform()->GetPosition().x - objlist->at(i)->GetTransform()->GetPosition().x;
-						float distanceY = objlist->at(j)->GetTransform()->GetPosition().y - objlist->at(i)->GetTransform()->GetPosition().y;
-						float extentDistanceX = objlist->at(j)->GetComponent<Collider>()->GetCollider()->Extents.x + objlist->at(i)->GetComponent<Collider>()->GetCollider()->Extents.x;
-						float extentDistanceY = objlist->at(j)->GetComponent<Collider>()->GetCollider()->Extents.y + objlist->at(i)->GetComponent<Collider>()->GetCollider()->Extents.y;
+						float distanceX = listMobileGameObjects->at(i)->GetTransform()->GetPosition().x - objlist->at(j)->GetTransform()->GetPosition().x;
+						float distanceY = listMobileGameObjects->at(i)->GetTransform()->GetPosition().y - objlist->at(j)->GetTransform()->GetPosition().y;
+						float extentDistanceX = objlist->at(j)->GetComponent<Collider>()->GetCollider()->Extents.x + listMobileGameObjects->at(i)->GetComponent<Collider>()->GetCollider()->Extents.x;
+						float extentDistanceY = objlist->at(j)->GetComponent<Collider>()->GetCollider()->Extents.y + listMobileGameObjects->at(i)->GetComponent<Collider>()->GetCollider()->Extents.y;
 
-						if (objlist->at(j)->GetComponent<Rigidbody>())
+						if (listMobileGameObjects->at(i)->GetComponent<Rigidbody>())
 						{
 							if (abs(distanceX) < extentDistanceX)
 							{
 								if (abs(distanceX) < extentDistanceX * 9 / 10)
 								{
-									if ((objlist->at(j)->GetComponent<Rigidbody>()->GetAcceleration().y > 0 || objlist->at(j)->GetComponent<Rigidbody>()->GetMovingVector().y > 0) && distanceY < 0)
+									if ((listMobileGameObjects->at(i)->GetComponent<Rigidbody>()->GetAcceleration().y > 0 || listMobileGameObjects->at(i)->GetComponent<Rigidbody>()->GetMovingVector().y > 0) && distanceY < 0)
 										normal = (normal.y >= 0) ? normal + Vector3(0, -1, 0) : normal;
-									else if ((objlist->at(j)->GetComponent<Rigidbody>()->GetAcceleration().y < 0 || objlist->at(j)->GetComponent<Rigidbody>()->GetMovingVector().y < 0) && distanceY > 0)
+									else if ((listMobileGameObjects->at(i)->GetComponent<Rigidbody>()->GetAcceleration().y < 0 || listMobileGameObjects->at(i)->GetComponent<Rigidbody>()->GetMovingVector().y < 0) && distanceY > 0)
 										normal = (normal.y <= 0) ? normal + Vector3(0, 1, 0) : normal;
 								}
 							}
@@ -65,25 +57,49 @@ void TilemapScene::UpdateScene(float elapsedTime)
 							{
 								if (abs(distanceY) < extentDistanceY * 8.5f / 10)
 								{
-									if ((objlist->at(j)->GetComponent<Rigidbody>()->GetAcceleration().x > 0 || objlist->at(j)->GetComponent<Rigidbody>()->GetMovingVector().x > 0) && distanceX < 0)
+									if ((listMobileGameObjects->at(i)->GetComponent<Rigidbody>()->GetAcceleration().x > 0 || listMobileGameObjects->at(i)->GetComponent<Rigidbody>()->GetMovingVector().x > 0) && distanceX < 0)
 										normal = (normal.x >= 0) ? normal + Vector3(-1, 0, 0) : normal;
-									else if ((objlist->at(j)->GetComponent<Rigidbody>()->GetAcceleration().x < 0 || objlist->at(j)->GetComponent<Rigidbody>()->GetMovingVector().x < 0) && distanceX > 0)
+									else if ((listMobileGameObjects->at(i)->GetComponent<Rigidbody>()->GetAcceleration().x < 0 || listMobileGameObjects->at(i)->GetComponent<Rigidbody>()->GetMovingVector().x < 0) && distanceX > 0)
 										normal = (normal.x <= 0) ? normal + Vector3(1, 0, 0) : normal;
 								}
 							}
 							else;
 						}
 
-						objlist->at(i)->GetComponent<Collider>()->SetCollisionStatus(true);
 						objlist->at(j)->GetComponent<Collider>()->SetCollisionStatus(true);
-						objlist->at(j)->GetComponent<Collider>()->OnCollisionEnter(objlist->at(i)->GetComponent<Collider>(), normal);
-						objlist->at(i)->GetComponent<Collider>()->OnCollisionEnter(newPlayer->GetComponent<Collider>(), normal*-1);
+						listMobileGameObjects->at(i)->GetComponent<Collider>()->SetCollisionStatus(true);
+						listMobileGameObjects->at(i)->GetComponent<Collider>()->OnCollisionEnter(objlist->at(j)->GetComponent<Collider>(), normal);
+						objlist->at(j)->GetComponent<Collider>()->OnCollisionEnter(newPlayer->GetComponent<Collider>(), normal*-1);
+
+						if (objlist->at(j)->GetTag() == "Elevator")
+						{
+							if (objlist->at(j)->GetTransform()->GetPosition().y > 1760)
+							{
+								objlist->at(j)->GetTransform()->SetPosition(objlist->at(j)->GetTransform()->GetPosition() + Vector3(0, -5.0f, 0));
+								newPlayer->GetTransform()->SetPosition(newPlayer->GetTransform()->GetPosition() + Vector3(0, -5.0f, 0));
+							}
+						}
+					}
+				}
+			}
+		}
+		else if (listMobileGameObjects->at(i)->GetComponent<Collider>() && listMobileGameObjects->at(i)->GetTag() == "bullet")
+		{
+			for (size_t j = 0; j < objlist->size(); j++)
+			{
+				if (objlist->at(j)->GetComponent<Collider>() && objlist->at(j)->GetTag() == "Enemy")
+				{
+					bool colType = objlist->at(j)->GetComponent<Collider>()->GetCollider()->Intersects(*listMobileGameObjects->at(i)->GetComponent<Collider>()->GetCollider());
+					if (colType)
+					{
+						listMobileGameObjects->erase(listMobileGameObjects->begin() + i);
+						i--;
 					}
 				}
 			}
 		}
 	}*/
-	for (size_t i = 0; i < gameObjectList->size(); i++)
+	/*for (size_t i = 0; i < gameObjectList->size(); i++)
 	{
 		if (gameObjectList->at(i)->GetComponent<Collider>())
 		{
@@ -153,10 +169,73 @@ void TilemapScene::UpdateScene(float elapsedTime)
 			}
 		}
 
+	}*/
+
+	for (size_t i = 0; i < objlist->size(); i++)
+	{
+		if (objlist->at(i)->GetComponent<Collider>())
+		{
+			objlist->at(i)->GetComponent<Collider>()->SetCollisionStatus(false);
+			for (int j = 0; j < objlist->size(); j++)
+			{
+				if (objlist->at(j)->GetComponent<Collider>() && objlist->at(j) != objlist->at(i))
+				{
+					bool colType = objlist->at(i)->GetComponent<Collider>()->GetCollider()->Intersects(*objlist->at(j)->GetComponent<Collider>()->GetCollider());
+					if (colType)
+					{
+						Vector3 normal = Vector3(0, 0, 0);
+						if (i == 1)
+							bool l = false;
+						if (objlist->at(i)->GetComponent<Rigidbody>())
+						{
+							float distanceX = objlist->at(i)->GetTransform()->GetPosition().x - objlist->at(j)->GetTransform()->GetPosition().x;
+							float distanceY = objlist->at(i)->GetTransform()->GetPosition().y - objlist->at(j)->GetTransform()->GetPosition().y;
+							float extentDistanceX = objlist->at(i)->GetComponent<Collider>()->GetCollider()->Extents.x + objlist->at(j)->GetComponent<Collider>()->GetCollider()->Extents.x;
+							float extentDistanceY = objlist->at(i)->GetComponent<Collider>()->GetCollider()->Extents.y + objlist->at(j)->GetComponent<Collider>()->GetCollider()->Extents.y;
+
+							if (abs(distanceX) < extentDistanceX)
+							{
+								if (abs(distanceX) < extentDistanceX * 9 / 10)
+								{
+									if ((objlist->at(i)->GetComponent<Rigidbody>()->GetAcceleration().y > 0 || objlist->at(i)->GetComponent<Rigidbody>()->GetMovingVector().y > 0) && distanceY < 0)
+										normal = (normal.y >= 0) ? normal + Vector3(0, -1, 0) : normal;
+									else if ((objlist->at(i)->GetComponent<Rigidbody>()->GetAcceleration().y < 0 || objlist->at(i)->GetComponent<Rigidbody>()->GetMovingVector().y < 0) && distanceY > 0)
+										normal = (normal.y <= 0) ? normal + Vector3(0, 1, 0) : normal;
+								}
+							}
+							else;
+							if (abs(distanceY) < extentDistanceY)
+							{
+								if (abs(distanceY) < extentDistanceY * 8.5f / 10)
+								{
+									if ((objlist->at(i)->GetComponent<Rigidbody>()->GetAcceleration().x > 0 || objlist->at(i)->GetComponent<Rigidbody>()->GetMovingVector().x > 0) && distanceX < 0)
+										normal = (normal.x >= 0) ? normal + Vector3(-1, 0, 0) : normal;
+									else if ((objlist->at(i)->GetComponent<Rigidbody>()->GetAcceleration().x < 0 || objlist->at(i)->GetComponent<Rigidbody>()->GetMovingVector().x < 0) && distanceX > 0)
+										normal = (normal.x <= 0) ? normal + Vector3(1, 0, 0) : normal;
+								}
+							}
+							else;
+						}
+						objlist->at(i)->OnCollisionEnter(objlist->at(j)->GetComponent<Collider>(), normal);
+						objlist->at(j)->GetComponent<Collider>()->OnCollisionEnter(objlist->at(i)->GetComponent<Collider>(), normal*-1);
+						if (objlist->at(j)->GetTag() == "Elevator")
+						{
+							if (objlist->at(j)->GetTransform()->GetPosition().y > 1760)
+							{
+								objlist->at(j)->GetTransform()->SetPosition(objlist->at(j)->GetTransform()->GetPosition() + Vector3(0, -5.0f, 0));
+								objlist->at(i)->GetTransform()->SetPosition(objlist->at(i)->GetTransform()->GetPosition() + Vector3(0, -5.0f, 0));
+							}
+						}
+						normal = Vector3(0, 0, 0);
+					}
+				}
+			}
+		}
 	}
-	for (size_t i = 0; i < gameObjectList->size(); i++) gameObjectList->at(i)->Update(elapsedTime);
-	for (size_t i = 0; i < gameObjectList->size(); i++) gameObjectList->at(i)->LateUpdate(elapsedTime);
+	for (size_t i = 0; i < objlist->size(); i++) objlist->at(i)->Update(elapsedTime);
+	for (size_t i = 0; i < objlist->size(); i++) objlist->at(i)->LateUpdate(elapsedTime);
 	camera->SetPosition(newPlayer->GetTransform()->GetPosition());
+	//camera->SetPosition(Vector3(9740, 4500, 0));
 	delete objlist;
 }
 
@@ -187,9 +266,6 @@ void TilemapScene::LoadScene()
 	newPlayer = new Player(m_dxBase);
 	newPlayer->SetTag("Player");
 	gameObjectList->insert(gameObjectList->end(), newPlayer);
-	//sceneQuadTree->Insert(newPlayer);
-	ShurikenBoss* newShuikenBoss = new ShurikenBoss(m_dxBase, Vector3(9760, 4500, 0), Vector3(0, 0, 0), Vector3(1, 1, 1));
-	gameObjectList->insert(gameObjectList->end(), newShuikenBoss);
 
 	for (size_t i = 0; i < tilemap->GetListGameObjects()->size(); i++)
 	{
@@ -200,19 +276,32 @@ void TilemapScene::LoadScene()
 			newEnemy->SetTag("Enemy");
 			tilemap->GetListGameObjects()->at(i) = newEnemy;
 		}
+		else if (tilemap->GetListGameObjects()->at(i)->GetTag() == "Shuriken")
+		{
+			ShurikenBoss* newShuikenBoss = new ShurikenBoss(m_dxBase, tilemap->GetListGameObjects()->at(i)->GetTransform()->GetPosition(), Vector3(0, 0, 0), Vector3(1, 1, 1));
+			newShuikenBoss->GetTransform()->SetScreenScale(Vector3(3, 3, 0));
+			newShuikenBoss->AddComponent<Rigidbody>(new Rigidbody(newShuikenBoss));
+			newShuikenBoss->GetComponent<Rigidbody>()->SetGravity(Vector3(0, 0, 0));
+
+			tilemap->GetListGameObjects()->erase(tilemap->GetListGameObjects()->begin() + i);
+			//i--;
+			gameObjectList->insert(gameObjectList->end(), newShuikenBoss);
+		}
 	}
 	gameObjectList->insert(gameObjectList->end(), tilemap->GetListGameObjects()->begin(), tilemap->GetListGameObjects()->end());
-	tilemap->GetQuadTree()->ClearTree(tilemap->GetQuadTree());
-	sceneQuadTree = new QuadTree(tilemap->GetRegion(), 1, 6);
+	sceneQuadTree = new QuadTree(tilemap->GetRegion(), 1, 3);
 	for (size_t i = 0; i < gameObjectList->size(); i++)
 	{
 		sceneQuadTree->Insert(gameObjectList->at(i));
 		tilemap->GetQuadTree()->Insert(gameObjectList->at(i));
 	}
+
 	camera->SetPosition(newPlayer->GetTransform()->GetPosition());
 	Elevator* newElevator = new Elevator(m_dxBase);
+	newElevator->SetTag("Elevator");
 	gameObjectList->insert(gameObjectList->end(), newElevator);
-	sceneQuadTree->Insert(newElevator);
+
+	newPlayer->GetTransform()->SetPosition(Vector3(9400, 4650, 0));
 }
 
 void TilemapScene::UnloadScene()
