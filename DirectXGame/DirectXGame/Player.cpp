@@ -63,9 +63,10 @@ void Player::Update(float _deltaTime)
 	{
 		if (m_dxBase->GetInputManager()->IsKeyDown("L"))
 		{
-			Bullet* asd = new Bullet(L"Resources/Animations/bullet/lv2.png", m_dxBase, this->GetTransform()->GetPosition() + Vector3(100, 0, 0), Vector3(2, 2, 2), Vector3(lastFrameMove.x > 0 ? 5 : -5, 0, 0));
+			Bullet* asd = new Bullet(L"Resources/Animations/bullet/lv2.png", m_dxBase, this->GetTransform()->GetPosition() + Vector3(100, 0, 0), Vector3(2, 2, 2), Vector3(lastFrameMove.x > 0 ? 20 : -20, 0, 0));
 			asd->SetTag("PlayerBullet");
 			m_dxBase->GetCurrentScene()->GetGameObjectList()->insert(m_dxBase->GetCurrentScene()->GetGameObjectList()->end(), asd);
+			//m_dxBase->GetCurrentScene()->GetQuadTree()->Insert(asd);
 			currentCountTimer = 0;
 		}
 	}

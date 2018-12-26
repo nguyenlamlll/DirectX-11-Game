@@ -35,7 +35,7 @@ void Bullet::LateUpdate(float _deltaTime)
 
 void Bullet::OnCollisionEnter(Collider * _other, Vector3 _normal)
 {
-	if (_other->GetAttachedGameObject()->GetTag() == "Enemy")
+	if (_other->GetAttachedGameObject()->GetTag() == "Enemy" || _other->GetAttachedGameObject()->GetTag() == "Shuriken")
 	{
 		m_dxBase->GetCurrentScene()->GetGameObjectList()->erase(std::remove(m_dxBase->GetCurrentScene()->GetGameObjectList()->begin(), m_dxBase->GetCurrentScene()->GetGameObjectList()->end(),this), m_dxBase->GetCurrentScene()->GetGameObjectList()->end());
 	}

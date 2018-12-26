@@ -318,7 +318,6 @@
     </ResourceCompile>
   </ItemGroup>
   <ItemGroup>
-    <None Include="packages.config" />
     <None Include="zlibwapi.dll">
       <Filter>Resource Files</Filter>
     </None>
@@ -328,6 +327,7 @@
     <None Include="..\DirectXGame\myfile.spritefont">
       <Filter>Resource Files</Filter>
     </None>
+    <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
     <Image Include="cat.png">

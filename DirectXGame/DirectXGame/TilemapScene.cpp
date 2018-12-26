@@ -170,7 +170,6 @@ void TilemapScene::UpdateScene(float elapsedTime)
 		}
 
 	}*/
-
 	for (size_t i = 0; i < objlist->size(); i++)
 	{
 		if (objlist->at(i)->GetComponent<Collider>())
@@ -235,7 +234,7 @@ void TilemapScene::UpdateScene(float elapsedTime)
 	for (size_t i = 0; i < objlist->size(); i++) objlist->at(i)->Update(elapsedTime);
 	for (size_t i = 0; i < objlist->size(); i++) objlist->at(i)->LateUpdate(elapsedTime);
 	camera->SetPosition(newPlayer->GetTransform()->GetPosition());
-	//camera->SetPosition(Vector3(9740, 4500, 0));
+	//camera->SetPosition(Vector3(15000, 4500, 0));
 	delete objlist;
 }
 
@@ -278,14 +277,11 @@ void TilemapScene::LoadScene()
 		}
 		else if (tilemap->GetListGameObjects()->at(i)->GetTag() == "Shuriken")
 		{
-			ShurikenBoss* newShuikenBoss = new ShurikenBoss(m_dxBase, tilemap->GetListGameObjects()->at(i)->GetTransform()->GetPosition(), Vector3(0, 0, 0), Vector3(1, 1, 1));
-			newShuikenBoss->GetTransform()->SetScreenScale(Vector3(3, 3, 0));
-			newShuikenBoss->AddComponent<Rigidbody>(new Rigidbody(newShuikenBoss));
-			newShuikenBoss->GetComponent<Rigidbody>()->SetGravity(Vector3(0, 0, 0));
-
-			tilemap->GetListGameObjects()->erase(tilemap->GetListGameObjects()->begin() + i);
+			ShurikenBoss* newShuikenBoss = new ShurikenBoss(m_dxBase, tilemap->GetListGameObjects()->at(i)->GetTransform()->GetPosition(), Vector3(0, 0, 0), Vector3(3.5f, 3.5f, 1));
+			//tilemap->GetListGameObjects()->erase(tilemap->GetListGameObjects()->begin() + i);
 			//i--;
-			gameObjectList->insert(gameObjectList->end(), newShuikenBoss);
+			//gameObjectList->insert(gameObjectList->end(), newShuikenBoss);
+			tilemap->GetListGameObjects()->at(i) = newShuikenBoss;
 		}
 	}
 	gameObjectList->insert(gameObjectList->end(), tilemap->GetListGameObjects()->begin(), tilemap->GetListGameObjects()->end());
@@ -298,10 +294,11 @@ void TilemapScene::LoadScene()
 
 	camera->SetPosition(newPlayer->GetTransform()->GetPosition());
 	Elevator* newElevator = new Elevator(m_dxBase);
-	newElevator->SetTag("Elevator");
+	newElevator->SetTag("Elevator"); 
 	gameObjectList->insert(gameObjectList->end(), newElevator);
 
 	newPlayer->GetTransform()->SetPosition(Vector3(9400, 4650, 0));
+	//camera->SetPosition(Vector3(31250, 7600, 0));
 }
 
 void TilemapScene::UnloadScene()

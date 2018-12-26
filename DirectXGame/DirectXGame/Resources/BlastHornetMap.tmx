@@ -73,7 +73,7 @@
  </layer>
  <objectgroup id="7" name="Hornet" visible="0"/>
  <objectgroup id="6" name="Shuriken">
-  <object id="158" x="2520.12" y="1177.63"/>
+  <object id="158" x="2490.24" y="1157.57"/>
   <object id="160" x="7895.98" y="1947.01"/>
  </objectgroup>
  <objectgroup id="2" name="Stage" visible="0">
@@ -191,8 +191,8 @@
   <object id="167" x="3967" y="978" width="32" height="219"/>
   <object id="168" x="3971" y="980" width="281" height="35"/>
   <object id="169" x="4227" y="984" width="26" height="134"/>
-  <object id="170" x="2543" y="1023" width="333" height="129.924"/>
-  <object id="171" x="2272" y="1024" width="45" height="126.283"/>
+  <object id="170" x="2543" y="1023" width="333" height="127.718"/>
+  <object id="171" x="2272" y="1024" width="45" height="125.583"/>
   <object id="172" x="2271.82" y="1016.94" width="317.801" height="26.263"/>
   <object id="173" x="2019" y="1022" width="252" height="64"/>
  </objectgroup>
