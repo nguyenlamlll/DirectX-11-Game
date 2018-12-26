@@ -128,7 +128,7 @@ void MenuScene::LoadScene()
 	m_tilemap->SetCamera(m_camera);
 
 	m_logoGameObject = new GameObject();
-	m_logoGameObject->GetTransform()->SetPosition(Vector3(115.f, 10.f, 0));
+	m_logoGameObject->GetTransform()->SetPosition(Vector3(500.f, 220.f, 0));
 	m_logoGameObject->GetTransform()->SetScreenScale(Vector3(0.4f, 0.4f, 0.4f));
 	//m_logoGameObject->GetTransform()->SetScreenScale(Vector3(1, 1, 1));
 	m_logoGameObject->AddComponent<Renderer>(new Renderer(m_dxBase->GetDeviceResource(), L"Resources/Megaman_x3_logo.jpg"));
