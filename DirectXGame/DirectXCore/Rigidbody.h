@@ -29,7 +29,7 @@ namespace DirectXCore
 		void OnPhysicUpdate(float _delta);
 		~Rigidbody();
 	private:
-		SimpleMath::Vector3 move,acceleration,position, velocity, force, impulse, mass, gravity = SimpleMath::Vector3(0, 20.8f, 0);
+		SimpleMath::Vector3 move,acceleration,position, velocity, force, impulse, mass, gravity = SimpleMath::Vector3(0, 9.8f, 0);
 		bool kinematic;
 		float accumulatedTime = 0.0f;
 	};

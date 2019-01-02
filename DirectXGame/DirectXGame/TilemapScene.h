@@ -12,6 +12,7 @@
 #include "QuadTree.h"
 #include "ShurikenBoss.h"
 #include "Elevator.h"
+#include "HornetBoss.h"
 
 class TilemapScene :
 	public DirectXCore::Scene

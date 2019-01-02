@@ -34,6 +34,19 @@ void Elevator::LateUpdate(float _deltaTime)
 	GameObject::LateUpdate(_deltaTime);
 }
 
+void Elevator::OnCollisionEnter(Collider * _other, Vector3 _normal)
+{
+	GameObject::OnCollisionEnter(_other, _normal);
+	if (_other->GetAttachedGameObject()->GetTag() == "Player")
+	{
+		if (this->GetTransform()->GetPosition().y > 1760)
+		{
+			this->GetTransform()->SetPosition(this->GetTransform()->GetPosition() + Vector3(0, -5.0f, 0));
+			_other->GetAttachedGameObject()->GetTransform()->SetPosition(_other->GetAttachedGameObject()->GetTransform()->GetPosition() + Vector3(0, -5.0f, 0));
+		}
+	}
+}
+
 
 Elevator::~Elevator()
 {

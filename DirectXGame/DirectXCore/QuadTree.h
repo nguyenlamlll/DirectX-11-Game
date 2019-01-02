@@ -15,7 +15,7 @@ namespace DirectXCore
 		bool IsContain(Vector3 _position, Vector3 _scale);
 		void UpdateWithCamera(Vector3 _position, Vector3 _scale, float _elapsedTime);
 		std::vector<QuadTree*>* GetNodes() { return nodes; }
-		void GetBranchNodesWithCamera(QuadTree* _node, Vector3 _position, Vector3 _scale, float _elapsedTime, std::vector<GameObject*>* _objectLists);
+		void GetBranchNodesWithCamera(Vector3 _position, Vector3 _scale, float _elapsedTime, std::vector<GameObject*>* _objectLists);
 		std::vector<GameObject*>* GameObjectList() { return objectList; }
 		void ClearTree();
 	private:

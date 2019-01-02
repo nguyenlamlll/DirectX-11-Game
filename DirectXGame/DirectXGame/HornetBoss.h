@@ -7,10 +7,11 @@
 #include "Animation.h"
 #include "State.h"
 #include "Bullet.h"
+#include <cmath>
 
 using namespace DirectXCore;
 
-class HornetBoss :GameObject
+class HornetBoss : public GameObject
 {
 public:
 	HornetBoss();
@@ -23,7 +24,10 @@ public:
 private:
 	std::shared_ptr<DirectXCore::DxBase> m_dxBase;
 	Vector3 direction, force;
-	float currentBossTimer = 0.0f;
+	float currentBossTimer = 0.0f, stageTwoTimer, stageOneTimer, stageThreeTimer;
 	bool Grounded = false;
+	Vector3 leftPos, rightPos, originPos;
+	float angle = 0;
+	GameObject* _player;
 };
 

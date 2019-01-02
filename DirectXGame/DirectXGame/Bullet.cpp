@@ -11,10 +11,11 @@ Bullet::Bullet(const wchar_t* _path, std::shared_ptr<DirectXCore::DxBase> _m_dxB
 	this->GetTransform()->SetScale(Vector3(120, 120, 1));
 	this->GetTransform()->SetScreenScale(_scl);
 	this->AddComponent<Renderer>(new Renderer(m_dxBase->GetDeviceResource(), L"Resources/rockman.png"));
-	this->AddComponent<Animation>(new Animation(this->GetComponent<Renderer>(), 1, 11, 0.1f, 1.0f, true));
-	this->GetComponent<Animation>()->ResetAnimation(_path, 1, 16);
-	this->AddComponent<Collider>(new Collider(this,this->GetTransform()));
+	this->AddComponent<Animation>(new Animation(this->GetComponent<Renderer>(), 1, 4, 0.03f, 1.0f, true));
+	this->GetComponent<Animation>()->ResetAnimation(_path, 1, 4);
+	this->AddComponent<Collider>(new Collider(this, this->GetTransform()));
 	direction = _dir;
+	m_dxBase->GetCurrentScene()->GetGameObjectList()->insert(m_dxBase->GetCurrentScene()->GetGameObjectList()->end(), this);
 }
 
 void Bullet::PreUpdate(float _deltaTime)
@@ -24,7 +25,6 @@ void Bullet::PreUpdate(float _deltaTime)
 
 void Bullet::Update(float _deltaTime)
 {
-	this->GetTransform()->SetPosition(this->transform->GetPosition() + direction);
 	GameObject::Update(_deltaTime);
 }
 
@@ -35,9 +35,13 @@ void Bullet::LateUpdate(float _deltaTime)
 
 void Bullet::OnCollisionEnter(Collider * _other, Vector3 _normal)
 {
-	if (_other->GetAttachedGameObject()->GetTag() == "Enemy" || _other->GetAttachedGameObject()->GetTag() == "Shuriken")
+	if (this->GetTag() == "PlayerBullet" && (_other->GetAttachedGameObject()->GetTag() == "Enemy" || _other->GetAttachedGameObject()->GetTag() == "Shuriken"))
 	{
-		m_dxBase->GetCurrentScene()->GetGameObjectList()->erase(std::remove(m_dxBase->GetCurrentScene()->GetGameObjectList()->begin(), m_dxBase->GetCurrentScene()->GetGameObjectList()->end(),this), m_dxBase->GetCurrentScene()->GetGameObjectList()->end());
+		m_dxBase->GetCurrentScene()->GetGameObjectList()->erase(std::remove(m_dxBase->GetCurrentScene()->GetGameObjectList()->begin(), m_dxBase->GetCurrentScene()->GetGameObjectList()->end(), this), m_dxBase->GetCurrentScene()->GetGameObjectList()->end());
+	}
+	else if (this->GetTag() == "EnemyBullet" && _other->GetAttachedGameObject()->GetTag() == "Wall" && _normal.y < 0)
+	{
+		m_dxBase->GetCurrentScene()->GetGameObjectList()->erase(std::remove(m_dxBase->GetCurrentScene()->GetGameObjectList()->begin(), m_dxBase->GetCurrentScene()->GetGameObjectList()->end(), this), m_dxBase->GetCurrentScene()->GetGameObjectList()->end());
 	}
 }
 

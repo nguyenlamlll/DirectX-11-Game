@@ -93,7 +93,7 @@ TileMap::TileMap(DirectXCore::DeviceResources *_deviceResource, const wchar_t * 
 		{
 
 		}
-		else if (objectGroup->GetName() == "Wall")
+		/*else if (objectGroup->GetName() == "Wall")
 		{
 			for (size_t j = 0; j < objectGroup->GetNumObjects(); j++)
 			{
@@ -129,6 +129,20 @@ TileMap::TileMap(DirectXCore::DeviceResources *_deviceResource, const wchar_t * 
 				enemyObject->GetTransform()->SetPosition((position + Vector3(object->GetX() + object->GetWidth() / 2, object->GetY() + object->GetHeight() / 2, 0))*scale);
 				gameObjectList->push_back(enemyObject);
 				thisQuad->Insert(enemyObject);
+			}
+		}*/
+		else
+		{
+			for (size_t j = 0; j < objectGroup->GetNumObjects(); j++)
+			{
+				Tmx::Object *object = objectGroup->GetObjects().at(j);
+				GameObject *gameObject = new GameObject();
+				gameObject->GetTransform()->SetPosition((position + Vector3(object->GetX() + object->GetWidth() / 2, object->GetY() + object->GetHeight() / 2, 0))*scale);
+				gameObject->GetTransform()->SetScale(Vector3(object->GetWidth()*scale.x, object->GetHeight()*scale.y, 1));
+				gameObject->AddComponent<Collider>(new Collider(gameObject, gameObject->GetTransform()));
+				gameObject->SetTag(objectGroup->GetName());
+				gameObjectList->push_back(gameObject);
+				thisQuad->Insert(gameObject);
 			}
 		}
 	}

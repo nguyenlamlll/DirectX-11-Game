@@ -22,7 +22,7 @@ void TilemapScene::UpdateScene(float elapsedTime)
 	//if (m_dxBase->GetInputManager()->IsKeyDown("S"))camera->SetPosition(camera->GetPosition() + Vector3(0, 50, 0));
 	//if (m_dxBase->GetInputManager()->IsKeyDown("D"))camera->SetPosition(camera->GetPosition() + Vector3(50, 0, 0));
 	std::vector<DirectXCore::GameObject*>* objlist = new  std::vector<DirectXCore::GameObject*>();
-	sceneQuadTree->GetBranchNodesWithCamera(sceneQuadTree, camera->GetPosition(), Vector3(100, 100, 1), elapsedTime, objlist);
+	sceneQuadTree->GetBranchNodesWithCamera(camera->GetPosition(), Vector3(1, 1, 1), elapsedTime, objlist);
 	for (size_t i = 0; i < objlist->size(); i++) objlist->at(i)->PreUpdate(elapsedTime);
 	/*for (size_t i = 0; i < listMobileGameObjects->size(); i++)
 	{
@@ -217,14 +217,6 @@ void TilemapScene::UpdateScene(float elapsedTime)
 						}
 						objlist->at(i)->OnCollisionEnter(objlist->at(j)->GetComponent<Collider>(), normal);
 						objlist->at(j)->GetComponent<Collider>()->OnCollisionEnter(objlist->at(i)->GetComponent<Collider>(), normal*-1);
-						if (objlist->at(j)->GetTag() == "Elevator")
-						{
-							if (objlist->at(j)->GetTransform()->GetPosition().y > 1760)
-							{
-								objlist->at(j)->GetTransform()->SetPosition(objlist->at(j)->GetTransform()->GetPosition() + Vector3(0, -5.0f, 0));
-								objlist->at(i)->GetTransform()->SetPosition(objlist->at(i)->GetTransform()->GetPosition() + Vector3(0, -5.0f, 0));
-							}
-						}
 						normal = Vector3(0, 0, 0);
 					}
 				}
@@ -234,7 +226,6 @@ void TilemapScene::UpdateScene(float elapsedTime)
 	for (size_t i = 0; i < objlist->size(); i++) objlist->at(i)->Update(elapsedTime);
 	for (size_t i = 0; i < objlist->size(); i++) objlist->at(i)->LateUpdate(elapsedTime);
 	camera->SetPosition(newPlayer->GetTransform()->GetPosition());
-	//camera->SetPosition(Vector3(15000, 4500, 0));
 	delete objlist;
 }
 
@@ -283,9 +274,14 @@ void TilemapScene::LoadScene()
 			//gameObjectList->insert(gameObjectList->end(), newShuikenBoss);
 			tilemap->GetListGameObjects()->at(i) = newShuikenBoss;
 		}
+		else if (tilemap->GetListGameObjects()->at(i)->GetTag() == "Hornet")
+		{
+			HornetBoss* newHornetBoss = new HornetBoss(m_dxBase, tilemap->GetListGameObjects()->at(i)->GetTransform()->GetPosition(), Vector3(0, 0, 0), Vector3(3, 3, 3));
+			tilemap->GetListGameObjects()->at(i) = newHornetBoss;
+		}
 	}
 	gameObjectList->insert(gameObjectList->end(), tilemap->GetListGameObjects()->begin(), tilemap->GetListGameObjects()->end());
-	sceneQuadTree = new QuadTree(tilemap->GetRegion(), 1, 3);
+	sceneQuadTree = new QuadTree(tilemap->GetRegion(), 1, 4);
 	for (size_t i = 0; i < gameObjectList->size(); i++)
 	{
 		sceneQuadTree->Insert(gameObjectList->at(i));
@@ -294,11 +290,12 @@ void TilemapScene::LoadScene()
 
 	camera->SetPosition(newPlayer->GetTransform()->GetPosition());
 	Elevator* newElevator = new Elevator(m_dxBase);
-	newElevator->SetTag("Elevator"); 
+	newElevator->SetTag("Elevator");
 	gameObjectList->insert(gameObjectList->end(), newElevator);
 
-	newPlayer->GetTransform()->SetPosition(Vector3(9400, 4650, 0));
-	//camera->SetPosition(Vector3(31250, 7600, 0));
+	//newPlayer->GetTransform()->SetPosition(Vector3(9400, 4650, 0));
+	//newPlayer->GetTransform()->SetPosition(Vector3(31220, 7600, 0));
+	//camera->SetPosition(Vector3(31200, 7560, 0));
 }
 
 void TilemapScene::UnloadScene()

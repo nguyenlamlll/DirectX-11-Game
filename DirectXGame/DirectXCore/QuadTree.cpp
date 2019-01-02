@@ -13,6 +13,7 @@ DirectXCore::QuadTree::QuadTree(RECT * _mapSize, int _level, int _maximumLevel)
 	level = _level;
 	maximumLevel = _maximumLevel;
 	objectList = new std::vector<GameObject*>;
+	nodes = new std::vector<QuadTree*>;
 	Split();
 }
 
@@ -54,8 +55,8 @@ void DirectXCore::QuadTree::Insert(GameObject * _object, bool mobile)
 
 bool DirectXCore::QuadTree::IsContain(Vector3 _position, Vector3 _scale)
 {
-	bool notContainX = (_position.x + _scale.x<region->left || _position.x - _scale.x>region->right);
-	bool notContainY = (_position.y + _scale.y<region->top || _position.y - _scale.y>region->bottom);
+	bool notContainX = (_position.x + _scale.x<this->region->left || _position.x - _scale.x>this->region->right);
+	bool notContainY = (_position.y + _scale.y<this->region->top || _position.y - _scale.y>this->region->bottom);
 	// To be contained, both X and Y of an object must be within viewport.
 	// !notContainX is ContainX and so on with Y.
 	bool iscontain = !notContainX && !notContainY;
@@ -69,17 +70,19 @@ void DirectXCore::QuadTree::UpdateWithCamera(Vector3 _position, Vector3 _scale, 
 	}
 }
 
-void DirectXCore::QuadTree::GetBranchNodesWithCamera(QuadTree* _node, Vector3 _position, Vector3 _scale, float _elapsedTime, std::vector<GameObject*>* _objectLists)
+void DirectXCore::QuadTree::GetBranchNodesWithCamera(Vector3 _position, Vector3 _scale, float _elapsedTime, std::vector<GameObject*>* _objectLists)
 {
 	//Vector3 regionVec = Vector3(_node->region->right - _node->region->left, _node->region->bottom - _node->region->top, 0);
-	if (_node->nodes == NULL && _node->IsContain(_position, _scale)) {
-		_objectLists->insert(_objectLists->end(), _node->objectList->begin(), _node->objectList->end());
+	if (this->nodes == NULL && this->IsContain(_position, _scale)) {
+		_objectLists->insert(_objectLists->end(), this->objectList->begin(), this->objectList->end());
 		//return;
 	}
-	else if (_node->nodes != NULL)
+	else if (this->nodes != NULL)
 	{
-		for (size_t i = 0; i < _node->nodes->size(); i++)
-			GetBranchNodesWithCamera(_node->nodes->at(i), _position, _scale, _elapsedTime, _objectLists);
+		this->nodes->at(0)->GetBranchNodesWithCamera(_position, _scale, _elapsedTime, _objectLists);
+		this->nodes->at(1)->GetBranchNodesWithCamera(_position, _scale, _elapsedTime, _objectLists);
+		this->nodes->at(2)->GetBranchNodesWithCamera(_position, _scale, _elapsedTime, _objectLists);
+		this->nodes->at(3)->GetBranchNodesWithCamera(_position, _scale, _elapsedTime, _objectLists);
 	}
 }
 
@@ -88,16 +91,16 @@ void DirectXCore::QuadTree::ClearTree()
 	if (this->nodes == NULL) {
 		objectList->clear();
 	}
-	else 
+	else
 	{
 		this->nodes->at(0)->ClearTree();
 		this->nodes->at(1)->ClearTree();
 		this->nodes->at(2)->ClearTree();
 		this->nodes->at(3)->ClearTree();
-	/*	ClearTree(this->nodes->at(0));
-		ClearTree(this->nodes->at(1));
-		ClearTree(this->nodes->at(2));
-		ClearTree(this->nodes->at(3));*/
+		/*	ClearTree(this->nodes->at(0));
+			ClearTree(this->nodes->at(1));
+			ClearTree(this->nodes->at(2));
+			ClearTree(this->nodes->at(3));*/
 	}
 }
 
@@ -105,22 +108,30 @@ void DirectXCore::QuadTree::ClearTree()
 
 void DirectXCore::QuadTree::Split()
 {
-	if (level != maximumLevel)
+	if (this->level < this->maximumLevel)
 	{
-		nodes = new std::vector<QuadTree*>;
+		LONG rectWidth = this->region->right - this->region->left;
+		LONG rectHeight = this->region->bottom - this->region->top;
 		RECT* rect1 = new RECT(), *rect2 = new RECT(), *rect3 = new RECT, *rect4 = new RECT();
-		rect1->left = rect3->left = region->left;
-		rect1->right = rect3->right = rect2->left = rect4->left = region->right / 2;
-		rect2->right = rect4->right = region->right;
+		rect1->left = rect3->left = this->region->left;
+		rect1->right = rect3->right = rect2->left = rect4->left = rect1->left + rectWidth / 2;
+		rect2->right = rect4->right = this->region->right;
 
-		rect1->top = rect2->top = region->top;
-		rect1->bottom = rect2->bottom = rect3->top = rect4->top = region->bottom / 2;
-		rect3->bottom = rect4->bottom = region->bottom;
+		rect1->top = rect2->top = this->region->top;
+		rect1->bottom = rect2->bottom = rect3->top = rect4->top = rect1->top + rectHeight / 2;
+		rect3->bottom = rect4->bottom = this->region->bottom;
 
-		nodes->push_back(new QuadTree(rect1, level + 1, maximumLevel));
-		nodes->push_back(new QuadTree(rect2, level + 1, maximumLevel));
-		nodes->push_back(new QuadTree(rect3, level + 1, maximumLevel));
-		nodes->push_back(new QuadTree(rect4, level + 1, maximumLevel));
+		if (rect1->bottom - rect1->top == 2048)
+			int a = 1;
+
+		this->nodes->push_back(new QuadTree(rect1, this->level + 1, this->maximumLevel));
+		this->nodes->push_back(new QuadTree(rect2, this->level + 1, this->maximumLevel));
+		this->nodes->push_back(new QuadTree(rect3, this->level + 1, this->maximumLevel));
+		this->nodes->push_back(new QuadTree(rect4, this->level + 1, this->maximumLevel));
 	}
-	else nodes = NULL;
+	else
+	{
+		this->nodes = NULL;
+	}
+
 }

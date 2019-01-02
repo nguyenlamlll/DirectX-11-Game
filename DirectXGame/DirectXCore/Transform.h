@@ -15,7 +15,7 @@ namespace DirectXCore
 		Vector3 GetWorldToScreenPosition() { return screenPosition; }
 		void SetWorldToScreenPosition(Vector3 _cameraShift);
 		void SetPosition(Vector3 _newPosition);
-		void LerpPosition(Vector3 _newPosition,float _deltatime) { position.Lerp(position,_newPosition,_deltatime); }
+		void LerpPosition(Vector3 _newPosition,float _deltatime) { position = position.Lerp(position,_newPosition,_deltatime); }
 
 		Vector3 GetRotation() { return rotation; }
 		void SetRotation(Vector3 _newRotation);

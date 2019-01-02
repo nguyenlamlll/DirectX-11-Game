@@ -22,6 +22,7 @@ public:
 private:
 	std::shared_ptr<DirectXCore::DxBase> m_dxBase;
 	Vector3 lastFrameAcc, lastFrameMove;
-	float currentCountTimer = 0;
+	float currentCountTimer = 0, weaponTimer = 0;
+	bool shoot = false;
 };
 
