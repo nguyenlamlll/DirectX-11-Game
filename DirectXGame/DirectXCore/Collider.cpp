@@ -6,16 +6,19 @@ using namespace DirectXCore;
 
 Collider::Collider()
 {
+	isTrigger = false;
 }
 DirectXCore::Collider::Collider(GameObject * _attachedGameObject, Transform* _gameObjectTransform)
 {
 	attachedGameObject = _attachedGameObject;
 	collider = new BoundingBox(_gameObjectTransform->GetPosition(), _gameObjectTransform->GetScale());
 	SetColliderTransform(_gameObjectTransform);
+	isTrigger = false;
 }
 DirectXCore::Collider::Collider(GameObject * _attachedGameObject, Vector3 _pos, Vector3 _rot, Vector3 _scl)
 {
 	attachedGameObject = _attachedGameObject;
+	isTrigger = false;
 }
 void DirectXCore::Collider::PreUpdate(float _deltaTime)
 {

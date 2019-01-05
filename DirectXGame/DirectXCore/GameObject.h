@@ -19,6 +19,8 @@ namespace DirectXCore
 		Transform* GetTransform() { return transform; }
 		std::string GetTag() { return tag; }
 		void SetTag(std::string _newTag) {  tag = _newTag; }
+		std::string GetName() { return name; }
+		void SetName(std::string _newName) {  name = _newName; }
 		template<class ComponentType>	ComponentType* GetComponent() {
 			for (size_t i = 0; i < componentList->size(); i++)
 			{
@@ -37,7 +39,7 @@ namespace DirectXCore
 		virtual void OnCollisionEnter(Collider* _other, Vector3 _normal);
 		~GameObject();
 	protected:
-		std::string tag;
+		std::string tag,name;
 		Transform* transform;
 		std::vector<Component*>* componentList;
 	private:

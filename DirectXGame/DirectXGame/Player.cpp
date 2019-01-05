@@ -22,10 +22,12 @@ Player::Player(std::shared_ptr<DirectXCore::DxBase> _m_dxBase)
 	stringStates->push_back("sweepflip");
 	this->AddComponent<State>(new State(this, *stringStates));
 	this->GetComponent<Rigidbody>()->SetGravity(Vector3(0, 30, 0));
+	cutscene = false;
 }
 
 void Player::PreUpdate(float _deltaTime)
 {
+	cutscene = false;
 	GameObject::PreUpdate(_deltaTime);
 	if (m_dxBase->GetInputManager()->IsKeyDown("D"))
 	{
@@ -40,7 +42,6 @@ void Player::PreUpdate(float _deltaTime)
 		//this->GetComponent<Rigidbody>()->AddForce(Vector3(-3, 0, 0));
 		//camera->SetPosition(camera->GetPosition() + Vector3(-10, 0, 0));
 	}
-
 	if (m_dxBase->GetInputManager()->IsKeyDown("S"))
 	{
 		//camera->SetPosition(camera->GetPosition() + Vector3(0, 10, 0));
@@ -59,7 +60,6 @@ void Player::PreUpdate(float _deltaTime)
 void Player::Update(float _deltaTime)
 {
 	GameObject::Update(_deltaTime);
-
 	if (m_dxBase->GetInputManager()->IsKeyDown("W") && this->GetComponent<Collider>()->GetCollisionStatus())
 	{
 		if (this->GetComponent<Rigidbody>()->GetVelocity().y == 0)
@@ -127,7 +127,22 @@ void Player::Update(float _deltaTime)
 		else this->GetComponent<State>()->SetState("none");
 	}
 	else currentCountTimer += _deltaTime;
-	if (weaponTimer > 3.0f)
+	if (weaponTimer > 0.8f && weaponTimer < 1.8f)
+	{
+		if (shoot && m_dxBase->GetInputManager()->IsKeyUp("L"))
+		{
+			Bullet* asd = new Bullet(L"Resources/Animations/bullet/lv1.png", m_dxBase, this->GetTransform()->GetPosition() + Vector3(transform->GetRotation().y == 0 ? 10 : -10, 0, 0), Vector3(5, 5, 5), Vector3(transform->GetRotation().y == 0 ? 20 : -20, 0, 0));
+			asd->GetComponent<Animation>()->ResetAnimation(L"Resources/Animations/bullet/lv2.png", 1, 16);
+			asd->SetTag("PlayerBullet");
+			asd->AddComponent<Rigidbody>(new Rigidbody(asd));
+			asd->GetComponent<Rigidbody>()->SetGravity(Vector3(0, 0, 0));
+			asd->GetComponent<Rigidbody>()->AddForce(Vector3(transform->GetRotation().y == 0 ? 1000 : -1000, 0, 0));
+			this->GetComponent<State>()->SetState("shoot");
+			shoot = false;
+		}
+		else this->GetComponent<State>()->SetState("none");
+	}
+	else if (weaponTimer > 1.8f)
 	{
 		if (shoot && m_dxBase->GetInputManager()->IsKeyUp("L"))
 		{
@@ -138,17 +153,16 @@ void Player::Update(float _deltaTime)
 			asd->GetComponent<Rigidbody>()->SetGravity(Vector3(0, 0, 0));
 			asd->GetComponent<Rigidbody>()->AddForce(Vector3(transform->GetRotation().y == 0 ? 1000 : -1000, 0, 0));
 			this->GetComponent<State>()->SetState("shoot");
-			//currentCountTimer = 0;
-			//weaponTimer = 0;
 			shoot = false;
 		}
 		else this->GetComponent<State>()->SetState("none");
 	}
-	else
+	if (weaponTimer < 1.8f)
 	{
 		if (m_dxBase->GetInputManager()->IsKeyDown("L")) weaponTimer += _deltaTime;
 		else shoot = false;
 	}
+	if (cutscene) this->GetComponent<Rigidbody>()->SetVelocity(Vector3(0, 0, 0));
 }
 
 void Player::LateUpdate(float _deltaTime)
@@ -159,7 +173,23 @@ void Player::LateUpdate(float _deltaTime)
 void Player::OnCollisionEnter(Collider* _other, Vector3 _normal)
 {
 	if (_other->GetAttachedGameObject()->GetTag() == "Wall" || _other->GetAttachedGameObject()->GetTag() == "Elevator")
+	{
 		GameObject::OnCollisionEnter(_other, _normal);
+		if (_normal.x != 0 && this->GetComponent<Rigidbody>()->GetVelocity().y > 0 && lastFrameMove.x != 0)
+		{
+			this->GetComponent<Rigidbody>()->AddForce(Vector3(0, this->GetComponent<Rigidbody>()->GetVelocity().y/-2, 0));
+		}
+	}
+
+	else if (_other->GetAttachedGameObject()->GetTag() == "Door")
+	{
+		if (lastFrameMove.x >= 0)
+		{
+			cutscene = true;
+			this->GetTransform()->SetPosition(this->GetTransform()->GetPosition() + Vector3(3, 0, 0));
+		}
+		else if (lastFrameMove.x < 0) GameObject::OnCollisionEnter(_other, _normal);
+	}
 }
 
 

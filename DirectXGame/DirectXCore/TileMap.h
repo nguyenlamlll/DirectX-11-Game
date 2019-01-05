@@ -22,6 +22,7 @@ namespace DirectXCore
 		void SetTilemapScale(SimpleMath::Vector3 _scale);
 		QuadTree* GetQuadTree() { return thisQuad; }
 		std::vector<GameObject*>* GetListGameObjects() { return gameObjectList; }
+		std::vector<GameObject*>* GetListAreas() { return listAreas; }
 		RECT* GetRegion() { return newRegion; }
 		~TileMap();
 	private:
@@ -34,7 +35,7 @@ namespace DirectXCore
 		Camera* mainCamera;
 		DirectXCore::DeviceResources* deviceResource;
 		std::vector<GameObject*>* gameObjectList;
-		std::vector<GameObject*>* sectorObjects;
+		std::vector<GameObject*>* listAreas;
 		Renderer* thisRenderer;
 		QuadTree* thisQuad;
 		RECT* newRegion;

@@ -79,7 +79,9 @@ void Enemy::Update(float _deltaTime)
 		{
 			if (this->GetComponent<State>()->GetState() != "stand") {
 				this->GetComponent<State>()->SetState("stand");
-				this->GetComponent<Animation>()->ResetAnimation(L"Resources/Animations/enemies/stand.png", 1, 4);
+				if (this->GetName() == "Brute") this->GetComponent<Animation>()->ResetAnimation(L"Resources/Animations/enemies/enemies11.png", 1, 4);
+				else if (this->GetName() == "Copter") this->GetComponent<Animation>()->ResetAnimation(L"Resources/Animations/enemies/enemies18.png", 1, 6);
+				else this->GetComponent<Animation>()->ResetAnimation(L"Resources/Animations/enemies/stand.png", 1, 4);
 				this->GetTransform()->SetScale(Vector3(this->GetComponent<Animation>()->GetFrameScale().x / 2, this->GetComponent<Animation>()->GetFrameScale().y / 2, 1)*this->GetTransform()->GetScreenScale());
 			}
 		}
@@ -115,10 +117,7 @@ void Enemy::LateUpdate(float _deltaTime)
 void Enemy::OnCollisionEnter(Collider * _other, Vector3 _normal)
 {
 	if (_other->GetAttachedGameObject()->GetTag() == "Wall") GameObject::OnCollisionEnter(_other, _normal);
-	if (_other->GetAttachedGameObject()->GetTag() == "PlayerBullet")
-	{
-		death = true;
-	}
+	if (_other->GetAttachedGameObject()->GetTag() == "PlayerBullet") death = true;
 }
 
 Enemy::~Enemy()

@@ -10,6 +10,7 @@ TileMap::TileMap()
 TileMap::TileMap(DirectXCore::DeviceResources *_deviceResource, const wchar_t * path)
 {
 	gameObjectList = new std::vector<GameObject*>();
+	listAreas = new std::vector<GameObject*>();
 	deviceResource = _deviceResource;
 	tilemap = new Tmx::Map;
 	std::wstring ws(path);
@@ -39,12 +40,6 @@ TileMap::TileMap(DirectXCore::DeviceResources *_deviceResource, const wchar_t * 
 		thisRenderer = new Renderer(_deviceResource, spritePath);
 		thisRenderer->SetPivot(Vector3(tileset->GetTileWidth() / 2 + 5, tileset->GetTileHeight() / 2 + 5, 0));
 		//thisRenderer->SetPivot(Vector3(0, 0, 0));
-		GameObject* renderingThing = new GameObject();
-		renderingThing->AddComponent<Renderer>(new Renderer(_deviceResource, spritePath));
-		renderingThing->GetTransform()->SetScreenScale(scale);
-		renderingThing->GetTransform()->SetScale(Vector3(tileset->GetImage()->GetWidth(), tileset->GetImage()->GetHeight(), 1));// old tilemap
-		//renderingThing->GetTransform()->SetScale(Vector3(tileset->GetImageInTileset()->GetWidth(),tileset->GetImageInTileset()->GetHeight(),1)); // new tilemap
-		listRenderers.push_back(renderingThing);
 	}
 	for (int i = 0; i < tilemap->GetNumTileLayers(); i++)
 	{
@@ -89,9 +84,20 @@ TileMap::TileMap(DirectXCore::DeviceResources *_deviceResource, const wchar_t * 
 				listRenderers.at(j)->GetTransform()->SetPosition(Vector3(object->GetX(), object->GetY(), 0));
 			}
 		}
-		else if (objectGroup->GetName() == "Stage")
+		else if (objectGroup->GetName() == "Area")
 		{
-
+			for (size_t j = 0; j < objectGroup->GetNumObjects(); j++)
+			{
+				Tmx::Object *object = objectGroup->GetObjects().at(j);
+				GameObject *gameObject = new GameObject();
+				gameObject->GetTransform()->SetPosition((position + Vector3(object->GetX() + object->GetWidth() / 2, object->GetY() + object->GetHeight() / 2, 0))*scale);
+				gameObject->GetTransform()->SetScale(Vector3(object->GetWidth()*scale.x, object->GetHeight()*scale.y, 1));
+				gameObject->AddComponent<Collider>(new Collider(gameObject, gameObject->GetTransform()));
+				gameObject->GetComponent<Collider>()->SetTrigger(true);
+				gameObject->SetTag(objectGroup->GetName());
+				gameObject->SetName(object->GetName());
+				listAreas->push_back(gameObject);
+			}
 		}
 		/*else if (objectGroup->GetName() == "Wall")
 		{
@@ -141,6 +147,7 @@ TileMap::TileMap(DirectXCore::DeviceResources *_deviceResource, const wchar_t * 
 				gameObject->GetTransform()->SetScale(Vector3(object->GetWidth()*scale.x, object->GetHeight()*scale.y, 1));
 				gameObject->AddComponent<Collider>(new Collider(gameObject, gameObject->GetTransform()));
 				gameObject->SetTag(objectGroup->GetName());
+				gameObject->SetName(object->GetName());
 				gameObjectList->push_back(gameObject);
 				thisQuad->Insert(gameObject);
 			}

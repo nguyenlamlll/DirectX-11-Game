@@ -225,7 +225,26 @@ void TilemapScene::UpdateScene(float elapsedTime)
 	}
 	for (size_t i = 0; i < objlist->size(); i++) objlist->at(i)->Update(elapsedTime);
 	for (size_t i = 0; i < objlist->size(); i++) objlist->at(i)->LateUpdate(elapsedTime);
-	camera->SetPosition(newPlayer->GetTransform()->GetPosition());
+
+	BoundingBox * camBB = new BoundingBox(newPlayer->GetTransform()->GetPosition(), Vector3(camera->GetWidth() / 2, camera->GetHeight() / 2, 0));
+	bool containsX = false;
+	bool containsY = false;
+	for (size_t i = 0; i < tilemap->GetListAreas()->size(); i++)
+	{
+		if (i == 0)
+			int a = 1;
+		BoundingBox * objBB = tilemap->GetListAreas()->at(i)->GetComponent<Collider>()->GetCollider();
+		float distanceX = abs(camBB->Center.x - objBB->Center.x);
+		float distanceY = abs(camBB->Center.y - objBB->Center.y);
+		float diameterX = (objBB->Extents.x - camBB->Extents.x);
+		float diameterY = objBB->Extents.y - camBB->Extents.y;
+		if (distanceX <= diameterX)
+			containsX = true;
+		if (distanceY <= diameterY)
+			containsY = true;
+	}
+	if (containsX || containsY) camera->SetPosition(Vector3(camBB->Center.x, camBB->Center.y, 0));
+	//camera->SetPosition(Vector3(containsX ? camBB->Center.x : camera->GetPosition().x, containsY ? camBB->Center.y : camera->GetPosition().y, 0));
 	delete objlist;
 }
 
@@ -245,7 +264,7 @@ void TilemapScene::RenderScene()
 
 void TilemapScene::LoadScene()
 {
-	m_dxBase->CreateCamera(&camera);
+	camera = new Camera(m_dxBase->GetDeviceResource()->GetOutputSize().right / 2, m_dxBase->GetDeviceResource()->GetOutputSize().bottom / 2);
 	tilemap = new TileMap(m_dxBase->GetDeviceResource(), L"Resources/BlastHornetMap.tmx");
 	tilemap->SetCamera(camera);
 	gameObjectList = new std::vector<GameObject*>();
@@ -264,6 +283,7 @@ void TilemapScene::LoadScene()
 			Enemy* newEnemy = new Enemy(m_dxBase, tilemap->GetListGameObjects()->at(i)->GetTransform()->GetPosition());
 			newEnemy->GetTransform()->SetScreenScale(Vector3(2, 2, 0));
 			newEnemy->SetTag("Enemy");
+			newEnemy->SetName(tilemap->GetListGameObjects()->at(i)->GetName());
 			tilemap->GetListGameObjects()->at(i) = newEnemy;
 		}
 		else if (tilemap->GetListGameObjects()->at(i)->GetTag() == "Shuriken")
@@ -293,7 +313,9 @@ void TilemapScene::LoadScene()
 	newElevator->SetTag("Elevator");
 	gameObjectList->insert(gameObjectList->end(), newElevator);
 
-	//newPlayer->GetTransform()->SetPosition(Vector3(9400, 4650, 0));
+	//newPlayer->GetTransform()->SetPosition(Vector3(530, 3700, 0));
+	//camera->SetPosition(Vector3(530, 3520, 0));
+	newPlayer->GetTransform()->SetPosition(Vector3(9400, 4740, 0));
 	//newPlayer->GetTransform()->SetPosition(Vector3(31220, 7600, 0));
 	//camera->SetPosition(Vector3(31200, 7560, 0));
 }
