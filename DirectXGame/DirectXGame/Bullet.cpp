@@ -26,6 +26,7 @@ void Bullet::PreUpdate(float _deltaTime)
 void Bullet::Update(float _deltaTime)
 {
 	GameObject::Update(_deltaTime);
+	if (this->GetName() == "BruteBullet") this->GetTransform()->LerpPosition(target, _deltaTime);
 }
 
 void Bullet::LateUpdate(float _deltaTime)
@@ -39,10 +40,18 @@ void Bullet::OnCollisionEnter(Collider * _other, Vector3 _normal)
 	{
 		m_dxBase->GetCurrentScene()->GetGameObjectList()->erase(std::remove(m_dxBase->GetCurrentScene()->GetGameObjectList()->begin(), m_dxBase->GetCurrentScene()->GetGameObjectList()->end(), this), m_dxBase->GetCurrentScene()->GetGameObjectList()->end());
 	}
-	else if (this->GetTag() == "EnemyBullet" && _other->GetAttachedGameObject()->GetTag() == "Wall" && _normal.y < 0)
+	else if (this->GetTag() == "EnemyBullet")
 	{
-		m_dxBase->GetCurrentScene()->GetGameObjectList()->erase(std::remove(m_dxBase->GetCurrentScene()->GetGameObjectList()->begin(), m_dxBase->GetCurrentScene()->GetGameObjectList()->end(), this), m_dxBase->GetCurrentScene()->GetGameObjectList()->end());
+		if ((_other->GetAttachedGameObject()->GetTag() == "Wall" && _normal.y < 0) || _other->GetAttachedGameObject()->GetTag() == "Player")
+			m_dxBase->GetCurrentScene()->GetGameObjectList()->erase(std::remove(m_dxBase->GetCurrentScene()->GetGameObjectList()->begin(), m_dxBase->GetCurrentScene()->GetGameObjectList()->end(), this), m_dxBase->GetCurrentScene()->GetGameObjectList()->end());
 	}
+}
+
+void Bullet::SetTarget(Vector3 _target)
+{
+	target.x = _target.x;
+	target.y = _target.y;
+	target.z = _target.z;
 }
 
 Bullet::~Bullet()

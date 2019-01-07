@@ -315,7 +315,7 @@ void TilemapScene::LoadScene()
 
 	//newPlayer->GetTransform()->SetPosition(Vector3(530, 3700, 0));
 	//camera->SetPosition(Vector3(530, 3520, 0));
-	newPlayer->GetTransform()->SetPosition(Vector3(9400, 4740, 0));
+	newPlayer->GetTransform()->SetPosition(Vector3(9460, 4740, 0));
 	//newPlayer->GetTransform()->SetPosition(Vector3(31220, 7600, 0));
 	//camera->SetPosition(Vector3(31200, 7560, 0));
 }

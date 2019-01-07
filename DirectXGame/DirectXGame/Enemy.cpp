@@ -8,6 +8,7 @@ Enemy::Enemy()
 
 Enemy::Enemy(std::shared_ptr<DirectXCore::DxBase> _m_dxBase)
 {
+	player = NULL;
 	bulletTimer = 0;
 	deathTimer = 0;
 	death = false;
@@ -28,6 +29,7 @@ Enemy::Enemy(std::shared_ptr<DirectXCore::DxBase> _m_dxBase)
 
 Enemy::Enemy(std::shared_ptr<DirectXCore::DxBase> _m_dxBase, SimpleMath::Vector3 _instantiatePosition)
 {
+	player = NULL;
 	bulletTimer = 0;
 	deathTimer = 0;
 	death = false;
@@ -47,6 +49,7 @@ Enemy::Enemy(std::shared_ptr<DirectXCore::DxBase> _m_dxBase, SimpleMath::Vector3
 
 Enemy::Enemy(std::shared_ptr<DirectXCore::DxBase> _m_dxBase, SimpleMath::Vector3 _instantiatePosition, SimpleMath::Vector3 _instantiateRotation, SimpleMath::Vector3 _instantiateScale)
 {
+	player = NULL;
 	bulletTimer = 0;
 	deathTimer = 0;
 	death = false;
@@ -75,28 +78,83 @@ void Enemy::Update(float _deltaTime)
 	GameObject::Update(_deltaTime);
 	if (!death)
 	{
-		if (this->GetComponent<State>())
+		if (this->GetName() == "Brute")
 		{
-			if (this->GetComponent<State>()->GetState() != "stand") {
-				this->GetComponent<State>()->SetState("stand");
-				if (this->GetName() == "Brute") this->GetComponent<Animation>()->ResetAnimation(L"Resources/Animations/enemies/enemies11.png", 1, 4);
-				else if (this->GetName() == "Copter") this->GetComponent<Animation>()->ResetAnimation(L"Resources/Animations/enemies/enemies18.png", 1, 6);
-				else this->GetComponent<Animation>()->ResetAnimation(L"Resources/Animations/enemies/stand.png", 1, 4);
-				this->GetTransform()->SetScale(Vector3(this->GetComponent<Animation>()->GetFrameScale().x / 2, this->GetComponent<Animation>()->GetFrameScale().y / 2, 1)*this->GetTransform()->GetScreenScale());
+			if (player == NULL)
+			{
+				for (size_t i = 0; i < m_dxBase->GetCurrentScene()->GetGameObjectList()->size(); i++)
+				{
+					if (m_dxBase->GetCurrentScene()->GetGameObjectList()->at(i)->GetTag() == "Player") player = m_dxBase->GetCurrentScene()->GetGameObjectList()->at(i);
+				}
 			}
+			if (this->GetComponent<State>())
+			{
+				if (this->GetComponent<State>()->GetState() != "stand") {
+					this->GetComponent<State>()->SetState("stand");
+					this->GetComponent<Animation>()->ResetAnimation(L"Resources/Animations/enemies/enemies11.png", 1, 4);
+					this->GetTransform()->SetScale(Vector3(this->GetComponent<Animation>()->GetFrameScale().x / 2, this->GetComponent<Animation>()->GetFrameScale().y / 2, 1)*this->GetTransform()->GetScreenScale());
+				}
+			}
+			if (bulletTimer >= 3.0f)
+			{
+				Bullet* asd = new Bullet(L"Resources/Animations/bullet/lv1.png", m_dxBase, this->GetTransform()->GetPosition() + Vector3(transform->GetRotation().y == 0 ? 10 : -10, -10, 0), Vector3(2, 2, 2), Vector3(transform->GetRotation().y == 0 ? 20 : -20, 0, 0));
+				asd->SetTag("EnemyBullet");
+				asd->SetName("BruteBullet");
+				asd->SetTarget(player->GetTransform()->GetPosition());
+				asd->GetComponent<Animation>()->ResetAnimation(L"Resources/Animations/enemies/rocket.png", 1, 2);
+				asd->GetTransform()->SetScale(Vector3(5, 5, 5));
+				//asd->AddComponent<Rigidbody>(new Rigidbody(asd));
+				//asd->GetComponent<Rigidbody>()->SetVelocity(Vector3(0, 100.0f, 0));
+				//asd->GetComponent<Rigidbody>()->AddForce(Vector3(-300, -200, 0));
+				bulletTimer = 0;
+			}
+			else bulletTimer += _deltaTime;
 		}
-		if (bulletTimer >= 3.0f)
+		else if (this->GetName() == "Copter")
 		{
-			Bullet* asd = new Bullet(L"Resources/Animations/bullet/lv1.png", m_dxBase, this->GetTransform()->GetPosition() + Vector3(transform->GetRotation().y == 0 ? 10 : -10, -10, 0), Vector3(2, 2, 2), Vector3(transform->GetRotation().y == 0 ? 20 : -20, 0, 0));
-			asd->SetTag("EnemyBullet");
-			asd->GetComponent<Animation>()->ResetAnimation(L"Resources/Animations/enemies/1.png", 1, 1);
-			asd->GetTransform()->SetScale(Vector3(5, 5, 5));
-			asd->AddComponent<Rigidbody>(new Rigidbody(asd));
-			asd->GetComponent<Rigidbody>()->SetVelocity(Vector3(0, 100.0f, 0));
-			asd->GetComponent<Rigidbody>()->AddForce(Vector3(-300, -200, 0));
-			bulletTimer = 0;
+			if (this->GetComponent<State>())
+			{
+				if (this->GetComponent<State>()->GetState() != "stand") {
+					this->GetComponent<State>()->SetState("stand");
+					this->GetComponent<Animation>()->ResetAnimation(L"Resources/Animations/enemies/enemies15.png", 1, 4);
+					this->GetTransform()->SetScale(Vector3(this->GetComponent<Animation>()->GetFrameScale().x / 2, this->GetComponent<Animation>()->GetFrameScale().y / 2, 1)*this->GetTransform()->GetScreenScale());
+				}
+			}
+			if (bulletTimer >= 3.0f)
+			{
+				Bullet* asd = new Bullet(L"Resources/Animations/bullet/lv1.png", m_dxBase, this->GetTransform()->GetPosition() + Vector3(transform->GetRotation().y == 0 ? 10 : -10, -10, 0), Vector3(2, 2, 2), Vector3(transform->GetRotation().y == 0 ? 20 : -20, 0, 0));
+				asd->SetTag("EnemyBullet");
+				asd->GetComponent<Animation>()->ResetAnimation(L"Resources/Animations/enemies/enemies17.png", 1, 4);
+				asd->GetTransform()->SetScale(Vector3(5, 5, 5));
+				asd->AddComponent<Rigidbody>(new Rigidbody(asd));
+				bulletTimer = 0;
+			}
+			else bulletTimer += _deltaTime;
+
 		}
-		else bulletTimer += _deltaTime;
+		else
+		{
+			if (this->GetComponent<State>())
+			{
+				if (this->GetComponent<State>()->GetState() != "stand") {
+					this->GetComponent<State>()->SetState("stand");
+					this->GetComponent<Animation>()->ResetAnimation(L"Resources/Animations/enemies/stand.png", 1, 4);
+					this->GetTransform()->SetScale(Vector3(this->GetComponent<Animation>()->GetFrameScale().x / 2, this->GetComponent<Animation>()->GetFrameScale().y / 2, 1)*this->GetTransform()->GetScreenScale());
+				}
+			}
+			if (bulletTimer >= 3.0f)
+			{
+				Bullet* asd = new Bullet(L"Resources/Animations/bullet/lv1.png", m_dxBase, this->GetTransform()->GetPosition() + Vector3(transform->GetRotation().y == 0 ? 10 : -10, -10, 0), Vector3(2, 2, 2), Vector3(transform->GetRotation().y == 0 ? 20 : -20, 0, 0));
+				asd->SetTag("EnemyBullet");
+				asd->GetComponent<Animation>()->ResetAnimation(L"Resources/Animations/enemies/1.png", 1, 1);
+				asd->GetTransform()->SetScale(Vector3(5, 5, 5));
+				asd->AddComponent<Rigidbody>(new Rigidbody(asd));
+				asd->GetComponent<Rigidbody>()->SetVelocity(Vector3(0, 100.0f, 0));
+				asd->GetComponent<Rigidbody>()->AddForce(Vector3(-300, -200, 0));
+				bulletTimer = 0;
+			}
+			else bulletTimer += _deltaTime;
+		}
 	}
 	else
 	{

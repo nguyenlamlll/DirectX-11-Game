@@ -20,11 +20,12 @@ ShurikenBoss::ShurikenBoss(std::shared_ptr<DirectXCore::DxBase> _m_dxBase, Simpl
 	stringStates->push_back("shoot");
 	stringStates->push_back("stand");
 	this->AddComponent<State>(new State(this, *stringStates));
-	//direction = Vector3(0, -400.0f, 0);
-	//direction = Vector3(-400, 0, 0);
 	force = Vector3(0, 0, 0);
 	this->GetComponent<Rigidbody>()->SetGravity(Vector3(0, 20.0f, 0));
+	direction = Vector3(-400, 0, 0);
+
 	//this->GetComponent<Rigidbody>()->SetGravity(Vector3(0, 0, 0));
+	//direction = Vector3(0, 400, 0);
 	this->SetTag("Shuriken");
 }
 
@@ -57,21 +58,25 @@ void ShurikenBoss::LateUpdate(float _deltaTime)
 
 void ShurikenBoss::OnCollisionEnter(Collider * _other, Vector3 _normal)
 {
-	if (_other->GetAttachedGameObject()->GetTag() == "Wall")
+	if (_other->GetAttachedGameObject()->GetTag() == "Wall" || _other->GetAttachedGameObject()->GetTag() == "Door")
 	{
-		/*if (_normal.x < 0) direction = Vector3(0, 250, 0);
-		if (_normal.x > 0) direction = Vector3(0, -250, 0);
-		if (_normal.y < 0) direction = Vector3(-250, 0, 0);
-		if (_normal.y > 0) direction = Vector3(250, 0, 0);*/
+		GameObject::OnCollisionEnter(_other, _normal);
+		/*if (_normal.x < 0)
+			direction = Vector3(0, 250, 0);
+		else if (_normal.x > 0)
+			direction = Vector3(0, -250, 0);
+		if (_normal.y < 0)
+			direction = Vector3(-250, 0, 0);
+		else if (_normal.y > 0)
+			direction = Vector3(250, 0, 0);*/
 
-		GameObject::OnCollisionEnter(_other,_normal);
 		if (_normal.x < 0) direction = Vector3(-400, 0, 0);
 		if (_normal.x > 0) direction = Vector3(400, 0, 0);
 		if (_normal.y < 0) Grounded = true;
 	}
 	else if (_other->GetAttachedGameObject()->GetTag() == "PlayerBullet")
 	{
-		if (Grounded) 
+		if (Grounded)
 			this->GetComponent<Rigidbody>()->AddForce(Vector3(0, -800, 0));
 	}
 }

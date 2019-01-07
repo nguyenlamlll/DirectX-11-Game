@@ -25,5 +25,6 @@ private:
 	std::shared_ptr<DirectXCore::DxBase> m_dxBase;
 	float bulletTimer,deathTimer;
 	bool death;
+	GameObject* player;
 };
 

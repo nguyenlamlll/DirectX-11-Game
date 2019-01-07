@@ -10,7 +10,7 @@
 
 using namespace DirectXCore;
 
-class Bullet :	public GameObject
+class Bullet : public GameObject
 {
 public:
 	Bullet();
@@ -19,9 +19,10 @@ public:
 	void Update(float _deltaTime) override;
 	void LateUpdate(float _deltaTime) override;
 	void OnCollisionEnter(Collider* _other, Vector3 _normal) override;
+	void SetTarget(Vector3 _target);
 	~Bullet();
 private:
 	std::shared_ptr<DirectXCore::DxBase> m_dxBase;
-	Vector3 direction;
+	Vector3 direction, target;
 };
 
