@@ -7,7 +7,7 @@
 
 namespace DirectXCore
 {
-	class GameObject:public Object
+	class GameObject :public Object
 	{
 	public:
 		GameObject();
@@ -18,9 +18,9 @@ namespace DirectXCore
 		GameObject* GetGameObject() { return this; }
 		Transform* GetTransform() { return transform; }
 		std::string GetTag() { return tag; }
-		void SetTag(std::string _newTag) {  tag = _newTag; }
+		void SetTag(std::string _newTag) { tag = _newTag; }
 		std::string GetName() { return name; }
-		void SetName(std::string _newName) {  name = _newName; }
+		void SetName(std::string _newName) { name = _newName; }
 		template<class ComponentType>	ComponentType* GetComponent() {
 			for (size_t i = 0; i < componentList->size(); i++)
 			{
@@ -31,17 +31,20 @@ namespace DirectXCore
 		template<class ComponentType>	void AddComponent(ComponentType *_component) {
 			for (size_t i = 0; i < componentList->size(); i++)
 			{
-				if (ComponentType* compo = dynamic_cast<ComponentType*>(componentList->at(i))) return ;
+				if (ComponentType* compo = dynamic_cast<ComponentType*>(componentList->at(i))) return;
 			}
 			componentList->push_back(_component);
 			ReferenceGameObject();
 		}
 		virtual void OnCollisionEnter(Collider* _other, Vector3 _normal);
+		void SetActive(bool _active) { isActive = _active; };
+		bool IsActive() { return isActive; }
 		~GameObject();
 	protected:
-		std::string tag,name;
+		std::string tag, name;
 		Transform* transform;
 		std::vector<Component*>* componentList;
+		bool isActive = true;
 	private:
 		void ReferenceGameObject();
 	};

@@ -26,6 +26,14 @@ void DirectXCore::Sound::Play()
 	}
 }
 
+void DirectXCore::Sound::Play(DirectX::AudioEngine* audioEngine, const wchar_t * fileName)
+{
+	if (m_fileName != fileName) m_fileName = fileName;
+	m_soundEffect = std::make_unique<SoundEffect>(audioEngine, fileName);
+	m_soundInstance = m_soundEffect->CreateInstance();
+	m_soundInstance->Play();
+}
+
 void DirectXCore::Sound::Loop()
 {
 }

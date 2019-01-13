@@ -94,7 +94,7 @@ void DirectXCore::Renderer::Render(SimpleMath::Vector3 _newPos)
 void DirectXCore::Renderer::Render(SimpleMath::Vector3 _newPos, SimpleMath::Vector3 _newRot, SimpleMath::Vector3 _newScl)
 {
 	m_spriteBatch->Begin(DirectX::SpriteSortMode_Deferred, m_states->NonPremultiplied());
-	m_spriteBatch->Draw(m_texture.Get(), _newPos, spriterect, Colors::White, 0.f, pivot, _newScl, DirectX::SpriteEffects_None);
+	m_spriteBatch->Draw(m_texture.Get(), _newPos, spriterect, Colors::White, _newRot.z, pivot, _newScl, DirectX::SpriteEffects_None);
 	m_spriteBatch->End();
 }
 

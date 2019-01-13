@@ -27,7 +27,7 @@ namespace DirectXCore
 		void CreateCamera(Camera** returnCamera);
 		void CreateTilemap(const wchar_t * tilemapSpriteName, TileMap** returnTilemap);
 		void CreateSprite(const wchar_t* spriteName, Sprite** returnSprite);
-
+		std::shared_ptr<DirectX::AudioEngine> GetAudioEngine() { return m_audioEngine; }
 		void CreateText(const wchar_t* fontPath, const wchar_t* content, Text** returnText);
 
 		void InitializeWithScene(int index);

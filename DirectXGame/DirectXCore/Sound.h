@@ -12,12 +12,13 @@ namespace DirectXCore
 		~Sound();
 
 		void Play();
+		void Play(DirectX::AudioEngine* audioEngine, const wchar_t* fileName);
 		void Loop();
 
 	private:
 		std::unique_ptr<DirectX::SoundEffect> m_soundEffect;
 		std::unique_ptr<DirectX::SoundEffectInstance> m_soundInstance;
-		wchar_t m_fileName;
+		const wchar_t* m_fileName;
 	};
 }
 
