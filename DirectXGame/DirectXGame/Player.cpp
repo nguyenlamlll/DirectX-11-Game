@@ -3,9 +3,9 @@
 Player::Player(std::shared_ptr<DirectXCore::DxBase> _m_dxBase)
 {
 	m_dxBase = _m_dxBase;
-	this->GetTransform()->SetPosition(Vector3(50, 3500, 0));
-	this->GetTransform()->SetScale(Vector3(120, 120, 1));
-	this->GetTransform()->SetScreenScale(Vector3(3, 3, 1));
+	this->GetTransform()->SetPosition(Vector3(500, 0, 0));
+	this->GetTransform()->SetScale(Vector3(40, 40, 1));
+	this->GetTransform()->SetScreenScale(Vector3(1, 1, 1));
 	this->AddComponent<Renderer>(new Renderer(_m_dxBase->GetDeviceResource(), L"Resources/rockman.png"));
 	this->AddComponent<Rigidbody>(new Rigidbody(this));
 	this->AddComponent<Collider>(new Collider(this, this->GetTransform()));

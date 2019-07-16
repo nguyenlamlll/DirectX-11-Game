@@ -15,12 +15,21 @@ void TestScene::UpdateScene(float elapsedTime)
 {
 	
 
-
 	player->PreUpdate(elapsedTime);
 	box1->PreUpdate(elapsedTime);
 
+	float normalX, normalY;
+	float contactTime = PhysicsManager::GetInstance()->CheckSweptAABB(player, box1, normalX, normalY);
+
+	if (normalY < 0 && contactTime < 1)
+	{
+		bool a = PhysicsManager::GetInstance()->Collided(box1->GetComponent<Collider>()->GetCollider(), player->GetComponent<Collider>()->GetCollider());
+		int asdasdasdasd = 1;
+	}
+
 	if (PhysicsManager::GetInstance()->Collided(box1->GetComponent<Collider>()->GetCollider(), player->GetComponent<Collider>()->GetCollider()))
 	{
+		
 		if (abs(player->GetComponent<Collider>()->GetColliderPosition().x - box1->GetComponent<Collider>()->GetColliderPosition().x) <= (player->GetComponent<Collider>()->GetColliderScale().x / 2 + box1->GetComponent<Collider>()->GetColliderScale().x / 2))
 		{
 			float j = abs(player->GetComponent<Collider>()->GetColliderPosition().y - box1->GetComponent<Collider>()->GetColliderPosition().y);
@@ -60,7 +69,7 @@ void TestScene::LoadScene()
 	camera = new Camera(m_dxBase->GetDeviceResource()->GetOutputSize().right / 2, m_dxBase->GetDeviceResource()->GetOutputSize().bottom / 2);
 
 	box1 = new GameObject();
-	box1->GetTransform()->SetPosition(Vector3(500,500, 0));
+	box1->GetTransform()->SetPosition(Vector3(500,200, 0));
 	box1->GetTransform()->SetScale(Vector3(1000, 40, 1));
 	box1->GetTransform()->SetScreenScale(Vector3(1, 1, 1));
 	box1->AddComponent<Renderer>(new Renderer(m_dxBase->GetDeviceResource(), L"Resources/rockman.png"));

@@ -38,19 +38,20 @@ void DirectXCore::Rigidbody::PreUpdate(float _deltaTime)
 	//}
 	AddForce(gravity);
 	//velocity = acceleration + move;
+	//velocity = (acceleration + move)*_deltaTime;
 }
 
 void DirectXCore::Rigidbody::Update(float _deltaTime)
 {
 	//AddForce(gravity);
-	velocity = acceleration + move;
+	velocity = (acceleration + move)*_deltaTime;
 	//velocity += move;
 }
 
 void DirectXCore::Rigidbody::LateUpdate(float _deltaTime)
 {
 	if (!kinematic && attachedGameObject)
-		attachedGameObject->GetTransform()->SetPosition(attachedGameObject->GetTransform()->GetPosition() + (velocity)*_deltaTime);
+		attachedGameObject->GetTransform()->SetPosition(attachedGameObject->GetTransform()->GetPosition() + velocity);
 	//move = SimpleMath::Vector3(0, 0, 0);
 }
 

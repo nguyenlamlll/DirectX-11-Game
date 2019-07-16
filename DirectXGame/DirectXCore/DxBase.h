@@ -9,6 +9,9 @@
 #include "Scene.h"
 #include "Text.h"
 #include "Input.h"
+#include "Singleton.h"
+#include "PhysicsManager.h"
+#include "ObjectManager.h"
 
 namespace DirectXCore 
 {

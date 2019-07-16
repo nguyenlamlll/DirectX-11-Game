@@ -137,6 +137,7 @@
     <ClCompile Include="MenuScene.cpp" />
     <ClCompile Include="Player.cpp" />
     <ClCompile Include="ShurikenBoss.cpp" />
+    <ClCompile Include="TestScene.cpp" />
     <ClCompile Include="TilemapScene.cpp" />
   </ItemGroup>
   <ItemGroup>
@@ -155,6 +156,7 @@
     <ClInclude Include="Player.h" />
     <ClInclude Include="resource.h" />
     <ClInclude Include="ShurikenBoss.h" />
+    <ClInclude Include="TestScene.h" />
     <ClInclude Include="TilemapScene.h" />
   </ItemGroup>
   <ItemGroup>

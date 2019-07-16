@@ -168,7 +168,10 @@
     <ClInclude Include="DirectXCore.h" />
     <ClInclude Include="DxBase.h" />
     <ClInclude Include="GameObject.h" />
+    <ClInclude Include="ObjectManager.h" />
+    <ClInclude Include="PhysicsManager.h" />
     <ClInclude Include="QuadTree.h" />
+    <ClInclude Include="Singleton.h" />
     <ClInclude Include="State.h" />
     <ClInclude Include="Text.h" />
     <ClInclude Include="Input.h" />

@@ -1,5 +1,4 @@
-#pragma once
-#include "DirectXCore.h"
+﻿#pragma once
 
 #define NOMINMAX
 
@@ -141,6 +140,36 @@ namespace DirectXCore
 				// return the time of collision
 				return entryTime;
 			}
+		}
+		float CheckSweptAABB(GameObject* obj1, GameObject* obj2, float& normalx, float& normaly)
+		{
+			Box* b1 = new Box();
+			Box* b2 = new Box();
+
+			b1->x = obj1->GetTransform()->GetPosition().x - obj1->GetTransform()->GetScale().x / 2;
+			b1->y = obj1->GetTransform()->GetPosition().y - obj1->GetTransform()->GetScale().y / 2;
+			b1->w = obj1->GetTransform()->GetScale().x;
+			b1->h = obj1->GetTransform()->GetScale().y;
+
+			b2->x = obj2->GetTransform()->GetPosition().x - obj2->GetTransform()->GetScale().x / 2;
+			b2->y = obj2->GetTransform()->GetPosition().y - obj2->GetTransform()->GetScale().y / 2;
+			b2->w = obj2->GetTransform()->GetScale().x;
+			b2->h = obj2->GetTransform()->GetScale().y;
+
+			if (!obj1->GetComponent<Rigidbody>()) b1->vx = b1->vy = 0;
+			else
+			{
+				b1->vx = obj1->GetComponent<Rigidbody>()->GetVelocity().x;
+				b1->vy = obj1->GetComponent<Rigidbody>()->GetVelocity().y;
+			}
+			if (!obj2->GetComponent<Rigidbody>()) b2->vx = b2->vy = 0;
+			else
+			{
+				b2->vx = obj2->GetComponent<Rigidbody>()->GetVelocity().x;
+				b2->vy = obj2->GetComponent<Rigidbody>()->GetVelocity().y;
+			}
+
+			return SweptAABB(*b1, *b2, normalx, normaly);
 		}
 		bool Collided(BoundingBox* b1, BoundingBox* b2)
 		{
