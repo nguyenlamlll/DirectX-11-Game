@@ -27,9 +27,12 @@ void TestScene::UpdateScene(float elapsedTime)
 		int asdasdasdasd = 1;
 	}
 
-	if (PhysicsManager::GetInstance()->Collided(box1->GetComponent<Collider>()->GetCollider(), player->GetComponent<Collider>()->GetCollider()))
+	if ((normalY < 0 && contactTime < 1) || PhysicsManager::GetInstance()->Collided(box1->GetComponent<Collider>()->GetCollider(), player->GetComponent<Collider>()->GetCollider()))
 	{
-		
+		Vector3 a = player->GetComponent<Rigidbody>()->GetVelocity();
+		a.y = player->GetComponent<Rigidbody>()->GetVelocity().y*-1;
+		player->GetComponent<Rigidbody>()->SetVelocity(player->GetComponent<Rigidbody>()->GetVelocity() + a);
+
 		if (abs(player->GetComponent<Collider>()->GetColliderPosition().x - box1->GetComponent<Collider>()->GetColliderPosition().x) <= (player->GetComponent<Collider>()->GetColliderScale().x / 2 + box1->GetComponent<Collider>()->GetColliderScale().x / 2))
 		{
 			float j = abs(player->GetComponent<Collider>()->GetColliderPosition().y - box1->GetComponent<Collider>()->GetColliderPosition().y);
