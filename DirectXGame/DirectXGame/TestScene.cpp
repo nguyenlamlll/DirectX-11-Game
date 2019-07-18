@@ -25,8 +25,12 @@ void TestScene::UpdateScene(float elapsedTime)
 			{
 				Vector3 a = player->GetComponent<Rigidbody>()->GetVelocity();
 				Vector3 b = player->GetComponent<Rigidbody>()->GetVelocity() + a * -1;
+				Vector3* normalVector = new Vector3(normalX, normalY, 0);
 				a.y = player->GetComponent<Rigidbody>()->GetVelocity().y*-1;
 				player->GetComponent<Rigidbody>()->SetVelocity(player->GetComponent<Rigidbody>()->GetVelocity() + a);
+				player->OnCollisionEnter(gameObjectList->at(i)->GetComponent<Collider>(), *normalVector);
+				//objlist->at(i)->OnCollisionEnter(objlist->at(j)->GetComponent<Collider>(), *normalVector);
+				//objlist->at(j)->GetComponent<Collider>()->OnCollisionEnter(objlist->at(i)->GetComponent<Collider>(), *normalVector*-1);
 			}
 		}
 	}

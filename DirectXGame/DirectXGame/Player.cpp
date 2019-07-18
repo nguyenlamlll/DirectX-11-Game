@@ -73,7 +73,9 @@ void Player::Update(float _deltaTime)
 		}
 	}
 
-	const wchar_t* animationString = L"";
+
+
+	/*const wchar_t* animationString = L"";
 	int animationCount = 0;
 	if (this->GetComponent<Collider>()->GetCollisionStatus())
 	{
@@ -162,7 +164,7 @@ void Player::Update(float _deltaTime)
 		if (m_dxBase->GetInputManager()->IsKeyDown("L")) weaponTimer += _deltaTime;
 		else shoot = false;
 	}
-	if (cutscene) this->GetComponent<Rigidbody>()->SetVelocity(Vector3(0, 0, 0));
+	if (cutscene) this->GetComponent<Rigidbody>()->SetVelocity(Vector3(0, 0, 0));*/
 }
 
 void Player::LateUpdate(float _deltaTime)
@@ -173,6 +175,11 @@ void Player::LateUpdate(float _deltaTime)
 void Player::OnCollisionEnter(Collider* _other, Vector3 _normal)
 {
 	GameObject::OnCollisionEnter(_other, _normal);
+
+	if (_normal.y != 0)
+	{
+		this->GetComponent<Animation>()->ResetAnimation(L"Resources/Captain/Animations/move.png", 1, 6);
+	}
 	if ( _other->GetAttachedGameObject()->GetTag() == "Elevator")
 	{
 		if (_normal.x != 0 && this->GetComponent<Rigidbody>()->GetVelocity().y > 0 && lastFrameMove.x != 0)
