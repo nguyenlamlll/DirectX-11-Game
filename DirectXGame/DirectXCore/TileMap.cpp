@@ -17,7 +17,7 @@ TileMap::TileMap(DirectXCore::DeviceResources *_deviceResource, const wchar_t * 
 	std::string pathstr(ws.begin(), ws.end());
 	tilemap->ParseFile(pathstr);
 	position = Vector3(0, 0, 0);
-	scale = Vector3(4, 4, 1);
+	scale = Vector3(3, 3, 1);
 	worldToScreenPosition = position;
 
 	newRegion = new RECT();
@@ -31,7 +31,8 @@ TileMap::TileMap(DirectXCore::DeviceResources *_deviceResource, const wchar_t * 
 	{
 		const Tmx::Tileset *tileset = tilemap->GetTileset(i);
 		int as = tileset->GetTileWidth();
-		std::string username = "Resources/" + tileset->GetImage()->GetSource();// old tilemap
+		//std::string username = "Resources/" + tileset->GetImage()->GetSource();// old tilemap
+		std::string username = "Resources/Captain/Maps/" + tileset->GetImage()->GetSource();// old tilemap
 		//std::string username = "Resources/" + tileset->GetImageInTileset()->GetSource();// new tilemap
 		std::wstring wideusername;
 		for (int i = 0; i < username.length(); ++i) wideusername += wchar_t(username[i]);
@@ -99,7 +100,7 @@ TileMap::TileMap(DirectXCore::DeviceResources *_deviceResource, const wchar_t * 
 				listAreas->push_back(gameObject);
 			}
 		}
-		/*else if (objectGroup->GetName() == "Wall")
+		else if (objectGroup->GetName() == "Wall")
 		{
 			for (size_t j = 0; j < objectGroup->GetNumObjects(); j++)
 			{
@@ -113,7 +114,7 @@ TileMap::TileMap(DirectXCore::DeviceResources *_deviceResource, const wchar_t * 
 				thisQuad->Insert(gameObject);
 			}
 		}
-		else if (objectGroup->GetName() == "Enemies")
+		/*else if (objectGroup->GetName() == "Enemies")
 		{
 			for (size_t j = 0; j < objectGroup->GetNumObjects(); j++)
 			{

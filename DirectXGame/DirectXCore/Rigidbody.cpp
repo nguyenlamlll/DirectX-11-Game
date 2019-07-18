@@ -38,13 +38,13 @@ void DirectXCore::Rigidbody::PreUpdate(float _deltaTime)
 	//}
 	AddForce(gravity);
 	//velocity = acceleration + move;
-	//velocity = (acceleration + move)*_deltaTime;
+	velocity = (acceleration + move)*_deltaTime;
 }
 
 void DirectXCore::Rigidbody::Update(float _deltaTime)
 {
 	//AddForce(gravity);
-	velocity = (acceleration + move)*_deltaTime;
+	//velocity = (acceleration + move)*_deltaTime;
 	//velocity += move;
 }
 

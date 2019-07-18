@@ -24,7 +24,7 @@ void TilemapScene::UpdateScene(float elapsedTime)
 	std::vector<DirectXCore::GameObject*>* objlist = new  std::vector<DirectXCore::GameObject*>();
 	sceneQuadTree->GetBranchNodesWithCamera(camera->GetPosition(), Vector3(1, 1, 1), elapsedTime, objlist);
 	for (size_t i = 0; i < objlist->size(); i++) objlist->at(i)->PreUpdate(elapsedTime);
-	for (size_t i = 0; i < objlist->size(); i++)
+	/*for (size_t i = 0; i < objlist->size(); i++)
 	{
 		if (objlist->at(i)->GetComponent<Collider>())
 		{
@@ -76,7 +76,7 @@ void TilemapScene::UpdateScene(float elapsedTime)
 				}
 			}
 		}
-	}
+	}*/
 	for (size_t i = 0; i < objlist->size(); i++)
 	{
 		if (objlist->at(i)->GetComponent<Collider>())
@@ -91,7 +91,7 @@ void TilemapScene::UpdateScene(float elapsedTime)
 				float normalX, normalY;
 				float contactTime = PhysicsManager::GetInstance()->CheckSweptAABB(objlist->at(i), objlist->at(j), normalX, normalY);
 
-				if (contactTime < 0.5f)
+				if (contactTime < 1)
 				{
 					Vector3* normalVector = new Vector3(normalX, normalY, 0);
 					objlist->at(i)->OnCollisionEnter(objlist->at(j)->GetComponent<Collider>(), *normalVector);

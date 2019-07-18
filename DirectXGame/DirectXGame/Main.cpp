@@ -93,9 +93,9 @@ int WINAPI wWinMain(
 	//const wchar_t* ambience = L"res\\NightAmbienceSimple.wav";
 	//game->CreateSoundAndMusic(ambience);
 
-	game->AddScene(new MenuScene(game.get()));
-	game->AddScene(new TilemapScene(game.get()));
-	//game->AddScene(new TestScene(game.get()));
+	//game->AddScene(new MenuScene(game.get()));
+	//game->AddScene(new TilemapScene(game.get()));
+	game->AddScene(new TestScene(game.get()));
 
 	//game->CreateSprite(L"Resources/untitled.tmx");
 	//game->AddScene(new PingPongScene(game.get()));

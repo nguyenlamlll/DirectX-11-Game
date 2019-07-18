@@ -67,7 +67,8 @@ void DirectXCore::GameObject::OnCollisionEnter(Collider* _other, Vector3 _normal
 				velocityVec.y = (_normal.y > 0) ? -velocityVec.y : velocityVec.y;
 				Vector3 newVec = objectVec * _normal + this->GetComponent<Rigidbody>()->GetVelocity();
 				this->GetComponent<Rigidbody>()->Move(moveVec);
-				this->GetComponent<Rigidbody>()->AddForce(objectVec*_normal);
+				//this->GetComponent<Rigidbody>()->AddForce(objectVec*_normal);
+				this->GetComponent<Rigidbody>()->SetVelocity(velocityVec + velocityVec *_normal);
 			}
 		}
 	}
