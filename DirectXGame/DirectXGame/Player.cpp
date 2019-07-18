@@ -60,7 +60,7 @@ void Player::PreUpdate(float _deltaTime)
 void Player::Update(float _deltaTime)
 {
 	GameObject::Update(_deltaTime);
-	if (m_dxBase->GetInputManager()->IsKeyDown("W") && this->GetComponent<Collider>()->GetCollisionStatus())
+	if (m_dxBase->GetInputManager()->IsKeyDown("W") /*&& this->GetComponent<Collider>()->GetCollisionStatus()*/)
 	{
 		if (this->GetComponent<Rigidbody>()->GetVelocity().y == 0)
 		{
@@ -172,9 +172,9 @@ void Player::LateUpdate(float _deltaTime)
 
 void Player::OnCollisionEnter(Collider* _other, Vector3 _normal)
 {
-	if (_other->GetAttachedGameObject()->GetTag() == "Wall" || _other->GetAttachedGameObject()->GetTag() == "Elevator")
+	GameObject::OnCollisionEnter(_other, _normal);
+	if ( _other->GetAttachedGameObject()->GetTag() == "Elevator")
 	{
-		GameObject::OnCollisionEnter(_other, _normal);
 		if (_normal.x != 0 && this->GetComponent<Rigidbody>()->GetVelocity().y > 0 && lastFrameMove.x != 0)
 		{
 			this->GetComponent<Rigidbody>()->AddForce(Vector3(0, this->GetComponent<Rigidbody>()->GetVelocity().y/-2, 0));

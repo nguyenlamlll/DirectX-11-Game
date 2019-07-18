@@ -91,55 +91,13 @@ void TilemapScene::UpdateScene(float elapsedTime)
 				float normalX, normalY;
 				float contactTime = PhysicsManager::GetInstance()->CheckSweptAABB(objlist->at(i), objlist->at(j), normalX, normalY);
 
-				if (normalY < 0 && contactTime < 1)
+				if (contactTime < 0.5f)
 				{
-					Vector3* normalVector = new Vector3(normalX, normalY,0);
+					Vector3* normalVector = new Vector3(normalX, normalY, 0);
 					objlist->at(i)->OnCollisionEnter(objlist->at(j)->GetComponent<Collider>(), *normalVector);
 					objlist->at(j)->GetComponent<Collider>()->OnCollisionEnter(objlist->at(i)->GetComponent<Collider>(), *normalVector*-1);
 				}
-				if (objlist->at(j)->GetComponent<Collider>() && objlist->at(j) != objlist->at(i))
-				{
-					bool colType = objlist->at(i)->GetComponent<Collider>()->GetCollider()->Intersects(*objlist->at(j)->GetComponent<Collider>()->GetCollider());
-					if (colType)
-					{
-						Vector3 normal = Vector3(0, 0, 0);
-						if (i == 1)
-							bool l = false;
-						if (objlist->at(i)->GetComponent<Rigidbody>())
-						{
-							float distanceX = objlist->at(i)->GetTransform()->GetPosition().x - objlist->at(j)->GetTransform()->GetPosition().x;
-							float distanceY = objlist->at(i)->GetTransform()->GetPosition().y - objlist->at(j)->GetTransform()->GetPosition().y;
-							float extentDistanceX = objlist->at(i)->GetComponent<Collider>()->GetCollider()->Extents.x + objlist->at(j)->GetComponent<Collider>()->GetCollider()->Extents.x;
-							float extentDistanceY = objlist->at(i)->GetComponent<Collider>()->GetCollider()->Extents.y + objlist->at(j)->GetComponent<Collider>()->GetCollider()->Extents.y;
-
-							if (abs(distanceX) < extentDistanceX)
-							{
-								if (abs(distanceX) < extentDistanceX * 9 / 10)
-								{
-									if ((objlist->at(i)->GetComponent<Rigidbody>()->GetAcceleration().y > 0 || objlist->at(i)->GetComponent<Rigidbody>()->GetMovingVector().y > 0) && distanceY < 0)
-										normal = (normal.y >= 0) ? normal + Vector3(0, -1, 0) : normal;
-									else if ((objlist->at(i)->GetComponent<Rigidbody>()->GetAcceleration().y < 0 || objlist->at(i)->GetComponent<Rigidbody>()->GetMovingVector().y < 0) && distanceY > 0)
-										normal = (normal.y <= 0) ? normal + Vector3(0, 1, 0) : normal;
-								}
-							}
-							else;
-							if (abs(distanceY) < extentDistanceY)
-							{
-								if (abs(distanceY) < extentDistanceY * 8.5f / 10)
-								{
-									if ((objlist->at(i)->GetComponent<Rigidbody>()->GetAcceleration().x > 0 || objlist->at(i)->GetComponent<Rigidbody>()->GetMovingVector().x > 0) && distanceX < 0)
-										normal = (normal.x >= 0) ? normal + Vector3(-1, 0, 0) : normal;
-									else if ((objlist->at(i)->GetComponent<Rigidbody>()->GetAcceleration().x < 0 || objlist->at(i)->GetComponent<Rigidbody>()->GetMovingVector().x < 0) && distanceX > 0)
-										normal = (normal.x <= 0) ? normal + Vector3(1, 0, 0) : normal;
-								}
-							}
-							else;
-						}
-						objlist->at(i)->OnCollisionEnter(objlist->at(j)->GetComponent<Collider>(), normal);
-						objlist->at(j)->GetComponent<Collider>()->OnCollisionEnter(objlist->at(i)->GetComponent<Collider>(), normal*-1);
-						normal = Vector3(0, 0, 0);
-					}
-				}
+				
 			}
 		}
 	}

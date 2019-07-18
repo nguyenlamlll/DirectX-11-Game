@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.2" tiledversion="1.2.0" orientation="orthogonal" renderorder="right-down" width="248" height="64" tilewidth="32" tileheight="32" infinite="0" nextlayerid="9" nextobjectid="200">
+<map version="1.2" tiledversion="1.2.4" orientation="orthogonal" renderorder="right-down" width="248" height="64" tilewidth="32" tileheight="32" infinite="0" nextlayerid="9" nextobjectid="200">
  <tileset firstgid="1" name="file" tilewidth="32" tileheight="32" margin="5" tilecount="21824" columns="248">
   <image source="Map_finally/file.png" width="7946" height="2846"/>
  </tileset>
@@ -214,8 +214,8 @@
   <object id="199" x="5911.2" y="1199.45" width="135.741" height="63.0227"/>
  </objectgroup>
  <objectgroup id="8" name="Door">
-  <object id="187" x="2288" y="1145" width="27" height="62.5"/>
-  <object id="188" x="2544.5" y="1144.5" width="32.5" height="66"/>
+  <object id="187" x="2288" y="1150" width="31" height="48.5"/>
+  <object id="188" x="2544.5" y="1150.83" width="30.8333" height="47.6667"/>
   <object id="192" x="5615.78" y="1152.57" width="29.184" height="46.3053"/>
   <object id="193" x="5871.82" y="1149.85" width="31.9079" height="47.8618"/>
   <object id="194" x="7409.2" y="1920.98" width="29.0874" height="46.459"/>
