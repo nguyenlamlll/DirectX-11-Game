@@ -17,7 +17,7 @@ TileMap::TileMap(DirectXCore::DeviceResources *_deviceResource, const wchar_t * 
 	std::string pathstr(ws.begin(), ws.end());
 	tilemap->ParseFile(pathstr);
 	position = Vector3(0, 0, 0);
-	scale = Vector3(3, 3, 1);
+	scale = Vector3(4, 4, 1);
 	worldToScreenPosition = position;
 
 	newRegion = new RECT();

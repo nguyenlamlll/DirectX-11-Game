@@ -14,32 +14,21 @@ TestScene::TestScene(DirectXCore::DxBase * dxBase)
 void TestScene::UpdateScene(float elapsedTime)
 {
 	player->PreUpdate(elapsedTime);
-	//box1->PreUpdate(elapsedTime);
 	for (size_t i = 0; i < gameObjectList->size(); i++)
 	{
 		float normalX, normalY;
-		float contactTime = PhysicsManager::GetInstance()->CheckSweptAABB(player, gameObjectList->at(i), normalX, normalY);
-		if (normalY < 0 && contactTime < 1)
+		if (PhysicsManager::GetInstance()->CheckSweptAABB(player, gameObjectList->at(i), normalX, normalY) < 1.0f)
 		{
-			if (normalY < 0 && contactTime < 1)
-			{
-				Vector3 a = player->GetComponent<Rigidbody>()->GetVelocity();
-				Vector3 b = player->GetComponent<Rigidbody>()->GetVelocity() + a * -1;
-				Vector3* normalVector = new Vector3(normalX, normalY, 0);
-				a.y = player->GetComponent<Rigidbody>()->GetVelocity().y*-1;
-				player->GetComponent<Rigidbody>()->SetVelocity(player->GetComponent<Rigidbody>()->GetVelocity() + a);
-				player->OnCollisionEnter(gameObjectList->at(i)->GetComponent<Collider>(), *normalVector);
-				//objlist->at(i)->OnCollisionEnter(objlist->at(j)->GetComponent<Collider>(), *normalVector);
-				//objlist->at(j)->GetComponent<Collider>()->OnCollisionEnter(objlist->at(i)->GetComponent<Collider>(), *normalVector*-1);
-			}
+			Vector3* normalVector = new Vector3(normalX, normalY, 0);
+			player->OnCollisionEnter(gameObjectList->at(i)->GetComponent<Collider>(), *normalVector);
+			//objlist->at(i)->OnCollisionEnter(objlist->at(j)->GetComponent<Collider>(), *normalVector);
+			//objlist->at(j)->GetComponent<Collider>()->OnCollisionEnter(objlist->at(i)->GetComponent<Collider>(), *normalVector*-1);
 		}
 	}
 
-	
+
 	player->Update(elapsedTime);
 	player->LateUpdate(elapsedTime);
-	//box1->Update(elapsedTime);
-	//box1->LateUpdate(elapsedTime);
 	camera->SetPosition(player->GetTransform()->GetPosition());
 }
 
@@ -57,8 +46,6 @@ void TestScene::RenderScene()
 			gameObjectList->at(i)->Render();
 		}
 	}
-	/*box1->GetTransform()->SetWorldToScreenPosition(worldToScreenShift);
-	box1->Render();*/
 }
 
 void TestScene::LoadScene()
@@ -68,12 +55,13 @@ void TestScene::LoadScene()
 	tilemap = new TileMap(m_dxBase->GetDeviceResource(), L"Resources/Captain/Maps/Captain.tmx");
 	tilemap->SetCamera(camera);
 	gameObjectList->insert(gameObjectList->end(), tilemap->GetListGameObjects()->begin(), tilemap->GetListGameObjects()->end());
-	/*box1 = new GameObject();
+	box1 = new GameObject();
 	box1->GetTransform()->SetPosition(Vector3(500,200, 0));
-	box1->GetTransform()->SetScale(Vector3(1000, 40, 1));
+	box1->GetTransform()->SetScale(Vector3(40, 40, 1));
 	box1->GetTransform()->SetScreenScale(Vector3(1, 1, 1));
 	box1->AddComponent<Renderer>(new Renderer(m_dxBase->GetDeviceResource(), L"Resources/rockman.png"));
-	box1->AddComponent<Collider>(new Collider(box1, box1->GetTransform()));*/
+	box1->AddComponent<Collider>(new Collider(box1, box1->GetTransform()));
+	gameObjectList->push_back(box1);
 
 	player = new Player(m_dxBase);
 	player->SetTag("Player");
