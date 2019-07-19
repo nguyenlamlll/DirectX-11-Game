@@ -14,6 +14,7 @@ TestScene::TestScene(DirectXCore::DxBase * dxBase)
 void TestScene::UpdateScene(float elapsedTime)
 {
 	player->PreUpdate(elapsedTime);
+	player->GetComponent<Collider>()->SetCollisionStatus(false);
 	for (size_t i = 0; i < gameObjectList->size(); i++)
 	{
 		float normalX, normalY;
@@ -21,6 +22,7 @@ void TestScene::UpdateScene(float elapsedTime)
 		{
 			Vector3* normalVector = new Vector3(normalX, normalY, 0);
 			player->OnCollisionEnter(gameObjectList->at(i)->GetComponent<Collider>(), *normalVector);
+			player->GetComponent<Collider>()->SetCollisionStatus(true);
 			//objlist->at(i)->OnCollisionEnter(objlist->at(j)->GetComponent<Collider>(), *normalVector);
 			//objlist->at(j)->GetComponent<Collider>()->OnCollisionEnter(objlist->at(i)->GetComponent<Collider>(), *normalVector*-1);
 		}
@@ -59,7 +61,7 @@ void TestScene::LoadScene()
 	box1->GetTransform()->SetPosition(Vector3(500,200, 0));
 	box1->GetTransform()->SetScale(Vector3(40, 40, 1));
 	box1->GetTransform()->SetScreenScale(Vector3(1, 1, 1));
-	box1->AddComponent<Renderer>(new Renderer(m_dxBase->GetDeviceResource(), L"Resources/rockman.png"));
+	box1->AddComponent<Renderer>(new Renderer(m_dxBase->GetDeviceResource(), L"Resources/Captain/Animations/stand.png"));
 	box1->AddComponent<Collider>(new Collider(box1, box1->GetTransform()));
 	gameObjectList->push_back(box1);
 
