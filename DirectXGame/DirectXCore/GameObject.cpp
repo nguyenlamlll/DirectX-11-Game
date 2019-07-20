@@ -77,7 +77,26 @@ void DirectXCore::GameObject::OnCollisionEnter(Collider* _other, Vector3 _normal
 						this->GetComponent<Rigidbody>()->AddForce(acc);
 					}
 				}
-				this->GetComponent<Rigidbody>()->Move(moveVec);
+				if (_normal.x != 0)
+				{
+					/*if (this->GetComponent<Rigidbody>()->GetMovingVector().x > 0)
+					{
+						Vector3 move = this->GetComponent<Rigidbody>()->GetMovingVector();
+						move.x *= -1;
+						this->GetComponent<Rigidbody>()->SetVelocity(this->GetComponent<Rigidbody>()->GetVelocity() + move);
+					}*/
+					Vector3 vec = this->GetComponent<Rigidbody>()->GetVelocity();
+					Vector3 move = this->GetComponent<Rigidbody>()->GetMovingVector();
+					Vector3 finalVector = this->GetComponent<Rigidbody>()->GetMovingVector();
+					finalVector.x = this->GetComponent<Rigidbody>()->GetMovingVector().x + move.x*-1;
+					finalVector.y = vec.y;
+					finalVector.z = vec.z;
+
+					move.x *= -1;
+					//this->GetComponent<Rigidbody>()->Move(this->GetComponent<Rigidbody>()->GetMovingVector() + move);
+					this->GetComponent<Rigidbody>()->SetVelocity(finalVector);
+				}
+				//this->GetComponent<Rigidbody>()->Move(moveVec);
 				//this->GetComponent<Rigidbody>()->AddForce(objectVec*_normal);
 				//this->GetComponent<Rigidbody>()->SetVelocity(velocityVec + velocityVec *_normal);
 			}

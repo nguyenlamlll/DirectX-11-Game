@@ -3,7 +3,7 @@
 Player::Player(std::shared_ptr<DirectXCore::DxBase> _m_dxBase)
 {
 	m_dxBase = _m_dxBase;
-	this->GetTransform()->SetPosition(Vector3(100, 500, 0));
+	this->GetTransform()->SetPosition(Vector3(500, 500, 0));
 	this->GetTransform()->SetScale(Vector3(96, 120, 1));
 	this->GetTransform()->SetScreenScale(Vector3(3, 3, 1));
 	this->AddComponent<Renderer>(new Renderer(_m_dxBase->GetDeviceResource(), L"Resources/Captain/Animations/stand.png"));
@@ -31,13 +31,32 @@ void Player::PreUpdate(float _deltaTime)
 	cutscene = false;
 	GameObject::PreUpdate(_deltaTime);
 	Rigidbody* getrigid = this->GetComponent<Rigidbody>();
-	
-	
-	if (m_dxBase->GetInputManager()->IsKeyDown("L") && weaponTimer < 0)
+
+
+
+	if (m_dxBase->GetInputManager()->IsKeyDown("M") && weaponTimer < 0)
 	{
 		if (!this->GetComponent<Collider>()->GetCollisionStatus()) this->GetComponent<Animation>()->ResetAnimation(L"Resources/Captain/Animations/kick.png", 1, 1);
-		else this->GetComponent<Animation>()->ResetAnimation(L"Resources/Captain/Animations/attack.png", 1, 2);
-		weaponTimer = 0.5;
+		else this->GetComponent<Animation>()->ResetAnimation(L"Resources/Captain/Animations/dash.png", 1, 2);
+		weaponTimer = 0.6f;
+	}
+	else if (m_dxBase->GetInputManager()->IsKeyDown("L") && weaponTimer < 0)
+	{
+		if (!this->GetComponent<Collider>()->GetCollisionStatus()) this->GetComponent<Animation>()->ResetAnimation(L"Resources/Captain/Animations/kick.png", 1, 1);
+		else
+		{
+			this->GetComponent<Animation>()->ResetAnimation(L"Resources/Captain/Animations/attack.png", 1, 2);
+		}
+		weaponTimer = 0.6f;
+	}
+	else if (m_dxBase->GetInputManager()->IsKeyDown("L") && m_dxBase->GetInputManager()->IsKeyDown("S") && weaponTimer < 0)
+	{
+		if (this->GetComponent<Collider>()->GetCollisionStatus()) this->GetComponent<Animation>()->ResetAnimation(L"Resources/Captain/Animations/sit_attack.png", 1, 2);
+		weaponTimer = 0.6f;
+	}
+	else if (m_dxBase->GetInputManager()->IsKeyDown("L") && weaponTimer < 0.4f)
+	{
+		this->GetComponent<Animation>()->ResetAnimation(L"Resources/Captain/Animations/shieldlessattack.png", 1, 2);
 	}
 	weaponTimer -= _deltaTime;
 
@@ -49,7 +68,20 @@ void Player::PreUpdate(float _deltaTime)
 		}
 		else if (m_dxBase->GetInputManager()->IsKeyDown("S"))
 		{
-			this->GetComponent<Animation>()->ResetAnimation(L"Resources/Captain/Animations/sit.png", 1, 1);
+			if (m_dxBase->GetInputManager()->IsKeyDown("L") && weaponTimer < 0)
+			{
+				this->GetComponent<Animation>()->ResetAnimation(L"Resources/Captain/Animations/sit_attack.png", 1, 2);
+				//weaponTimer = 0.5f;
+			}
+			else this->GetComponent<Animation>()->ResetAnimation(L"Resources/Captain/Animations/sit.png", 1, 1);
+		}
+		else if (m_dxBase->GetInputManager()->IsKeyDown("O"))
+		{
+			this->GetComponent<Animation>()->ResetAnimation(L"Resources/Captain/Animations/damage.png", 1, 1);
+		}
+		else if (m_dxBase->GetInputManager()->IsKeyDown("P"))
+		{
+			this->GetComponent<Animation>()->ResetAnimation(L"Resources/Captain/Animations/die.png", 1, 2);
 		}
 		else
 		{
@@ -66,6 +98,7 @@ void Player::PreUpdate(float _deltaTime)
 			if (m_dxBase->GetInputManager()->IsKeyDown("K"))
 			{
 				this->GetComponent<Rigidbody>()->AddForce(Vector3(0, -500, 0));
+				jumpTime = -0.5f;
 			}
 			if (!m_dxBase->GetInputManager()->IsKeyDown("D") && !m_dxBase->GetInputManager()->IsKeyDown("A"))
 			{
@@ -76,7 +109,17 @@ void Player::PreUpdate(float _deltaTime)
 	}
 	else
 	{
-		if (weaponTimer < 0)  this->GetComponent<Animation>()->ResetAnimation(L"Resources/Captain/Animations/jump.png", 1, 1);
+		jumpTime += _deltaTime;
+		if (weaponTimer < 0)
+		{
+			//if (jumpTime > 0.5f) 
+			this->GetComponent<Animation>()->ResetAnimation(L"Resources/Captain/Animations/jump.png", 1, 1);
+			if (jumpTime > 0 && m_dxBase->GetInputManager()->IsKeyDown("K"))
+			{
+				//jumpTime = 0;
+				this->GetComponent<Animation>()->ResetAnimation(L"Resources/Captain/Animations/spin.png", 1, 2);
+			}
+		}
 		if (m_dxBase->GetInputManager()->IsKeyDown("D"))
 		{
 			this->GetComponent<Rigidbody>()->Move(Vector3(360, 0, 0));
@@ -86,8 +129,10 @@ void Player::PreUpdate(float _deltaTime)
 			this->GetComponent<Rigidbody>()->Move(Vector3(-360, 0, 0));
 		}
 	}
-	
-	
+
+
+
+
 	lastFrameAcc = this->GetComponent<Rigidbody>()->GetAcceleration();
 	lastFrameMove = this->GetComponent<Rigidbody>()->GetMovingVector();
 	this->GetComponent<Collider>()->SetCollisionStatus(false);
