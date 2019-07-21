@@ -24,14 +24,16 @@ Player::Player(std::shared_ptr<DirectXCore::DxBase> _m_dxBase)
 	this->GetComponent<Rigidbody>()->SetGravity(Vector3(0, 30, 0));
 	cutscene = false;
 	weaponTimer = 0;
+
+	capshield = new Shield(_m_dxBase,this);
+	this->AddChild(capshield);
 }
 
 void Player::PreUpdate(float _deltaTime)
 {
 	cutscene = false;
 	GameObject::PreUpdate(_deltaTime);
-	Rigidbody* getrigid = this->GetComponent<Rigidbody>();
-
+	//capshield->PreUpdate(_deltaTime);
 
 
 	if (m_dxBase->GetInputManager()->IsKeyDown("M") && weaponTimer < 0)
@@ -143,11 +145,14 @@ void Player::PreUpdate(float _deltaTime)
 void Player::Update(float _deltaTime)
 {
 	GameObject::Update(_deltaTime);
+	//capshield->Update(_deltaTime);
 }
 
 void Player::LateUpdate(float _deltaTime)
 {
 	GameObject::LateUpdate(_deltaTime);
+	//capshield->LateUpdate(_deltaTime);
+	capshield->GetTransform()->SetPosition(this->GetTransform()->GetPosition());
 }
 
 void Player::OnCollisionEnter(Collider* _other, Vector3 _normal)

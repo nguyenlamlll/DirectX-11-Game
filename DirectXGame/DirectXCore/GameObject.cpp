@@ -7,6 +7,16 @@ DirectXCore::GameObject::GameObject()
 {
 	transform = new Transform(Vector3(0, 0, 0), Vector3(0, 0, 0), Vector3(1, 1, 1));
 	componentList = new std::vector<Component*>();
+	childrens = new std::vector<GameObject*>();
+	parent = nullptr;
+}
+
+DirectXCore::GameObject::GameObject(GameObject * _parent)
+{
+	transform = new Transform(Vector3(0, 0, 0), Vector3(0, 0, 0), Vector3(1, 1, 1));
+	componentList = new std::vector<Component*>();
+	childrens = new std::vector<GameObject*>();
+	parent = _parent;
 }
 
 void DirectXCore::GameObject::PreUpdate(float _deltaTime)
@@ -14,6 +24,10 @@ void DirectXCore::GameObject::PreUpdate(float _deltaTime)
 	for (size_t i = 0; i < componentList->size(); i++)
 	{
 		componentList->at(i)->PreUpdate(_deltaTime);
+	}
+	for (size_t i = 0; i < childrens->size(); i++)
+	{
+		childrens->at(i)->PreUpdate(_deltaTime);
 	}
 }
 
@@ -23,6 +37,10 @@ void DirectXCore::GameObject::Update(float _deltaTime)
 	{
 		componentList->at(i)->Update(_deltaTime);
 	}
+	for (size_t i = 0; i < childrens->size(); i++)
+	{
+		childrens->at(i)->Update(_deltaTime);
+	}
 }
 
 void DirectXCore::GameObject::LateUpdate(float _deltaTime)
@@ -31,6 +49,10 @@ void DirectXCore::GameObject::LateUpdate(float _deltaTime)
 	{
 		componentList->at(i)->LateUpdate(_deltaTime);
 	}
+	for (size_t i = 0; i < childrens->size(); i++)
+	{
+		childrens->at(i)->LateUpdate(_deltaTime);
+	}
 }
 
 void DirectXCore::GameObject::Render()
@@ -38,6 +60,10 @@ void DirectXCore::GameObject::Render()
 	for (size_t i = 0; i < componentList->size(); i++)
 	{
 		componentList->at(i)->Render();
+	}
+	for (size_t i = 0; i < childrens->size(); i++)
+	{
+		childrens->at(i)->Render();
 	}
 }
 

@@ -1,6 +1,5 @@
 #pragma once
 #include "GameObject.h"
-#include "GameObject.h"
 #include "DxBase.h"
 #include "GameObject.h"
 #include "Rigidbody.h"

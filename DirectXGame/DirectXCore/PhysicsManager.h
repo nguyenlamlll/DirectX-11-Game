@@ -23,6 +23,20 @@ namespace DirectXCore
 
 	public:
 		const Vector3 gravity = Vector3(0, 9.81f, 0);
+		Box GetSweptBroadphaseBox(Box b)
+		{
+			Box broadphasebox;
+			broadphasebox.x = b.vx > 0 ? b.x : b.x + b.vx;
+			broadphasebox.y = b.vy > 0 ? b.y : b.y + b.vy;
+			broadphasebox.w = b.vx > 0 ? b.vx + b.w : b.w - b.vx;
+			broadphasebox.h = b.vy > 0 ? b.vy + b.h : b.h - b.vy;
+
+			return broadphasebox;
+		}
+		bool AABBCheck(Box b1, Box b2)
+		{
+			return !(b1.x + b1.w < b2.x || b1.x > b2.x + b2.w || b1.y + b1.h < b2.y || b1.y > b2.y + b2.h);
+		}
 
 		PhysicsManager()
 		{
@@ -169,7 +183,11 @@ namespace DirectXCore
 				b2->vy = obj2->GetComponent<Rigidbody>()->GetVelocity().y;
 			}
 
-			return SweptAABB(*b1, *b2, normalx, normaly);
+			Box boxI = GetSweptBroadphaseBox(*b1);
+			Box boxII = GetSweptBroadphaseBox(*b2);
+			if(AABBCheck(boxI, boxII)) 
+				return SweptAABB(*b1, *b2, normalx, normaly);
+			else return 1;
 		}
 		SimpleMath::Vector3 CheckBoundingBoxCollision(GameObject* obj1, GameObject* obj2)
 		{
@@ -187,28 +205,18 @@ namespace DirectXCore
 
 					if (abs(distanceX) < extentDistanceX)
 					{
-						/*if (abs(distanceX) < extentDistanceX * 9 / 10)
-						{
-							if ((obj1->GetComponent<Rigidbody>()->GetAcceleration().y > 0 || obj1->GetComponent<Rigidbody>()->GetMovingVector().y > 0) && distanceY < 0)
-								normal = (normal.y >= 0) ? normal + Vector3(0, -1, 0) : normal;
-							else if ((obj1->GetComponent<Rigidbody>()->GetAcceleration().y < 0 || obj1->GetComponent<Rigidbody>()->GetMovingVector().y < 0) && distanceY > 0)
-								normal = (normal.y <= 0) ? normal + Vector3(0, 1, 0) : normal;
-						}*/
 						if ((obj1->GetComponent<Rigidbody>()->GetAcceleration().y > 0 || obj1->GetComponent<Rigidbody>()->GetMovingVector().y > 0) && distanceY < 0)
 							normal = (normal.y >= 0) ? normal + Vector3(0, -1, 0) : normal;
 						else if ((obj1->GetComponent<Rigidbody>()->GetAcceleration().y < 0 || obj1->GetComponent<Rigidbody>()->GetMovingVector().y < 0) && distanceY > 0)
 							normal = (normal.y <= 0) ? normal + Vector3(0, 1, 0) : normal;
 					}
 					else;
-					if (abs(distanceY) < extentDistanceY)
+					if (abs(distanceY)+ obj1->GetComponent<Rigidbody>()->GetAcceleration().y < extentDistanceY)
 					{
-						if (abs(distanceY) < extentDistanceY * 8.5f / 10)
-						{
-							if ((obj1->GetComponent<Rigidbody>()->GetAcceleration().x > 0 || obj1->GetComponent<Rigidbody>()->GetMovingVector().x > 0) && distanceX < 0)
-								normal = (normal.x >= 0) ? normal + Vector3(-1, 0, 0) : normal;
-							else if ((obj1->GetComponent<Rigidbody>()->GetAcceleration().x < 0 || obj1->GetComponent<Rigidbody>()->GetMovingVector().x < 0) && distanceX > 0)
-								normal = (normal.x <= 0) ? normal + Vector3(1, 0, 0) : normal;
-						}
+						if ((obj1->GetComponent<Rigidbody>()->GetAcceleration().x > 0 || obj1->GetComponent<Rigidbody>()->GetMovingVector().x > 0) && distanceX < 0)
+							normal = (normal.x >= 0) ? normal + Vector3(-1, 0, 0) : normal;
+						else if ((obj1->GetComponent<Rigidbody>()->GetAcceleration().x < 0 || obj1->GetComponent<Rigidbody>()->GetMovingVector().x < 0) && distanceX > 0)
+							normal = (normal.x <= 0) ? normal + Vector3(1, 0, 0) : normal;
 					}
 					else;
 				}

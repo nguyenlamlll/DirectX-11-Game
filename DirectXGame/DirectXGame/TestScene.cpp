@@ -17,21 +17,25 @@ void TestScene::UpdateScene(float elapsedTime)
 	player->GetComponent<Collider>()->SetCollisionStatus(false);
 	for (size_t i = 0; i < gameObjectList->size(); i++)
 	{
-		float normalX, normalY;
-		//if (PhysicsManager::GetInstance()->CheckSweptAABB(player, gameObjectList->at(i), normalX, normalY) < 1.0f)
-		//{
-		//	Vector3* normalVector = new Vector3(normalX, normalY, 0);
-		//	player->OnCollisionEnter(gameObjectList->at(i)->GetComponent<Collider>(), *normalVector);
-		//	player->GetComponent<Collider>()->SetCollisionStatus(true);
-		//	//objlist->at(i)->OnCollisionEnter(objlist->at(j)->GetComponent<Collider>(), *normalVector);
-		//	//objlist->at(j)->GetComponent<Collider>()->OnCollisionEnter(objlist->at(i)->GetComponent<Collider>(), *normalVector*-1);
-		//}
-		Vector3 boundingboxCollisionCheck = PhysicsManager::GetInstance()->CheckBoundingBoxCollision(player, gameObjectList->at(i));
-		if (boundingboxCollisionCheck.z == 1)
-			if (boundingboxCollisionCheck.y < 0)
-				int l = 1;
+		if (!gameObjectList->at(i)->GetComponent<Collider>()->IsTrigger())
+		{
+			float normalX, normalY;
+			if (PhysicsManager::GetInstance()->CheckSweptAABB(player, gameObjectList->at(i), normalX, normalY) < 1.0f)
+			{
+				Vector3* normalVector = new Vector3(normalX, normalY, 0);
+				player->OnCollisionEnter(gameObjectList->at(i)->GetComponent<Collider>(), *normalVector);
+				player->GetComponent<Collider>()->SetCollisionStatus(true);
+				//objlist->at(i)->OnCollisionEnter(objlist->at(j)->GetComponent<Collider>(), *normalVector);
+				//objlist->at(j)->GetComponent<Collider>()->OnCollisionEnter(objlist->at(i)->GetComponent<Collider>(), *normalVector*-1);
+			}
+			/*Vector3 boundingboxCollisionCheck = PhysicsManager::GetInstance()->CheckBoundingBoxCollision(player, gameObjectList->at(i));
+			if (boundingboxCollisionCheck.z == 1)
+			{
+				player->OnCollisionEnter(gameObjectList->at(i)->GetComponent<Collider>(), boundingboxCollisionCheck);
+				player->GetComponent<Collider>()->SetCollisionStatus(true);
+			}*/
+		}
 	}
-
 
 	player->Update(elapsedTime);
 	player->LateUpdate(elapsedTime);
@@ -56,7 +60,7 @@ void TestScene::RenderScene()
 
 void TestScene::LoadScene()
 {
-	gameObjectList = new std::vector<GameObject*>();
+	//gameObjectList = new std::vector<GameObject*>();
 	camera = new Camera(m_dxBase->GetDeviceResource()->GetOutputSize().right / 2, m_dxBase->GetDeviceResource()->GetOutputSize().bottom / 2);
 	tilemap = new TileMap(m_dxBase->GetDeviceResource(), L"Resources/Captain/Maps/Captain.tmx");
 	tilemap->SetCamera(camera);

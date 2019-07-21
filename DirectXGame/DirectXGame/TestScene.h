@@ -24,7 +24,7 @@ public:
 	~TestScene();
 private:
 	std::shared_ptr<DirectXCore::DxBase> m_dxBase;
-	std::vector<GameObject*>* gameObjectList;
+	//std::vector<GameObject*>* gameObjectList;
 	DirectXCore::Camera* camera;
 	GameObject* box1;
 	GameObject* box2;

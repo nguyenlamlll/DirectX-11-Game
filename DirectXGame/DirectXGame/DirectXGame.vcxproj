@@ -130,15 +130,14 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="Bullet.cpp" />
-    <ClCompile Include="Elevator.cpp" />
     <ClCompile Include="Enemy.cpp" />
     <ClCompile Include="HornetBoss.cpp" />
     <ClCompile Include="Main.cpp" />
     <ClCompile Include="MenuScene.cpp" />
     <ClCompile Include="Player.cpp" />
+    <ClCompile Include="Shield.cpp" />
     <ClCompile Include="ShurikenBoss.cpp" />
     <ClCompile Include="TestScene.cpp" />
-    <ClCompile Include="TilemapScene.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\DirectXCore\DirectXCore.vcxproj">
@@ -147,17 +146,14 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Bullet.h" />
-    <ClInclude Include="CatScene.h" />
-    <ClInclude Include="Elevator.h" />
     <ClInclude Include="Enemy.h" />
     <ClInclude Include="HornetBoss.h" />
     <ClInclude Include="MenuScene.h" />
-    <ClInclude Include="PingPongScene.h" />
     <ClInclude Include="Player.h" />
     <ClInclude Include="resource.h" />
+    <ClInclude Include="Shield.h" />
     <ClInclude Include="ShurikenBoss.h" />
     <ClInclude Include="TestScene.h" />
-    <ClInclude Include="TilemapScene.h" />
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="DirectXGame.rc" />

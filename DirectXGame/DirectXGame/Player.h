@@ -7,6 +7,7 @@
 #include "Animation.h"
 #include "State.h"
 #include "Bullet.h"
+#include "Shield.h"
 
 
 using namespace DirectXCore;
@@ -24,5 +25,6 @@ private:
 	Vector3 lastFrameAcc, lastFrameMove;
 	float currentCountTimer = 0, weaponTimer = 0, cutsceneTimer = 0, jumpTime = 0;;
 	bool shoot = false, cutscene = false;
+	Shield* capshield;
 };
 

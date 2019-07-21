@@ -11,11 +11,22 @@ namespace DirectXCore
 	{
 	public:
 		GameObject();
+		GameObject(GameObject* _parent);
 		virtual void PreUpdate(float _deltaTime);
 		virtual void Update(float _deltaTime);
 		virtual void LateUpdate(float _deltaTime);
 		virtual void Render();
 		GameObject* GetGameObject() { return this; }
+		void SetParent(GameObject* _parent) { parent = _parent; }
+		void AddChild(GameObject* _child) 
+		{
+			for (size_t i = 0; i < childrens->size(); i++)
+			{
+				if (_child == childrens->at(i)) return;
+			}
+			_child->SetParent(this);
+			childrens->push_back(_child);
+		}
 		Transform* GetTransform() { return transform; }
 		std::string GetTag() { return tag; }
 		void SetTag(std::string _newTag) { tag = _newTag; }
@@ -44,6 +55,8 @@ namespace DirectXCore
 		std::string tag, name;
 		Transform* transform;
 		std::vector<Component*>* componentList;
+		std::vector<GameObject*>* childrens;
+		GameObject* parent;
 		bool isActive = true;
 	private:
 		void ReferenceGameObject();

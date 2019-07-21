@@ -5,6 +5,7 @@ using namespace DirectXCore;
 
 Scene::Scene()
 {
+	gameObjectList = new std::vector<DirectXCore::GameObject*>();
 }
 
 

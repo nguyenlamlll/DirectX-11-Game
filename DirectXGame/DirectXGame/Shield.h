@@ -6,21 +6,25 @@
 #include "Renderer.h"
 #include "Animation.h"
 #include "State.h"
-#include "Bullet.h"
 
-using namespace DirectXCore;
+//using namespace DirectXCore;
 
-class Elevator: public DirectXCore::GameObject
+class Shield : public GameObject
 {
 public:
-	Elevator();
-	Elevator(std::shared_ptr<DirectXCore::DxBase> _m_dxBase);
+	Shield();
+	Shield(std::shared_ptr<DirectXCore::DxBase> _m_dxBase, GameObject* _captain);
+	~Shield();
 	void PreUpdate(float _deltaTime) override;
 	void Update(float _deltaTime) override;
 	void LateUpdate(float _deltaTime) override;
+	void Render() override;
 	void OnCollisionEnter(Collider* _other, Vector3 _normal) override;
-	~Elevator();
+	void SetTarget(Vector3 _target);
 private:
 	std::shared_ptr<DirectXCore::DxBase> m_dxBase;
+	GameObject* captain;
+	Vector3 captainPosition;
+	Vector3 direction, target;
 };
 

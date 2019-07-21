@@ -2,9 +2,6 @@
 #include <memory>
 
 #include <DirectXCore.h>
-#include "CatScene.h"
-#include "TilemapScene.h"
-#include "PingPongScene.h"
 #include "MenuScene.h"
 #include "TestScene.h"
 
