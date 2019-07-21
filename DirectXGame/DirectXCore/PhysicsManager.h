@@ -1,7 +1,7 @@
 ﻿#pragma once
 
 #define NOMINMAX
-
+#include "DxBase.h"
 
 namespace DirectXCore
 {
@@ -170,6 +170,53 @@ namespace DirectXCore
 			}
 
 			return SweptAABB(*b1, *b2, normalx, normaly);
+		}
+		SimpleMath::Vector3 CheckBoundingBoxCollision(GameObject* obj1, GameObject* obj2)
+		{
+			Vector3 normal = Vector3(0, 0, 0);
+			bool colType = obj1->GetComponent<Collider>()->GetCollider()->Intersects(*obj2->GetComponent<Collider>()->GetCollider());
+			if (colType)
+			{
+				normal.z = 1;
+				if (obj1->GetComponent<Rigidbody>())
+				{
+					float distanceX = obj1->GetTransform()->GetPosition().x - obj2->GetTransform()->GetPosition().x;
+					float distanceY = obj1->GetTransform()->GetPosition().y - obj2->GetTransform()->GetPosition().y;
+					float extentDistanceX = obj1->GetComponent<Collider>()->GetCollider()->Extents.x + obj2->GetComponent<Collider>()->GetCollider()->Extents.x;
+					float extentDistanceY = obj1->GetComponent<Collider>()->GetCollider()->Extents.y + obj2->GetComponent<Collider>()->GetCollider()->Extents.y;
+
+					if (abs(distanceX) < extentDistanceX)
+					{
+						/*if (abs(distanceX) < extentDistanceX * 9 / 10)
+						{
+							if ((obj1->GetComponent<Rigidbody>()->GetAcceleration().y > 0 || obj1->GetComponent<Rigidbody>()->GetMovingVector().y > 0) && distanceY < 0)
+								normal = (normal.y >= 0) ? normal + Vector3(0, -1, 0) : normal;
+							else if ((obj1->GetComponent<Rigidbody>()->GetAcceleration().y < 0 || obj1->GetComponent<Rigidbody>()->GetMovingVector().y < 0) && distanceY > 0)
+								normal = (normal.y <= 0) ? normal + Vector3(0, 1, 0) : normal;
+						}*/
+						if ((obj1->GetComponent<Rigidbody>()->GetAcceleration().y > 0 || obj1->GetComponent<Rigidbody>()->GetMovingVector().y > 0) && distanceY < 0)
+							normal = (normal.y >= 0) ? normal + Vector3(0, -1, 0) : normal;
+						else if ((obj1->GetComponent<Rigidbody>()->GetAcceleration().y < 0 || obj1->GetComponent<Rigidbody>()->GetMovingVector().y < 0) && distanceY > 0)
+							normal = (normal.y <= 0) ? normal + Vector3(0, 1, 0) : normal;
+					}
+					else;
+					if (abs(distanceY) < extentDistanceY)
+					{
+						if (abs(distanceY) < extentDistanceY * 8.5f / 10)
+						{
+							if ((obj1->GetComponent<Rigidbody>()->GetAcceleration().x > 0 || obj1->GetComponent<Rigidbody>()->GetMovingVector().x > 0) && distanceX < 0)
+								normal = (normal.x >= 0) ? normal + Vector3(-1, 0, 0) : normal;
+							else if ((obj1->GetComponent<Rigidbody>()->GetAcceleration().x < 0 || obj1->GetComponent<Rigidbody>()->GetMovingVector().x < 0) && distanceX > 0)
+								normal = (normal.x <= 0) ? normal + Vector3(1, 0, 0) : normal;
+						}
+					}
+					else;
+				}
+				/*obj1->OnCollisionEnter(obj2->GetComponent<Collider>(), normal);
+				obj2->GetComponent<Collider>()->OnCollisionEnter(obj1->GetComponent<Collider>(), normal*-1);
+				normal = Vector3(0, 0, 0);*/
+			}
+			return normal;
 		}
 		bool Collided(BoundingBox* b1, BoundingBox* b2)
 		{

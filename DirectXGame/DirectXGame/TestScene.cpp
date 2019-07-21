@@ -18,14 +18,18 @@ void TestScene::UpdateScene(float elapsedTime)
 	for (size_t i = 0; i < gameObjectList->size(); i++)
 	{
 		float normalX, normalY;
-		if (PhysicsManager::GetInstance()->CheckSweptAABB(player, gameObjectList->at(i), normalX, normalY) < 1.0f)
-		{
-			Vector3* normalVector = new Vector3(normalX, normalY, 0);
-			player->OnCollisionEnter(gameObjectList->at(i)->GetComponent<Collider>(), *normalVector);
-			player->GetComponent<Collider>()->SetCollisionStatus(true);
-			//objlist->at(i)->OnCollisionEnter(objlist->at(j)->GetComponent<Collider>(), *normalVector);
-			//objlist->at(j)->GetComponent<Collider>()->OnCollisionEnter(objlist->at(i)->GetComponent<Collider>(), *normalVector*-1);
-		}
+		//if (PhysicsManager::GetInstance()->CheckSweptAABB(player, gameObjectList->at(i), normalX, normalY) < 1.0f)
+		//{
+		//	Vector3* normalVector = new Vector3(normalX, normalY, 0);
+		//	player->OnCollisionEnter(gameObjectList->at(i)->GetComponent<Collider>(), *normalVector);
+		//	player->GetComponent<Collider>()->SetCollisionStatus(true);
+		//	//objlist->at(i)->OnCollisionEnter(objlist->at(j)->GetComponent<Collider>(), *normalVector);
+		//	//objlist->at(j)->GetComponent<Collider>()->OnCollisionEnter(objlist->at(i)->GetComponent<Collider>(), *normalVector*-1);
+		//}
+		Vector3 boundingboxCollisionCheck = PhysicsManager::GetInstance()->CheckBoundingBoxCollision(player, gameObjectList->at(i));
+		if (boundingboxCollisionCheck.z == 1)
+			if (boundingboxCollisionCheck.y < 0)
+				int l = 1;
 	}
 
 
@@ -58,7 +62,7 @@ void TestScene::LoadScene()
 	tilemap->SetCamera(camera);
 	gameObjectList->insert(gameObjectList->end(), tilemap->GetListGameObjects()->begin(), tilemap->GetListGameObjects()->end());
 	box1 = new GameObject();
-	box1->GetTransform()->SetPosition(Vector3(500,200, 0));
+	box1->GetTransform()->SetPosition(Vector3(500, 200, 0));
 	box1->GetTransform()->SetScale(Vector3(40, 40, 1));
 	box1->GetTransform()->SetScreenScale(Vector3(1, 1, 1));
 	box1->AddComponent<Renderer>(new Renderer(m_dxBase->GetDeviceResource(), L"Resources/Captain/Animations/stand.png"));
