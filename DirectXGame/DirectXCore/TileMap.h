@@ -12,6 +12,7 @@ namespace DirectXCore
 	{
 	public:
 		TileMap();
+		TileMap(DirectXCore::DeviceResources *_deviceResource, const wchar_t * _imagePath, const wchar_t * _txtPath, int _columns, int _rows);
 		TileMap(DirectXCore::DeviceResources *_deviceResource, const wchar_t *path);
 		void SetCamera(Camera* _cam) { mainCamera = _cam; }
 		void Update();
@@ -39,6 +40,7 @@ namespace DirectXCore
 		Renderer* thisRenderer;
 		QuadTree* thisQuad;
 		RECT* newRegion;
+		std::vector<int> data;
 	};
 }
 

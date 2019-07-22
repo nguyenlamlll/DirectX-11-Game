@@ -2,6 +2,8 @@
 
 
 
+
+
 TestScene::TestScene()
 {
 }
@@ -44,8 +46,8 @@ void TestScene::UpdateScene(float elapsedTime)
 
 void TestScene::RenderScene()
 {
-	tilemap->Render();
 	Vector3 worldToScreenShift = Vector3(camera->GetWidth() / 2 - camera->GetPosition().x, camera->GetHeight() / 2 - camera->GetPosition().y, 0);
+	tilemap->Render();
 	player->GetTransform()->SetWorldToScreenPosition(worldToScreenShift);
 	player->Render();
 	for (size_t i = 0; i < gameObjectList->size(); i++)
@@ -76,6 +78,10 @@ void TestScene::LoadScene()
 	player = new Player(m_dxBase);
 	player->SetTag("Player");
 	//camera->SetPosition(player->GetTransform()->GetPosition());
+
+
+
+	
 }
 
 

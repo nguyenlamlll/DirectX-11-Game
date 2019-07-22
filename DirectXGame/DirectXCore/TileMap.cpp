@@ -1,10 +1,62 @@
 #include "stdafx.h"
 #include "TileMap.h"
 
+#include <iostream>
+#include <fstream>
+#include <vector>
+#include <iterator>
+#include <algorithm>
+
 using namespace DirectXCore;
 
 TileMap::TileMap()
 {
+}
+
+DirectXCore::TileMap::TileMap(DirectXCore::DeviceResources *_deviceResource, const wchar_t * _imagePath, const wchar_t * _txtPath, int _columns, int _rows)
+{
+	std::ifstream file("Resources/00/Charleston_1_1.CSV");
+	data = std::vector<int>();
+	if (file.good())
+	{
+		std::string curData = "";
+
+		int i = 0;
+		while (file >> curData)
+		{
+			i++;
+			int x = atoi(curData.c_str());
+			if (x != 0)
+				data.push_back(x);
+		}
+		file.close();
+	}
+	//INIT
+	//for (size_t m = 0; m < 4; m++)
+	//{
+	//	for (size_t n = 0; n < 20; n++)
+	//	{
+	//		RECT* sourceRECT = new RECT();
+	//		int tileSetHorizontalCount = 20;
+	//		int tileSetVerticalCount = 4;
+
+	//		//tile index
+	//		int tileID = i;
+	//		int dataYIndex = tileID / tileSetHorizontalCount;
+	//		int dataXIndex = tileID % tileSetHorizontalCount;
+
+	//		sourceRECT->top = dataYIndex * 16;
+	//		sourceRECT->bottom = sourceRECT->top + 16;
+	//		sourceRECT->left = dataXIndex * 16;
+	//		sourceRECT->right = sourceRECT->left + 16;
+
+	//		listTileID.insert(std::pair<int, RECT*>(tileID, sourceRECT));
+	//		//listRECTPositions.insert(std::pair<int,Vector3>(tileID, Vector3((n * tileDataWidth) + position.x, (m * tileDataHeight) + position.y, 0)));
+	//	}
+	//}
+	thisRenderer = new Renderer(_deviceResource, _imagePath);
+	thisRenderer->SetPivot(Vector3(16 / 2, 16 / 2, 0));
+
 }
 
 TileMap::TileMap(DirectXCore::DeviceResources *_deviceResource, const wchar_t * path)
@@ -39,7 +91,7 @@ TileMap::TileMap(DirectXCore::DeviceResources *_deviceResource, const wchar_t * 
 		const wchar_t* spritePath = wideusername.c_str();
 
 		thisRenderer = new Renderer(_deviceResource, spritePath);
-		thisRenderer->SetPivot(Vector3(tileset->GetTileWidth() / 2 + 5, tileset->GetTileHeight() / 2 + 5, 0));
+		thisRenderer->SetPivot(Vector3(tileset->GetTileWidth() / 2, tileset->GetTileHeight() / 2, 0));
 		//thisRenderer->SetPivot(Vector3(0, 0, 0));
 	}
 	for (int i = 0; i < tilemap->GetNumTileLayers(); i++)
@@ -163,10 +215,7 @@ void DirectXCore::TileMap::Update()
 
 void TileMap::Render()
 {
-	Vector3 worldToScreenShift = Vector3(
-		mainCamera->GetWidth() / 2 - mainCamera->GetPosition().x,
-		mainCamera->GetHeight() / 2 - mainCamera->GetPosition().y,
-		0);
+	Vector3 worldToScreenShift = Vector3(mainCamera->GetWidth() / 2 - mainCamera->GetPosition().x, mainCamera->GetHeight() / 2 - mainCamera->GetPosition().y, 0);
 	worldToScreenPosition = position + worldToScreenShift;
 
 #pragma region OldTilemapAlgirithm
@@ -176,7 +225,6 @@ void TileMap::Render()
 		if (!layer->IsVisible()) continue;
 		int tileDataWidth = tilemap->GetTileWidth();
 		int tileDataHeight = tilemap->GetTileHeight();
-
 		for (size_t m = 0; m < layer->GetHeight(); m++)
 		{
 			for (size_t n = 0; n < layer->GetWidth(); n++)
@@ -199,14 +247,34 @@ void TileMap::Render()
 		}
 	}
 #pragma endregion
-
-#pragma region NewTilemapAlgorithm
-	/*for (int n = 0; n < listRenderers.size(); n++) {
-		listRenderers.at(n)->GetTransform()->SetWorldToScreenPosition(worldToScreenPosition);
-		listRenderers.at(n)->Render();
-	}*/
+#pragma region NewTilemapAlorithm
+	//{
+	//	//RENDER
+	//	for (int i = 0; i < data.size(); i++)
+	//	{
+	//		for (size_t m = 0; m < 4; m++)
+	//		{
+	//			for (size_t n = 0; n < 20; n++)
+	//			{
+	//				int tilesetIndex = data[i];
+	//				if (tilesetIndex != -1)
+	//				{
+	//					//tile index
+	//					int tileID = i;
+	//					//Sprite* sprite = tilesetSheet[layer->GetTileTilesetIndex(n, m)];
+	//					DirectX::SimpleMath::Vector3 currentPosition(((n * 16) + 16 / 2), ((m * 16) + 16 / 2), 0);
+	//					currentPosition *= scale;
+	//					currentPosition += worldToScreenPosition;
+	//					if (mainCamera->IsContain(currentPosition, Vector3(16 * scale.x, 16 * scale.y, 1))) {
+	//						thisRenderer->SetRECT(*listTileID[i]);
+	//						thisRenderer->Render(currentPosition, Vector3(0, 0, 0), scale);
+	//					}
+	//				}
+	//			}
+	//		}
+	//	}
+	//}
 #pragma endregion
-
 }
 
 void DirectXCore::TileMap::SetTilemapPosition(SimpleMath::Vector3 _tilemapPosition)
@@ -222,7 +290,6 @@ void DirectXCore::TileMap::SetTilemapScale(SimpleMath::Vector3 _scale)
 	scale.y = _scale.y;
 	scale.z = _scale.z;
 }
-
 
 TileMap::~TileMap()
 {
