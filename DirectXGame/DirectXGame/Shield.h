@@ -25,6 +25,6 @@ private:
 	std::shared_ptr<DirectXCore::DxBase> m_dxBase;
 	GameObject* captain;
 	Vector3 captainPosition;
-	Vector3 direction, target;
+	Vector3 direction, target,targetLeftSide,targetRightside;
 };
 

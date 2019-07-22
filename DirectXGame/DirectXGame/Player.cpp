@@ -3,7 +3,7 @@
 Player::Player(std::shared_ptr<DirectXCore::DxBase> _m_dxBase)
 {
 	m_dxBase = _m_dxBase;
-	this->GetTransform()->SetPosition(Vector3(500, 500, 0));
+	this->GetTransform()->SetPosition(Vector3(5000, 1150, 0));
 	this->GetTransform()->SetScale(Vector3(96, 120, 1));
 	this->GetTransform()->SetScreenScale(Vector3(3, 3, 1));
 	this->AddComponent<Renderer>(new Renderer(_m_dxBase->GetDeviceResource(), L"Resources/Captain/Animations/stand.png"));
@@ -33,7 +33,6 @@ void Player::PreUpdate(float _deltaTime)
 {
 	cutscene = false;
 	GameObject::PreUpdate(_deltaTime);
-	//capshield->PreUpdate(_deltaTime);
 
 
 	if (m_dxBase->GetInputManager()->IsKeyDown("M") && weaponTimer < 0)
@@ -48,17 +47,18 @@ void Player::PreUpdate(float _deltaTime)
 		else
 		{
 			this->GetComponent<Animation>()->ResetAnimation(L"Resources/Captain/Animations/attack.png", 1, 2);
+
 		}
-		weaponTimer = 0.6f;
-	}
-	else if (m_dxBase->GetInputManager()->IsKeyDown("L") && m_dxBase->GetInputManager()->IsKeyDown("S") && weaponTimer < 0)
-	{
-		if (this->GetComponent<Collider>()->GetCollisionStatus()) this->GetComponent<Animation>()->ResetAnimation(L"Resources/Captain/Animations/sit_attack.png", 1, 2);
 		weaponTimer = 0.6f;
 	}
 	else if (m_dxBase->GetInputManager()->IsKeyDown("L") && weaponTimer < 0.4f)
 	{
 		this->GetComponent<Animation>()->ResetAnimation(L"Resources/Captain/Animations/shieldlessattack.png", 1, 2);
+	}
+	else if (m_dxBase->GetInputManager()->IsKeyDown("L") && m_dxBase->GetInputManager()->IsKeyDown("S") && weaponTimer < 0)
+	{
+		if (this->GetComponent<Collider>()->GetCollisionStatus()) this->GetComponent<Animation>()->ResetAnimation(L"Resources/Captain/Animations/sit_attack.png", 1, 2);
+		weaponTimer = 0.6f;
 	}
 	weaponTimer -= _deltaTime;
 
@@ -145,14 +145,12 @@ void Player::PreUpdate(float _deltaTime)
 void Player::Update(float _deltaTime)
 {
 	GameObject::Update(_deltaTime);
-	//capshield->Update(_deltaTime);
 }
 
 void Player::LateUpdate(float _deltaTime)
 {
 	GameObject::LateUpdate(_deltaTime);
-	//capshield->LateUpdate(_deltaTime);
-	capshield->GetTransform()->SetPosition(this->GetTransform()->GetPosition());
+	//capshield->GetTransform()->SetPosition(this->GetTransform()->GetPosition());
 }
 
 void Player::OnCollisionEnter(Collider* _other, Vector3 _normal)
