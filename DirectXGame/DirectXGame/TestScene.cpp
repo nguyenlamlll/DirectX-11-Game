@@ -42,6 +42,8 @@ void TestScene::UpdateScene(float elapsedTime)
 	player->Update(elapsedTime);
 	player->LateUpdate(elapsedTime);
 	camera->SetPosition(player->GetTransform()->GetPosition());
+	/*if (m_dxBase->GetInputManager()->IsKeyDown("D"))
+		camera->SetPosition(camera->GetPosition() + Vector3(5,0,0));*/
 }
 
 void TestScene::RenderScene()
@@ -65,6 +67,7 @@ void TestScene::LoadScene()
 	//gameObjectList = new std::vector<GameObject*>();
 	camera = new Camera(m_dxBase->GetDeviceResource()->GetOutputSize().right / 2, m_dxBase->GetDeviceResource()->GetOutputSize().bottom / 2);
 	tilemap = new TileMap(m_dxBase->GetDeviceResource(), L"Resources/Captain/Maps/Captain.tmx");
+	//tilemap = new TileMap(m_dxBase->GetDeviceResource(), L"Resources/00/Charleston_1_1.BMP", L"Resources/00/Charleston_1_1.CSV", 20, 4,128,30);
 	tilemap->SetCamera(camera);
 	gameObjectList->insert(gameObjectList->end(), tilemap->GetListGameObjects()->begin(), tilemap->GetListGameObjects()->end());
 	box1 = new GameObject();
@@ -77,11 +80,6 @@ void TestScene::LoadScene()
 
 	player = new Player(m_dxBase);
 	player->SetTag("Player");
-	//camera->SetPosition(player->GetTransform()->GetPosition());
-
-
-
-	
 }
 
 

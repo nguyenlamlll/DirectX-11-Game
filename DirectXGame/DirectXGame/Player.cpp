@@ -3,6 +3,9 @@
 Player::Player(std::shared_ptr<DirectXCore::DxBase> _m_dxBase)
 {
 	m_dxBase = _m_dxBase;
+	//this->GetTransform()->SetPosition(Vector3(500, 0, 0));
+	//this->GetTransform()->SetScale(Vector3(32, 40, 1));
+	//this->GetTransform()->SetScreenScale(Vector3(1, 1, 1));
 	this->GetTransform()->SetPosition(Vector3(5000, 1150, 0));
 	this->GetTransform()->SetScale(Vector3(96, 120, 1));
 	this->GetTransform()->SetScreenScale(Vector3(3, 3, 1));

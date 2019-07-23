@@ -13,10 +13,15 @@ TileMap::TileMap()
 {
 }
 
-DirectXCore::TileMap::TileMap(DirectXCore::DeviceResources *_deviceResource, const wchar_t * _imagePath, const wchar_t * _txtPath, int _columns, int _rows)
+DirectXCore::TileMap::TileMap(DirectXCore::DeviceResources *_deviceResource, const wchar_t * _imagePath, const wchar_t * _txtPath, int _columns, int _rows, int _mapTileColumnCount, int _mapTileRowCount)
 {
+	position = Vector3(0, 0, 0);
+	scale = Vector3(1, 1, 1);
+	worldToScreenPosition = position;
+	gameObjectList = new std::vector<GameObject*>();
 	std::ifstream file("Resources/00/Charleston_1_1.CSV");
-	data = std::vector<int>();
+	data = new std::vector<int>();
+	positionList = new std::map<int, Vector3>();
 	if (file.good())
 	{
 		std::string curData = "";
@@ -27,21 +32,21 @@ DirectXCore::TileMap::TileMap(DirectXCore::DeviceResources *_deviceResource, con
 			i++;
 			int x = atoi(curData.c_str());
 			if (x != 0)
-				data.push_back(x);
+				data->push_back(x);
 		}
 		file.close();
 	}
 	//INIT
-	for (size_t m = 0; m < 4; m++)
+	for (size_t m = 0; m < _rows; m++)
 	{
-		for (size_t n = 0; n < 20; n++)
+		for (size_t n = 0; n < _columns; n++)
 		{
 			RECT* sourceRECT = new RECT();
 			int tileSetHorizontalCount = 20;
 			int tileSetVerticalCount = 4;
 
 			//tile index
-			int tileID = m+n;
+			int tileID = (m * 20) + n;
 			int dataYIndex = tileID / tileSetHorizontalCount;
 			int dataXIndex = tileID % tileSetHorizontalCount;
 
@@ -51,7 +56,28 @@ DirectXCore::TileMap::TileMap(DirectXCore::DeviceResources *_deviceResource, con
 			sourceRECT->right = sourceRECT->left + 16;
 
 			listTileID.insert(std::pair<int, RECT*>(tileID, sourceRECT));
+
+
 			//listRECTPositions.insert(std::pair<int,Vector3>(tileID, Vector3((n * tileDataWidth) + position.x, (m * tileDataHeight) + position.y, 0)));
+		}
+	}
+	for (size_t m = 0; m < _mapTileRowCount; m++)
+	{
+		for (size_t n = 0; n < _mapTileColumnCount; n++)
+		{
+			DirectX::SimpleMath::Vector3* currentPosition = new Vector3(((n * 16) + 16 / 2), ((m * 16) + 16 / 2), 0);
+			*currentPosition *= scale;
+			int tileIndex = (m * 128) + n;
+			positionList->insert(std::pair<int, Vector3>(tileIndex, *currentPosition));
+			if (data->at(tileIndex) == 57)
+			{
+				GameObject*gameObject = new GameObject();
+				gameObject->GetTransform()->SetPosition(position + (*currentPosition)*scale);
+				gameObject->GetTransform()->SetScale(Vector3(16 * scale.x, 16 * scale.y, 1));
+				gameObject->AddComponent<Collider>(new Collider(gameObject, gameObject->GetTransform()));
+				gameObject->SetTag("Wall");
+				gameObjectList->push_back(gameObject);
+			}
 		}
 	}
 	thisRenderer = new Renderer(_deviceResource, _imagePath);
@@ -217,7 +243,6 @@ void TileMap::Render()
 {
 	Vector3 worldToScreenShift = Vector3(mainCamera->GetWidth() / 2 - mainCamera->GetPosition().x, mainCamera->GetHeight() / 2 - mainCamera->GetPosition().y, 0);
 	worldToScreenPosition = position + worldToScreenShift;
-
 #pragma region OldTilemapAlgirithm
 	for (int i = 0; i < tilemap->GetNumTileLayers(); i++)
 	{
@@ -248,32 +273,19 @@ void TileMap::Render()
 	}
 #pragma endregion
 #pragma region NewTilemapAlorithm
-	//{
-	//	//RENDER
-	//	for (int i = 0; i < data.size(); i++)
-	//	{
-	//		for (size_t m = 0; m < 4; m++)
-	//		{
-	//			for (size_t n = 0; n < 20; n++)
-	//			{
-	//				int tilesetIndex = data[i];
-	//				if (tilesetIndex != -1)
-	//				{
-	//					//tile index
-	//					int tileID = i;
-	//					//Sprite* sprite = tilesetSheet[layer->GetTileTilesetIndex(n, m)];
-	//					DirectX::SimpleMath::Vector3 currentPosition(((n * 16) + 16 / 2), ((m * 16) + 16 / 2), 0);
-	//					currentPosition *= scale;
-	//					currentPosition += worldToScreenPosition;
-	//					if (mainCamera->IsContain(currentPosition, Vector3(16 * scale.x, 16 * scale.y, 1))) {
-	//						thisRenderer->SetRECT(*listTileID[i]);
-	//						thisRenderer->Render(currentPosition, Vector3(0, 0, 0), scale);
-	//					}
-	//				}
-	//			}
-	//		}
-	//	}
-	//}
+	/*for (int i = 0; i < data->size(); i++)
+	{
+		int tilesetIndex = data->at(i);
+		Vector3 tempPos = positionList->at(i);
+		tempPos += worldToScreenPosition;
+		if (mainCamera->IsContain(tempPos, Vector3(16 * scale.x, 16 * scale.y, 1))) {
+			if (listTileID[tilesetIndex] != NULL)
+			{
+				thisRenderer->SetRECT(*listTileID[tilesetIndex]);
+				thisRenderer->Render(tempPos, Vector3(0, 0, 0), scale);
+			}
+		}
+	}*/
 #pragma endregion
 }
 
