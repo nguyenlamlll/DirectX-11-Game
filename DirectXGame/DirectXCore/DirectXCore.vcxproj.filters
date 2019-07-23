@@ -183,9 +183,6 @@
     <ClInclude Include="QuadTree.h">
       <Filter>Header Files\Object</Filter>
     </ClInclude>
-    <ClInclude Include="Singleton.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="PhysicsManager.h">
       <Filter>Header Files\Core</Filter>
     </ClInclude>
@@ -193,7 +190,10 @@
       <Filter>Header Files\Core</Filter>
     </ClInclude>
     <ClInclude Include="Animator.h">
-      <Filter>Header Files</Filter>
+      <Filter>Header Files\Components</Filter>
+    </ClInclude>
+    <ClInclude Include="Singleton.h">
+      <Filter>Header Files\Core</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -324,7 +324,7 @@
       <Filter>Source Files\Object</Filter>
     </ClCompile>
     <ClCompile Include="Animator.cpp">
-      <Filter>Source Files</Filter>
+      <Filter>Source Files\Components</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

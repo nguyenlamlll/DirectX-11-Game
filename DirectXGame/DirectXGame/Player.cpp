@@ -28,7 +28,7 @@ Player::Player(std::shared_ptr<DirectXCore::DxBase> _m_dxBase)
 	cutscene = false;
 	weaponTimer = 0;
 
-	capshield = new Shield(_m_dxBase,this);
+	capshield = new Shield(_m_dxBase, this);
 	this->AddChild(capshield);
 }
 
@@ -36,7 +36,6 @@ void Player::PreUpdate(float _deltaTime)
 {
 	cutscene = false;
 	GameObject::PreUpdate(_deltaTime);
-
 
 	if (m_dxBase->GetInputManager()->IsKeyDown("M") && weaponTimer < 0)
 	{
@@ -102,7 +101,7 @@ void Player::PreUpdate(float _deltaTime)
 			}
 			if (m_dxBase->GetInputManager()->IsKeyDown("K"))
 			{
-				this->GetComponent<Rigidbody>()->AddForce(Vector3(0, -500, 0));
+				if (this->GetComponent<Rigidbody>()->GetAcceleration().y >= 0)this->GetComponent<Rigidbody>()->AddForce(Vector3(0, -1000, 0));
 				jumpTime = -0.5f;
 			}
 			if (!m_dxBase->GetInputManager()->IsKeyDown("D") && !m_dxBase->GetInputManager()->IsKeyDown("A"))
@@ -135,14 +134,13 @@ void Player::PreUpdate(float _deltaTime)
 		}
 	}
 
-
-
-
 	lastFrameAcc = this->GetComponent<Rigidbody>()->GetAcceleration();
 	lastFrameMove = this->GetComponent<Rigidbody>()->GetMovingVector();
 	this->GetComponent<Collider>()->SetCollisionStatus(false);
 	if (lastFrameMove.x > 0) transform->SetRotation(Vector3(transform->GetRotation().x, 360, transform->GetRotation().z));
 	else if (lastFrameMove.x < 0) transform->SetRotation(Vector3(transform->GetRotation().x, 0, transform->GetRotation().z));
+
+	this->GetComponent<Collider>()->SetCollisionStatus(false);
 }
 
 void Player::Update(float _deltaTime)
@@ -153,7 +151,6 @@ void Player::Update(float _deltaTime)
 void Player::LateUpdate(float _deltaTime)
 {
 	GameObject::LateUpdate(_deltaTime);
-	//capshield->GetTransform()->SetPosition(this->GetTransform()->GetPosition());
 }
 
 void Player::OnCollisionEnter(Collider* _other, Vector3 _normal)

@@ -7,6 +7,7 @@
 #include "Animation.h"
 #include "State.h"
 #include "Bullet.h"
+#include "Shield.h"
 
 using namespace DirectXCore;
 class Enemy : public DirectXCore::GameObject
@@ -18,6 +19,8 @@ public:
 	void Update(float _deltaTime) override;
 	void LateUpdate(float _deltaTime) override;
 	void OnCollisionEnter(Collider* _other, Vector3 _normal) override;
+
+	void AssignPlayer(GameObject* _player) { player = _player; }
 	~Enemy();
 private:
 	std::shared_ptr<DirectXCore::DxBase> m_dxBase;

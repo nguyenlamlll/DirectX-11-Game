@@ -1,6 +1,7 @@
 #pragma once
 #include "DirectXCore.h"
 #include "Player.h"
+#include "Enemy.h"
 
 class TestScene : public DirectXCore::Scene
 {

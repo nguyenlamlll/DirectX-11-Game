@@ -27,6 +27,7 @@ namespace DirectXCore
 			_child->SetParent(this);
 			childrens->push_back(_child);
 		}
+		std::vector<GameObject*>* GetChildrens() { return childrens; }
 		Transform* GetTransform() { return transform; }
 		std::string GetTag() { return tag; }
 		void SetTag(std::string _newTag) { tag = _newTag; }

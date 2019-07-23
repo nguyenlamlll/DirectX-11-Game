@@ -17,8 +17,6 @@ Shield::Shield(std::shared_ptr<DirectXCore::DxBase> _m_dxBase, GameObject * _cap
 	//this->AddComponent<Animation>(new Animation(this->GetComponent<Renderer>(), 1, 4, 0.03f, 1.0f, true));
 	this->AddComponent<Collider>(new Collider(this, this->GetTransform()));
 	this->GetComponent<Collider>()->SetTrigger(true);
-	m_dxBase->GetCurrentScene()->GetGameObjectList()->insert(m_dxBase->GetCurrentScene()->GetGameObjectList()->end(), this);
-	//this->SetParent(captain);
 
 	targetLeftSide = captain->GetTransform()->GetPosition() + Vector3(-300, 0, 0);
 	targetRightside = captain->GetTransform()->GetPosition() + Vector3(300, 0, 0);

@@ -57,13 +57,13 @@ void DirectXCore::GameObject::LateUpdate(float _deltaTime)
 
 void DirectXCore::GameObject::Render()
 {
-	for (size_t i = 0; i < componentList->size(); i++)
-	{
-		componentList->at(i)->Render();
-	}
 	for (size_t i = 0; i < childrens->size(); i++)
 	{
 		childrens->at(i)->Render();
+	}
+	for (size_t i = 0; i < componentList->size(); i++)
+	{
+		componentList->at(i)->Render();
 	}
 }
 

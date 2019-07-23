@@ -36,9 +36,12 @@ void DirectXCore::Rigidbody::PreUpdate(float _deltaTime)
 	//	accumulatedTime -= physicTimeStep;
 	//	OnPhysicUpdate(accumulatedTime);
 	//}
-	AddForce(gravity);
-	//velocity = acceleration + move;
-	velocity = (acceleration + move)*_deltaTime;
+	if (!kinematic)
+	{
+		AddForce(gravity);
+	}
+	velocity = (kinematic) ? move * _deltaTime : (acceleration + move)*_deltaTime;
+	if (velocity.y > 10) velocity.y = 10;
 }
 
 void DirectXCore::Rigidbody::Update(float _deltaTime)
@@ -92,6 +95,6 @@ Rigidbody::~Rigidbody()
 
 void DirectXCore::Rigidbody::OnPhysicUpdate(float _delta)
 {
-	
+
 }
 

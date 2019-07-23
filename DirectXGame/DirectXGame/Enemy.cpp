@@ -14,18 +14,19 @@ Enemy::Enemy(std::shared_ptr<DirectXCore::DxBase> _m_dxBase)
 	attackTimer = 0;
 	death = false;
 	m_dxBase = _m_dxBase;
-	this->GetTransform()->SetPosition(Vector3(50, 3500, 0));
-	//this->GetTransform()->SetScale(Vector3(50, 50, 1));
-	this->GetTransform()->SetScreenScale(Vector3(1, 1, 1));
-	this->AddComponent<Renderer>(new Renderer(m_dxBase->GetDeviceResource(), L"Resources/rockman.png"));
+	//this->GetTransform()->SetPosition(Vector3(50, 3500, 0));
+	this->GetTransform()->SetScale(Vector3(93, 139, 1));
+	this->GetTransform()->SetScreenScale(Vector3(3, 3, 1));
+	this->AddComponent<Renderer>(new Renderer(m_dxBase->GetDeviceResource(), L"Resources/Captain/Animations/enemy/shooter_sit.png"));
 	this->AddComponent<Rigidbody>(new Rigidbody(this));
 	this->AddComponent<Collider>(new Collider(this, this->GetTransform()));
 	this->AddComponent<Animation>(new Animation(this->GetComponent<Renderer>(), 1, 11, 0.1f, 1.0f, true));
-	this->GetTransform()->SetScale(Vector3(this->GetComponent<Animation>()->GetFrameScale().x / 2, this->GetComponent<Animation>()->GetFrameScale().y / 2, 1));
 	std::vector<std::string>* stringStates = new std::vector<std::string>();
 	stringStates->push_back("shoot");
 	stringStates->push_back("stand");
 	this->AddComponent<State>(new State(this, *stringStates));
+
+	this->GetComponent<Animation>()->ResetAnimation(L"Resources/Captain/Animations/enemy/shooter_move.png", 1, 3);
 }
 
 
@@ -119,20 +120,44 @@ void Enemy::Update(float _deltaTime)
 		//	else bulletTimer += _deltaTime;
 		//}
 
-
 		//JUMP
-		if (attackTimer > 0.5f)
+		if (attackTimer > 2.0f)
 		{
-			this->GetComponent<Rigidbody>()->AddForce(Vector3(0, -100, 0));
+			this->GetComponent<Rigidbody>()->AddForce(Vector3(0, -300, 0));
+			attackTimer = 0;
 		}
-		else if (attackTimer > 0 && attackTimer < 0.5f)
+		else if (attackTimer > 0 && attackTimer < 2.0f)
 		{
-			this->GetComponent<Rigidbody>()->AddForce(Vector3(50, -100, 0));
+			this->GetComponent<Rigidbody>()->Move(Vector3(50, 0, 0));
 		}
 		//SHOOT
 		if (bulletTimer > 0.7f)
 		{
 			//shooting code
+			float directionX = player->GetTransform()->GetPosition().x - this->GetTransform()->GetPosition().x;
+			if (directionX > 0.5f)
+			{
+				directionX = 0.5f;
+			}
+			else if (directionX < -0.5f)
+			{
+				directionX = -0.5f;
+			}
+			else directionX = 0;
+			Bullet* bullet = new Bullet(L"Resources/Captain/Animations/enemy/shooter_bullet.png", m_dxBase, this->GetTransform()->GetPosition(), Vector3(5, 5, 1), Vector3(directionX,0,0));
+			//Bullet* bullet = new Bullet(m_dxBase, this->GetTransform()->GetPosition());
+			this->AddChild(bullet);
+			//Shield* capshield = new Shield(m_dxBase, this);
+			//this->AddChild(capshield);
+			//asd->SetTag("EnemyBullet");
+			//asd->SetName("BruteBullet");
+			//asd->SetTarget(player->GetTransform()->GetPosition());
+			//asd->GetComponent<Animation>()->ResetAnimation(L"Resources/Animations/enemies/rocket.png", 1, 2);
+			//asd->GetTransform()->SetScale(Vector3(5, 5, 5));
+			//asd->AddComponent<Rigidbody>(new Rigidbody(asd));
+			//asd->GetComponent<Rigidbody>()->SetVelocity(Vector3(0, 100.0f, 0));
+			//asd->GetComponent<Rigidbody>()->AddForce(Vector3(-300, -200, 0));
+			bulletTimer = 0;
 		}
 		attackTimer += _deltaTime;
 		bulletTimer += _deltaTime;
@@ -155,8 +180,9 @@ void Enemy::LateUpdate(float _deltaTime)
 
 void Enemy::OnCollisionEnter(Collider * _other, Vector3 _normal)
 {
-	if (_other->GetAttachedGameObject()->GetTag() == "Wall") GameObject::OnCollisionEnter(_other, _normal);
-	if (_other->GetAttachedGameObject()->GetTag() == "PlayerBullet") death = true;
+	GameObject::OnCollisionEnter(_other, _normal);
+	/*if (_other->GetAttachedGameObject()->GetTag() == "Wall") GameObject::OnCollisionEnter(_other, _normal);
+	if (_other->GetAttachedGameObject()->GetTag() == "PlayerBullet") death = true;*/
 }
 
 Enemy::~Enemy()
