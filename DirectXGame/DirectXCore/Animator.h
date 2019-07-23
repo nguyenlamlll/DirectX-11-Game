@@ -1,4 +1,5 @@
 #pragma once
+#include "DxBase.h"
 #include "Component.h"
 
 namespace DirectXCore
@@ -13,7 +14,7 @@ namespace DirectXCore
 		void LateUpdate(float _deltaTime) override;
 		void Render();
 		bool loop;
-		//SimpleMath::Vector3 GetFrameScale() { return SimpleMath::Vector3(frameWidth, frameHeight, 0); }
+		void AddAnimation(Animation* anim);
 	private:
 		/*int frameIndex = 0, frameCount, frameWidth, frameHeight;
 		std::vector<RECT*> animationFrameRects;
@@ -21,6 +22,7 @@ namespace DirectXCore
 		Renderer* mainrender;
 		float currentFrameTime = 0, timePerFrame = 0, scale = 0;
 		const wchar_t* name;*/
+		std::vector<std::pair<std::string, Animation*>*>* animationList;
 	};
 }
 

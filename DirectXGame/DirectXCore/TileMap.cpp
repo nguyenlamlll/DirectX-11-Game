@@ -32,28 +32,28 @@ DirectXCore::TileMap::TileMap(DirectXCore::DeviceResources *_deviceResource, con
 		file.close();
 	}
 	//INIT
-	//for (size_t m = 0; m < 4; m++)
-	//{
-	//	for (size_t n = 0; n < 20; n++)
-	//	{
-	//		RECT* sourceRECT = new RECT();
-	//		int tileSetHorizontalCount = 20;
-	//		int tileSetVerticalCount = 4;
+	for (size_t m = 0; m < 4; m++)
+	{
+		for (size_t n = 0; n < 20; n++)
+		{
+			RECT* sourceRECT = new RECT();
+			int tileSetHorizontalCount = 20;
+			int tileSetVerticalCount = 4;
 
-	//		//tile index
-	//		int tileID = i;
-	//		int dataYIndex = tileID / tileSetHorizontalCount;
-	//		int dataXIndex = tileID % tileSetHorizontalCount;
+			//tile index
+			int tileID = m+n;
+			int dataYIndex = tileID / tileSetHorizontalCount;
+			int dataXIndex = tileID % tileSetHorizontalCount;
 
-	//		sourceRECT->top = dataYIndex * 16;
-	//		sourceRECT->bottom = sourceRECT->top + 16;
-	//		sourceRECT->left = dataXIndex * 16;
-	//		sourceRECT->right = sourceRECT->left + 16;
+			sourceRECT->top = dataYIndex * 16;
+			sourceRECT->bottom = sourceRECT->top + 16;
+			sourceRECT->left = dataXIndex * 16;
+			sourceRECT->right = sourceRECT->left + 16;
 
-	//		listTileID.insert(std::pair<int, RECT*>(tileID, sourceRECT));
-	//		//listRECTPositions.insert(std::pair<int,Vector3>(tileID, Vector3((n * tileDataWidth) + position.x, (m * tileDataHeight) + position.y, 0)));
-	//	}
-	//}
+			listTileID.insert(std::pair<int, RECT*>(tileID, sourceRECT));
+			//listRECTPositions.insert(std::pair<int,Vector3>(tileID, Vector3((n * tileDataWidth) + position.x, (m * tileDataHeight) + position.y, 0)));
+		}
+	}
 	thisRenderer = new Renderer(_deviceResource, _imagePath);
 	thisRenderer->SetPivot(Vector3(16 / 2, 16 / 2, 0));
 

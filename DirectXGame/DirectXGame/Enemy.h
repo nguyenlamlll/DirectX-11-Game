@@ -14,8 +14,6 @@ class Enemy : public DirectXCore::GameObject
 public:
 	Enemy();
 	Enemy(std::shared_ptr<DirectXCore::DxBase> _m_dxBase);
-	Enemy(std::shared_ptr<DirectXCore::DxBase> _m_dxBase, SimpleMath::Vector3 _instantiatePosition);
-	Enemy(std::shared_ptr<DirectXCore::DxBase> _m_dxBase, SimpleMath::Vector3 _instantiatePosition, SimpleMath::Vector3 _instantiateRotation, SimpleMath::Vector3 _instantiateScale);
 	void PreUpdate(float _deltaTime) override;
 	void Update(float _deltaTime) override;
 	void LateUpdate(float _deltaTime) override;
@@ -23,7 +21,7 @@ public:
 	~Enemy();
 private:
 	std::shared_ptr<DirectXCore::DxBase> m_dxBase;
-	float bulletTimer,deathTimer;
+	float bulletTimer,deathTimer,attackTimer;
 	bool death;
 	GameObject* player;
 };

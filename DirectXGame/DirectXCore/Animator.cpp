@@ -5,6 +5,7 @@ using namespace DirectXCore;
 
 Animator::Animator()
 {
+	animationList = new std::vector<std::pair<std::string, Animation*>*>();
 }
 
 
