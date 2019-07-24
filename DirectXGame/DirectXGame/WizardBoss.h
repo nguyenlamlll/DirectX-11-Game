@@ -9,22 +9,21 @@
 #include "Bullet.h"
 
 using namespace DirectXCore;
-class Enemy : public DirectXCore::GameObject
+class WizardBoss :public GameObject
 {
 public:
-	Enemy();
-	Enemy(std::shared_ptr<DirectXCore::DxBase> _m_dxBase);
+	WizardBoss();
+	WizardBoss(std::shared_ptr<DirectXCore::DxBase> _m_dxBase,GameObject* _captain);
 	void PreUpdate(float _deltaTime) override;
 	void Update(float _deltaTime) override;
 	void LateUpdate(float _deltaTime) override;
+	void Render() override;
 	void OnCollisionEnter(Collider* _other, Vector3 _normal) override;
+	~WizardBoss();
 
-	void AssignPlayer(GameObject* _player) { player = _player; }
-	~Enemy();
+	GameObject* cap;
 private:
 	std::shared_ptr<DirectXCore::DxBase> m_dxBase;
-	float bulletTimer,deathTimer,attackTimer;
-	bool death;
-	GameObject* player;
+	Vector3 upleftPos, uprightPos,downrighPos;
 };
 

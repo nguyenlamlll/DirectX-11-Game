@@ -108,6 +108,9 @@ void TestScene::LoadScene()
 	enemy->GetTransform()->SetPosition(player->GetTransform()->GetPosition() + Vector3(-70, -50, 0));
 	enemy->AssignPlayer(player);
 	gameObjectList->push_back(enemy);
+
+	WizardBoss* boss = new WizardBoss(m_dxBase,player);
+	gameObjectList->push_back(boss);
 }
 
 

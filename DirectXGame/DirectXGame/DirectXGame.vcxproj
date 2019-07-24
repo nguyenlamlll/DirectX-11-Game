@@ -138,6 +138,7 @@
     <ClCompile Include="Shield.cpp" />
     <ClCompile Include="ShurikenBoss.cpp" />
     <ClCompile Include="TestScene.cpp" />
+    <ClCompile Include="WizardBoss.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\DirectXCore\DirectXCore.vcxproj">
@@ -154,6 +155,7 @@
     <ClInclude Include="Shield.h" />
     <ClInclude Include="ShurikenBoss.h" />
     <ClInclude Include="TestScene.h" />
+    <ClInclude Include="WizardBoss.h" />
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="DirectXGame.rc" />

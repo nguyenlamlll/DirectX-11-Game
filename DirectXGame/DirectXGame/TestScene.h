@@ -2,6 +2,7 @@
 #include "DirectXCore.h"
 #include "Player.h"
 #include "Enemy.h"
+#include "WizardBoss.h"
 
 class TestScene : public DirectXCore::Scene
 {
