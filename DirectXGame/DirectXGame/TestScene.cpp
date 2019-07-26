@@ -15,29 +15,31 @@ TestScene::TestScene(DirectXCore::DxBase * dxBase)
 
 void TestScene::UpdateScene(float elapsedTime)
 {
+	//PRE UPDATE
 	for (size_t i = 0; i < gameObjectList->size(); i++)
 	{
 		gameObjectList->at(i)->PreUpdate(elapsedTime);
+		if (gameObjectList->at(i)->GetComponent<Collider>() != NULL) gameObjectList->at(i)->GetComponent<Collider>()->SetCollisionStatus(false);
 	}
 	//PHYSICS
 	for (size_t i = 0; i < gameObjectList->size(); i++)
 	{
-		//if (gameObjectList->at(i) != player)
-		//{
-		//	if (!gameObjectList->at(i)->GetComponent<Collider>()->IsTrigger())
-		//	{
-		//		float normalX, normalY;
-		//		if (PhysicsManager::GetInstance()->CheckSweptAABB(player, gameObjectList->at(i), normalX, normalY) < 1.0f)
-		//		{
-		//			Vector3* normalVector = new Vector3(normalX, normalY, 0);
-		//			player->OnCollisionEnter(gameObjectList->at(i)->GetComponent<Collider>(), *normalVector);
-		//			player->GetComponent<Collider>()->SetCollisionStatus(true);
-		//			//objlist->at(i)->OnCollisionEnter(objlist->at(j)->GetComponent<Collider>(), *normalVector);
-		//			//objlist->at(j)->GetComponent<Collider>()->OnCollisionEnter(objlist->at(i)->GetComponent<Collider>(), *normalVector*-1);
-		//		}
-		//	}
-		//}
-		for (size_t j = 0; j < gameObjectList->size(); j++)
+		if (gameObjectList->at(i) != player)
+		{
+			if (!gameObjectList->at(i)->GetComponent<Collider>()->IsTrigger())
+			{
+				float normalX, normalY;
+				if (PhysicsManager::GetInstance()->CheckSweptAABB(player, gameObjectList->at(i), normalX, normalY) < 1.0f)
+				{
+					Vector3* normalVector = new Vector3(normalX, normalY, 0);
+					player->OnCollisionEnter(gameObjectList->at(i)->GetComponent<Collider>(), *normalVector);
+					player->GetComponent<Collider>()->SetCollisionStatus(true);
+					//objlist->at(i)->OnCollisionEnter(objlist->at(j)->GetComponent<Collider>(), *normalVector);
+					//objlist->at(j)->GetComponent<Collider>()->OnCollisionEnter(objlist->at(i)->GetComponent<Collider>(), *normalVector*-1);
+				}
+			}
+		}
+		/*for (size_t j = 0; j < gameObjectList->size(); j++)
 		{
 			if (gameObjectList->at(i) != gameObjectList->at(j))
 			{
@@ -57,23 +59,29 @@ void TestScene::UpdateScene(float elapsedTime)
 					}
 				}
 			}
-		}
+		}*/
 	}
+	//UPDATE
 	for (size_t i = 0; i < gameObjectList->size(); i++)
 	{
 		gameObjectList->at(i)->Update(elapsedTime);
 	}
+	//LATE UPDATE
 	for (size_t i = 0; i < gameObjectList->size(); i++)
 	{
 		gameObjectList->at(i)->LateUpdate(elapsedTime);
 	}
 	camera->SetPosition(player->GetTransform()->GetPosition());
+	/*gridTest->PreUpdate(elapsedTime);
+	gridTest->Update(elapsedTime);
+	gridTest->LateUpdate(elapsedTime);*/
 }
 
 void TestScene::RenderScene()
 {
 	Vector3 worldToScreenShift = Vector3(camera->GetWidth() / 2 - camera->GetPosition().x, camera->GetHeight() / 2 - camera->GetPosition().y, 0);
-	tilemap->Render();
+	//tilemap->Render();
+	gridTest->Render();
 	for (size_t i = 0; i < gameObjectList->size(); i++)
 	{
 		gameObjectList->at(i)->GetTransform()->SetWorldToScreenPosition(worldToScreenShift);
@@ -98,19 +106,23 @@ void TestScene::LoadScene()
 	player = new Player(m_dxBase);
 	player->SetTag("Player");
 	camera = new Camera(m_dxBase->GetDeviceResource()->GetOutputSize().right / 2, m_dxBase->GetDeviceResource()->GetOutputSize().bottom / 2);
-	tilemap = new TileMap(m_dxBase->GetDeviceResource(), L"Resources/Captain/Maps/Captain.tmx");
-	//tilemap = new TileMap(m_dxBase->GetDeviceResource(), L"Resources/00/Charleston_1_1.BMP", L"Resources/00/Charleston_1_1.CSV", 20, 4,128,30);
+	//tilemap = new TileMap(m_dxBase->GetDeviceResource(), L"Resources/Captain/Maps/Captain.tmx");
+	tilemap = new TileMap(m_dxBase->GetDeviceResource(), L"Resources/00/Charleston_1_1.BMP", L"Resources/00/Charleston_1_1.CSV", 20, 4,128,30);
 	tilemap->SetCamera(camera);
 	gameObjectList->push_back(player);
 	gameObjectList->insert(gameObjectList->end(), tilemap->GetListGameObjects()->begin(), tilemap->GetListGameObjects()->end());
 
-	Enemy* enemy = new Enemy(m_dxBase);
+	gridTest = new Grid(tilemap->GetMapSize(), 2, 8, tilemap->GetListGameObjects(),camera);
+	gridTest->SetRenderer(tilemap->GetTilepRenderer());
+	gridTest->AddRenderTile(tilemap->GetListTileIDs(),tilemap->GetData(),tilemap->GetPositionList(),Vector3(3,3,1));
+
+	/*Enemy* enemy = new Enemy(m_dxBase);
 	enemy->GetTransform()->SetPosition(player->GetTransform()->GetPosition() + Vector3(-70, -50, 0));
 	enemy->AssignPlayer(player);
-	gameObjectList->push_back(enemy);
+	gameObjectList->push_back(enemy);*/
 
-	WizardBoss* boss = new WizardBoss(m_dxBase,player);
-	gameObjectList->push_back(boss);
+	//WizardBoss* boss = new WizardBoss(m_dxBase,player);
+	//gameObjectList->push_back(boss);
 }
 
 

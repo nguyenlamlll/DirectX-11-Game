@@ -12,6 +12,8 @@
 #include "Singleton.h"
 #include "PhysicsManager.h"
 #include "ObjectManager.h"
+#include "Animator.h"
+#include "Grid.h"
 
 namespace DirectXCore 
 {

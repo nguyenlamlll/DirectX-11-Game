@@ -20,7 +20,7 @@ WizardBoss::WizardBoss(std::shared_ptr<DirectXCore::DxBase> _m_dxBase, GameObjec
 	upleftPos = uprightPos + Vector3(-100, 0, 0);
 
 	this->AddComponent<Renderer>(new Renderer(m_dxBase->GetDeviceResource(), L"Resources/Captain/Animations/boss/wizard_1.png"));
-	this->AddComponent<Animation>(new Animation(this->GetComponent<Renderer>(), 1, 11, 0.1f, 1.0f, true));
+	this->AddComponent<Animation>(new Animation("asdsad",this->GetComponent<Renderer>(), 1, 11, 0.1f, 1.0f, true));
 	//this->AddComponent<Rigidbody>(new Rigidbody(this));
 	this->AddComponent<Collider>(new Collider(this, this->GetTransform()));
 

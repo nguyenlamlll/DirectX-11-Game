@@ -3,16 +3,32 @@
 Player::Player(std::shared_ptr<DirectXCore::DxBase> _m_dxBase)
 {
 	m_dxBase = _m_dxBase;
-	//this->GetTransform()->SetPosition(Vector3(500, 0, 0));
-	//this->GetTransform()->SetScale(Vector3(32, 40, 1));
-	//this->GetTransform()->SetScreenScale(Vector3(1, 1, 1));
-	this->GetTransform()->SetPosition(Vector3(5000, 1150, 0));
+	this->GetTransform()->SetPosition(Vector3(500, 0, 0));
+	this->GetTransform()->SetScale(Vector3(32, 40, 1));
+	this->GetTransform()->SetScreenScale(Vector3(1, 1, 1));
+	/*this->GetTransform()->SetPosition(Vector3(5000, 800, 0));
 	this->GetTransform()->SetScale(Vector3(96, 120, 1));
-	this->GetTransform()->SetScreenScale(Vector3(3, 3, 1));
+	this->GetTransform()->SetScreenScale(Vector3(3, 3, 1));*/
 	this->AddComponent<Renderer>(new Renderer(_m_dxBase->GetDeviceResource(), L"Resources/Captain/Animations/stand.png"));
 	this->AddComponent<Rigidbody>(new Rigidbody(this));
 	this->AddComponent<Collider>(new Collider(this, this->GetTransform()));
-	this->AddComponent<Animation>(new Animation(this->GetComponent<Renderer>(), 1, 11, 0.1f, 1.0f, true));
+	this->AddComponent<Animation>(new Animation("Jump",this->GetComponent<Renderer>(), 1, 11, 0.1f, 1.0f, true));
+
+	/*this->AddComponent<Animator>(new Animator(this->GetComponent<Renderer>()));
+	Animation* moveAnim = new Animation("Move", this->GetComponent<Renderer>(), 1, 11, 0.1f, 1.0f, true);
+	Animation* standAnim = new Animation("Stand", this->GetComponent<Renderer>(), 1, 11, 0.1f, 1.0f, true);
+	Animation* jumpAnim = new Animation("Jump", this->GetComponent<Renderer>(), 1, 11, 0.1f, 1.0f, true);
+	moveAnim->ResetAnimation(L"Resources/Captain/Animations/move.png", 1, 4);
+	standAnim->ResetAnimation(L"Resources/Captain/Animations/stand.png", 1, 1);
+	jumpAnim->ResetAnimation(L"Resources/Captain/Animations/jump.png", 1, 1);
+	this->GetComponent<Animator>()->AddAnimation(standAnim);
+	this->GetComponent<Animator>()->AddAnimation(moveAnim);
+	this->GetComponent<Animator>()->AddAnimation(jumpAnim);
+	this->GetComponent<Animator>()->SetCurrentAnimation(moveAnim);
+	this->GetComponent<Animator>()->AddTransition("Stand", "Move", true);
+	this->GetComponent<Animator>()->AddTransition("Move", "Stand", true);
+	this->GetComponent<Animator>()->AddTransition("Jump", "Stand", true);*/
+
 	std::vector<std::string>* stringStates = new std::vector<std::string>();
 	stringStates->push_back("jump");
 	stringStates->push_back("jumpflip");
@@ -49,7 +65,6 @@ void Player::PreUpdate(float _deltaTime)
 		else
 		{
 			this->GetComponent<Animation>()->ResetAnimation(L"Resources/Captain/Animations/attack.png", 1, 2);
-
 		}
 		weaponTimer = 0.6f;
 	}
@@ -63,7 +78,6 @@ void Player::PreUpdate(float _deltaTime)
 		weaponTimer = 0.6f;
 	}
 	weaponTimer -= _deltaTime;
-
 	if (this->GetComponent<Collider>()->GetCollisionStatus())
 	{
 		if (m_dxBase->GetInputManager()->IsKeyDown("W"))
@@ -101,7 +115,7 @@ void Player::PreUpdate(float _deltaTime)
 			}
 			if (m_dxBase->GetInputManager()->IsKeyDown("K"))
 			{
-				if (this->GetComponent<Rigidbody>()->GetAcceleration().y >= 0)this->GetComponent<Rigidbody>()->AddForce(Vector3(0, -1000, 0));
+				if (this->GetComponent<Rigidbody>()->GetAcceleration().y >= 0 && this->GetComponent<Collider>()->GetCollisionStatus())this->GetComponent<Rigidbody>()->AddForce(Vector3(0, -1000, 0));
 				jumpTime = -0.5f;
 			}
 			if (!m_dxBase->GetInputManager()->IsKeyDown("D") && !m_dxBase->GetInputManager()->IsKeyDown("A"))
@@ -136,16 +150,16 @@ void Player::PreUpdate(float _deltaTime)
 
 	lastFrameAcc = this->GetComponent<Rigidbody>()->GetAcceleration();
 	lastFrameMove = this->GetComponent<Rigidbody>()->GetMovingVector();
-	this->GetComponent<Collider>()->SetCollisionStatus(false);
 	if (lastFrameMove.x > 0) transform->SetRotation(Vector3(transform->GetRotation().x, 360, transform->GetRotation().z));
 	else if (lastFrameMove.x < 0) transform->SetRotation(Vector3(transform->GetRotation().x, 0, transform->GetRotation().z));
-
-	this->GetComponent<Collider>()->SetCollisionStatus(false);
 }
 
 void Player::Update(float _deltaTime)
 {
 	GameObject::Update(_deltaTime);
+	//this->GetComponent<Animator>()->SetBool("Move", "Stand", !m_dxBase->GetInputManager()->IsKeyDown("D") && this->GetComponent<Collider>()->GetCollisionStatus());
+	//this->GetComponent<Animator>()->SetBool("Stand", "Move", m_dxBase->GetInputManager()->IsKeyDown("D") && this->GetComponent<Collider>()->GetCollisionStatus());
+	//this->GetComponent<Animator>()->SetBool("Stand", "Jump", !this->GetComponent<Collider>()->GetCollisionStatus());
 }
 
 void Player::LateUpdate(float _deltaTime)
@@ -178,6 +192,7 @@ void Player::OnCollisionEnter(Collider* _other, Vector3 _normal)
 		}
 		else if (lastFrameMove.x < 0) GameObject::OnCollisionEnter(_other, _normal);
 	}
+	this->GetComponent<Collider>()->SetCollisionStatus(true);
 }
 
 

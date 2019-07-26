@@ -32,5 +32,6 @@ private:
 	GameObject* box2;
 	TileMap* tilemap;
 	Player* player;
+	Grid* gridTest;
 };
 

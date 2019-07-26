@@ -14,7 +14,7 @@ ShurikenBoss::ShurikenBoss(std::shared_ptr<DirectXCore::DxBase> _m_dxBase, Simpl
 	this->AddComponent<Renderer>(new Renderer(m_dxBase->GetDeviceResource(), L"Resources/rockman.png"));
 	this->AddComponent<Collider>(new Collider(this, this->GetTransform()));
 	this->AddComponent<Rigidbody>(new Rigidbody(this));
-	this->AddComponent<Animation>(new Animation(this->GetComponent<Renderer>(), 1, 11, 0.1f, 1.0f, true));
+	this->AddComponent<Animation>(new Animation("asd",this->GetComponent<Renderer>(), 1, 11, 0.1f, 1.0f, true));
 	this->GetTransform()->SetScale(Vector3(this->GetComponent<Animation>()->GetFrameScale().x*_instantiateScale.x, this->GetComponent<Animation>()->GetFrameScale().y*_instantiateScale.y, 1));
 	std::vector<std::string>* stringStates = new std::vector<std::string>();
 	stringStates->push_back("shoot");

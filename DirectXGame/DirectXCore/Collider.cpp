@@ -7,6 +7,7 @@ using namespace DirectXCore;
 Collider::Collider()
 {
 	isTrigger = false;
+	collided = false;
 }
 DirectXCore::Collider::Collider(GameObject * _attachedGameObject, Transform* _gameObjectTransform)
 {
@@ -14,11 +15,13 @@ DirectXCore::Collider::Collider(GameObject * _attachedGameObject, Transform* _ga
 	collider = new BoundingBox(_gameObjectTransform->GetPosition(), _gameObjectTransform->GetScale());
 	SetColliderTransform(_gameObjectTransform);
 	isTrigger = false;
+	collided = false;
 }
 DirectXCore::Collider::Collider(GameObject * _attachedGameObject, Vector3 _pos, Vector3 _rot, Vector3 _scl)
 {
 	attachedGameObject = _attachedGameObject;
 	isTrigger = false;
+	collided = false;
 }
 void DirectXCore::Collider::PreUpdate(float _deltaTime)
 {

@@ -195,6 +195,9 @@
     <ClInclude Include="Singleton.h">
       <Filter>Header Files\Core</Filter>
     </ClInclude>
+    <ClInclude Include="Grid.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="MapReader\miniz.c">
@@ -325,6 +328,9 @@
     </ClCompile>
     <ClCompile Include="Animator.cpp">
       <Filter>Source Files\Components</Filter>
+    </ClCompile>
+    <ClCompile Include="Grid.cpp">
+      <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

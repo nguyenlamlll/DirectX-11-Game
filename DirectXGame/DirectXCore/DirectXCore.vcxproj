@@ -169,6 +169,7 @@
     <ClInclude Include="DirectXCore.h" />
     <ClInclude Include="DxBase.h" />
     <ClInclude Include="GameObject.h" />
+    <ClInclude Include="Grid.h" />
     <ClInclude Include="ObjectManager.h" />
     <ClInclude Include="PhysicsManager.h" />
     <ClInclude Include="QuadTree.h" />
@@ -268,6 +269,7 @@
     <ClCompile Include="DeviceResources.cpp" />
     <ClCompile Include="DxBase.cpp" />
     <ClCompile Include="GameObject.cpp" />
+    <ClCompile Include="Grid.cpp" />
     <ClCompile Include="QuadTree.cpp" />
     <ClCompile Include="State.cpp" />
     <ClCompile Include="Text.cpp" />
