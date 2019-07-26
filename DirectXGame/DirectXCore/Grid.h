@@ -8,6 +8,7 @@ namespace DirectXCore
 	{
 		int dataIndex;
 		std::pair<int, Vector3>* positionIndex;
+		Vector3 tileScale;
 	};
 	struct GridTile
 	{
@@ -32,6 +33,7 @@ namespace DirectXCore
 		void GameObjectScattering(std::vector<GameObject*> _objects);
 		void SetRenderer(Renderer* _renderer) { mainRenderer = _renderer; }
 		void AddRenderTile(std::map<int, RECT*> _listTileID, std::vector<int>* data, std::map<int, Vector3>* _positionList,Vector3 _scale);
+		std::vector<GridTile*>* GetAvailableGrids() { return availableGrids; }
 		~Grid();
 	private:
 		Vector3 GridTileSize;
@@ -39,6 +41,9 @@ namespace DirectXCore
 		Camera* camera;
 		Renderer* mainRenderer;
 		std::map<int, RECT*> listTileID;
+		std::vector<GridTile*>* availableGrids;
+		Vector3 scale;
+
 	};
 
 

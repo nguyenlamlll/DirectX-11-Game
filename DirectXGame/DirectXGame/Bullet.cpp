@@ -8,7 +8,7 @@ Bullet::Bullet(std::shared_ptr<DirectXCore::DxBase> _m_dxBase, Vector3 _pos)
 {
 	m_dxBase = _m_dxBase;
 	this->GetTransform()->SetPosition(_pos);
-	this->GetTransform()->SetScale(Vector3(50, 50, 1));
+	this->GetTransform()->SetScale(Vector3(16, 16, 1));
 	this->GetTransform()->SetScreenScale(Vector3(2,2,1));
 	this->AddComponent<Renderer>(new Renderer(m_dxBase->GetDeviceResource(), L"Resources/Captain/Animations/enemy/shooter_bullet.png"));
 }
@@ -17,7 +17,7 @@ Bullet::Bullet(const wchar_t* _path, std::shared_ptr<DirectXCore::DxBase> _m_dxB
 {
 	m_dxBase = _m_dxBase;
 	this->GetTransform()->SetPosition(_pos);
-	this->GetTransform()->SetScale(Vector3(1, 1, 1));
+	this->GetTransform()->SetScale(Vector3(16, 16, 1));
 	this->GetTransform()->SetScreenScale(_scl);
 	this->AddComponent<Renderer>(new Renderer(m_dxBase->GetDeviceResource(), _path));
 	//this->AddComponent<Animation>(new Animation(this->GetComponent<Renderer>(), 1, 4, 0.03f, 1.0f, true));

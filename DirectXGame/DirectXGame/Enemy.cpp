@@ -15,8 +15,8 @@ Enemy::Enemy(std::shared_ptr<DirectXCore::DxBase> _m_dxBase)
 	death = false;
 	m_dxBase = _m_dxBase;
 	//this->GetTransform()->SetPosition(Vector3(50, 3500, 0));
-	this->GetTransform()->SetScale(Vector3(93, 139, 1));
-	this->GetTransform()->SetScreenScale(Vector3(3, 3, 1));
+	this->GetTransform()->SetScale(Vector3(31, 47, 1));
+	this->GetTransform()->SetScreenScale(Vector3(1, 1, 1));
 	this->AddComponent<Renderer>(new Renderer(m_dxBase->GetDeviceResource(), L"Resources/Captain/Animations/enemy/shooter_sit.png"));
 	this->AddComponent<Rigidbody>(new Rigidbody(this));
 	this->AddComponent<Collider>(new Collider(this, this->GetTransform()));
@@ -47,9 +47,9 @@ void Enemy::Update(float _deltaTime)
 		//{
 		//	if (player == NULL)
 		//	{
-		//		for (size_t i = 0; i < m_dxBase->GetCurrentScene()->GetGameObjectList()->size(); i++)
+		//		for (size_t i = 0; i < m_dxBase->GetCurrentScene()->GetDynamicGameObjectList()->size(); i++)
 		//		{
-		//			if (m_dxBase->GetCurrentScene()->GetGameObjectList()->at(i)->GetTag() == "Player") player = m_dxBase->GetCurrentScene()->GetGameObjectList()->at(i);
+		//			if (m_dxBase->GetCurrentScene()->GetDynamicGameObjectList()->at(i)->GetTag() == "Player") player = m_dxBase->GetCurrentScene()->GetDynamicGameObjectList()->at(i);
 		//		}
 		//	}
 		//	if (this->GetComponent<State>())
@@ -131,7 +131,7 @@ void Enemy::Update(float _deltaTime)
 			this->GetComponent<Rigidbody>()->Move(Vector3(50, 0, 0));
 		}
 		//SHOOT
-		if (bulletTimer > 0.7f)
+		if (bulletTimer > 2.7f)
 		{
 			//shooting code
 			float directionX = player->GetTransform()->GetPosition().x - this->GetTransform()->GetPosition().x;
@@ -144,9 +144,11 @@ void Enemy::Update(float _deltaTime)
 				directionX = -0.5f;
 			}
 			else directionX = 0;
-			Bullet* bullet = new Bullet(L"Resources/Captain/Animations/enemy/shooter_bullet.png", m_dxBase, this->GetTransform()->GetPosition(), Vector3(5, 5, 1), Vector3(directionX,0,0));
+			Bullet* bullet = new Bullet(L"Resources/Captain/Animations/enemy/shooter_bullet.png", m_dxBase, this->GetTransform()->GetPosition(), Vector3(2, 2, 1), Vector3(directionX,0,0));
 			//Bullet* bullet = new Bullet(m_dxBase, this->GetTransform()->GetPosition());
-			this->AddChild(bullet);
+			bullet->SetTag("EnemyBullet");
+			m_dxBase->GetCurrentScene()->GetDynamicGameObjectList()->push_back(bullet);
+			//this->AddChild(bullet);
 			//Shield* capshield = new Shield(m_dxBase, this);
 			//this->AddChild(capshield);
 			//asd->SetTag("EnemyBullet");
@@ -167,7 +169,7 @@ void Enemy::Update(float _deltaTime)
 		//this->GetComponent<Animation>()->ResetAnimation(L"Resources/Animations/enemies/stand.png", 1, 4);
 		if (deathTimer > 1.5f)
 		{
-			m_dxBase->GetCurrentScene()->GetGameObjectList()->erase(std::remove(m_dxBase->GetCurrentScene()->GetGameObjectList()->begin(), m_dxBase->GetCurrentScene()->GetGameObjectList()->end(), this), m_dxBase->GetCurrentScene()->GetGameObjectList()->end());
+			m_dxBase->GetCurrentScene()->GetDynamicGameObjectList()->erase(std::remove(m_dxBase->GetCurrentScene()->GetDynamicGameObjectList()->begin(), m_dxBase->GetCurrentScene()->GetDynamicGameObjectList()->end(), this), m_dxBase->GetCurrentScene()->GetDynamicGameObjectList()->end());
 		}
 		else deathTimer += _deltaTime;
 	}
