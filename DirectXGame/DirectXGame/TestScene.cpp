@@ -21,7 +21,7 @@ void TestScene::UpdateScene(float elapsedTime)
 	gameObjectList->clear();
 	for (size_t i = 0; i < gridTest->GetAvailableGrids()->size(); i++)
 	{
-		//if (i > 0) break;
+		if (i != 0) break;
 		gameObjectList->insert(gameObjectList->end(), gridTest->GetAvailableGrids()->at(i)->objects.begin(), gridTest->GetAvailableGrids()->at(i)->objects.end());
 	}
 
@@ -161,7 +161,7 @@ void TestScene::LoadScene()
 
 	gridTest = new Grid(tilemap->GetMapSize(), 2, 8, tilemap->GetListGameObjects(), camera);
 	gridTest->SetRenderer(tilemap->GetTilepRenderer());
-	gridTest->AddRenderTile(tilemap->GetListTileIDs(), tilemap->GetData(), tilemap->GetPositionList(), Vector3(3, 3, 1));
+	gridTest->AddRenderTile(tilemap->GetListTileIDs(), tilemap->GetData(), tilemap->GetPositionList(), tilemap->GetTilemapScale());
 
 	Enemy* enemy = new Enemy(m_dxBase);
 	enemy->GetTransform()->SetPosition(player->GetTransform()->GetPosition() + Vector3(50, -30, 0));

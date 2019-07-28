@@ -25,5 +25,6 @@ public:
 private:
 	std::shared_ptr<DirectXCore::DxBase> m_dxBase;
 	Vector3 direction, target;
+	float alivetime = 3.0f;
 };
 

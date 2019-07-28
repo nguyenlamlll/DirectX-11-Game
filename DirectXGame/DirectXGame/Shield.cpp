@@ -11,9 +11,9 @@ Shield::Shield(std::shared_ptr<DirectXCore::DxBase> _m_dxBase, GameObject * _cap
 	m_dxBase = _m_dxBase;
 	captain = _captain;
 	this->GetTransform()->SetPosition(_captain->GetTransform()->GetPosition());
-	this->GetTransform()->SetScale(Vector3(34, 40, 1));
-	this->GetTransform()->SetScreenScale(Vector3(2, 2, 1));
-	this->AddComponent<Renderer>(new Renderer(m_dxBase->GetDeviceResource(), L"Resources/Captain/Animations/shield_2.png"));
+	this->GetTransform()->SetScale(Vector3(51, 60, 1));
+	this->GetTransform()->SetScreenScale(Vector3(3, 3, 1));
+	this->AddComponent<Renderer>(new Renderer(m_dxBase->GetDeviceResource(), L"Resources/Captain/Animations/shield_1.png"));
 	//this->AddComponent<Animation>(new Animation(this->GetComponent<Renderer>(), 1, 4, 0.03f, 1.0f, true));
 	this->AddComponent<Collider>(new Collider(this, this->GetTransform()));
 	this->GetComponent<Collider>()->SetTrigger(true);
@@ -41,14 +41,25 @@ void Shield::Update(float _deltaTime)
 void Shield::LateUpdate(float _deltaTime)
 {
 	GameObject::LateUpdate(_deltaTime);
-	//this->GetTransform()->SetPosition(captain->GetTransform()->GetPosition());
-	Vector3 pos = this->GetTransform()->GetPosition();
+	Vector3 offset = Vector3(0, -20, 0);
+	if (captain->GetTransform()->GetRotation().y > 120)
+	{
+		this->GetTransform()->SetRotation(Vector3(0, 360, 0));
+		offset.x = 20;
+	}
+	else
+	{
+		this->GetTransform()->SetRotation(Vector3(0, 0, 0));
+		offset.x = -20;
+	}
+	//Vector3 pos = this->GetTransform()->GetPosition();
 	//pos.y = captain->GetTransform()->GetPosition().y;
-	if (pos.x > targetRightside.x && direction.x > 0)
+	/*if (pos.x > targetRightside.x && direction.x > 0)
 		direction.x *= -1;
 	else if (pos.x < targetLeftSide.x && direction.x < 0)
 		direction.x *= -1;
-	this->GetTransform()->SetPosition(this->GetTransform()->GetPosition() + direction);
+	this->GetTransform()->SetPosition(this->GetTransform()->GetPosition() + direction);*/
+	this->GetTransform()->SetPosition(captain->GetTransform()->GetPosition() + offset);
 }
 
 void Shield::Render()

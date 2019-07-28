@@ -89,7 +89,7 @@ void Grid::Render()
 	Vector3 worldToScreenShift = Vector3(camera->GetWidth() / 2 - camera->GetPosition().x, camera->GetHeight() / 2 - camera->GetPosition().y, 0);
 	for (size_t i = 0; i < availableGrids->size(); i++)
 	{
-		//if (i > 0) break;
+		if (i != 0) break;
 		for (size_t j = 0; j < availableGrids->at(i)->tileObjects.size(); j++)
 		{
 			
@@ -123,7 +123,7 @@ void DirectXCore::Grid::AddRenderTile(std::map<int, RECT*> _listTileID, std::vec
 		for (size_t i = 0; i < _positionList->size(); i++)
 		{
 			Vector3 _objectPosition = _positionList->at(i);
-			Vector3 _objectScale = Vector3(16 * scale.x, 16 * scale.y, 0);
+			Vector3 _objectScale = Vector3(16 /** scale.x*/, 16 /** scale.y*/, 0);
 			bool notContainX = (_objectPosition.x + _objectScale.x<Grids->at(j)->Position.x - Grids->at(j)->Size.x / 2 || _objectPosition.x - _objectScale.x>Grids->at(j)->Position.x + Grids->at(j)->Size.x / 2);
 			bool notContainY = (_objectPosition.y + _objectScale.y<Grids->at(j)->Position.y - Grids->at(j)->Size.y / 2 || _objectPosition.y - _objectScale.y>Grids->at(j)->Position.y + Grids->at(j)->Size.y / 2);
 			if (!notContainX && !notContainY)

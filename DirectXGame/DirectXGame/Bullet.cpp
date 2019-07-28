@@ -8,8 +8,8 @@ Bullet::Bullet(std::shared_ptr<DirectXCore::DxBase> _m_dxBase, Vector3 _pos)
 {
 	m_dxBase = _m_dxBase;
 	this->GetTransform()->SetPosition(_pos);
-	this->GetTransform()->SetScale(Vector3(16, 16, 1));
-	this->GetTransform()->SetScreenScale(Vector3(2,2,1));
+	this->GetTransform()->SetScale(Vector3(24, 24, 1));
+	this->GetTransform()->SetScreenScale(Vector3(3,3,1));
 	this->AddComponent<Renderer>(new Renderer(m_dxBase->GetDeviceResource(), L"Resources/Captain/Animations/enemy/shooter_bullet.png"));
 }
 
@@ -17,7 +17,7 @@ Bullet::Bullet(const wchar_t* _path, std::shared_ptr<DirectXCore::DxBase> _m_dxB
 {
 	m_dxBase = _m_dxBase;
 	this->GetTransform()->SetPosition(_pos);
-	this->GetTransform()->SetScale(Vector3(16, 16, 1));
+	this->GetTransform()->SetScale(Vector3(16*_scl.x, 16*_scl.y, 1));
 	this->GetTransform()->SetScreenScale(_scl);
 	this->AddComponent<Renderer>(new Renderer(m_dxBase->GetDeviceResource(), _path));
 	//this->AddComponent<Animation>(new Animation(this->GetComponent<Renderer>(), 1, 4, 0.03f, 1.0f, true));
@@ -36,6 +36,9 @@ void Bullet::Update(float _deltaTime)
 	GameObject::Update(_deltaTime);
 	//if (this->GetName() == "BruteBullet") this->GetTransform()->LerpPosition(target, _deltaTime);
 	this->GetTransform()->SetPosition(this->GetTransform()->GetPosition() + direction);
+	alivetime -= _deltaTime;
+	if (alivetime < 0)
+		m_dxBase->GetCurrentScene()->GetDynamicGameObjectList()->erase(std::remove(m_dxBase->GetCurrentScene()->GetDynamicGameObjectList()->begin(), m_dxBase->GetCurrentScene()->GetDynamicGameObjectList()->end(), this), m_dxBase->GetCurrentScene()->GetDynamicGameObjectList()->end());
 }
 
 void Bullet::LateUpdate(float _deltaTime)

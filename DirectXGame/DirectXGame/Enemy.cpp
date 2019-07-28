@@ -15,8 +15,8 @@ Enemy::Enemy(std::shared_ptr<DirectXCore::DxBase> _m_dxBase)
 	death = false;
 	m_dxBase = _m_dxBase;
 	//this->GetTransform()->SetPosition(Vector3(50, 3500, 0));
-	this->GetTransform()->SetScale(Vector3(31, 47, 1));
-	this->GetTransform()->SetScreenScale(Vector3(1, 1, 1));
+	this->GetTransform()->SetScale(Vector3(93, 141, 1));
+	this->GetTransform()->SetScreenScale(Vector3(3, 3, 1));
 	this->AddComponent<Renderer>(new Renderer(m_dxBase->GetDeviceResource(), L"Resources/Captain/Animations/enemy/shooter_sit.png"));
 	this->AddComponent<Rigidbody>(new Rigidbody(this));
 	this->AddComponent<Collider>(new Collider(this, this->GetTransform()));
@@ -131,26 +131,24 @@ void Enemy::Update(float _deltaTime)
 			this->GetComponent<Rigidbody>()->Move(Vector3(50, 0, 0));
 		}
 		//SHOOT
-		if (bulletTimer > 2.7f)
+		if (bulletTimer > 3.0f)
 		{
 			//shooting code
 			float directionX = player->GetTransform()->GetPosition().x - this->GetTransform()->GetPosition().x;
-			if (directionX > 0.5f)
+			if (directionX > 3.5f)
 			{
-				directionX = 0.5f;
+				directionX = 3.5f;
 			}
-			else if (directionX < -0.5f)
+			else if (directionX < -3.5f)
 			{
-				directionX = -0.5f;
+				directionX = -3.5f;
 			}
 			else directionX = 0;
-			Bullet* bullet = new Bullet(L"Resources/Captain/Animations/enemy/shooter_bullet.png", m_dxBase, this->GetTransform()->GetPosition(), Vector3(2, 2, 1), Vector3(directionX,0,0));
+			Bullet* bullet = new Bullet(L"Resources/Captain/Animations/enemy/shooter_bullet.png", m_dxBase, this->GetTransform()->GetPosition(), Vector3(3, 3, 1), Vector3(directionX,0,0));
 			//Bullet* bullet = new Bullet(m_dxBase, this->GetTransform()->GetPosition());
 			bullet->SetTag("EnemyBullet");
 			m_dxBase->GetCurrentScene()->GetDynamicGameObjectList()->push_back(bullet);
 			//this->AddChild(bullet);
-			//Shield* capshield = new Shield(m_dxBase, this);
-			//this->AddChild(capshield);
 			//asd->SetTag("EnemyBullet");
 			//asd->SetName("BruteBullet");
 			//asd->SetTarget(player->GetTransform()->GetPosition());

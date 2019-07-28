@@ -3,12 +3,12 @@
 Player::Player(std::shared_ptr<DirectXCore::DxBase> _m_dxBase)
 {
 	m_dxBase = _m_dxBase;
+	//this->GetTransform()->SetPosition(Vector3(500, 0, 0));
+	//this->GetTransform()->SetScale(Vector3(32, 40, 1));
+	//this->GetTransform()->SetScreenScale(Vector3(1, 1, 1));
 	this->GetTransform()->SetPosition(Vector3(500, 0, 0));
-	this->GetTransform()->SetScale(Vector3(32, 40, 1));
-	this->GetTransform()->SetScreenScale(Vector3(1, 1, 1));
-	/*this->GetTransform()->SetPosition(Vector3(5000, 800, 0));
-	this->GetTransform()->SetScale(Vector3(96, 120, 1));
-	this->GetTransform()->SetScreenScale(Vector3(3, 3, 1));*/
+	this->GetTransform()->SetScale(Vector3(50, 120, 1));
+	this->GetTransform()->SetScreenScale(Vector3(3, 3, 1));
 	this->AddComponent<Renderer>(new Renderer(_m_dxBase->GetDeviceResource(), L"Resources/Captain/Animations/stand.png"));
 	this->AddComponent<Rigidbody>(new Rigidbody(this));
 	this->AddComponent<Collider>(new Collider(this, this->GetTransform()));
@@ -167,8 +167,9 @@ void Player::Update(float _deltaTime)
 	if (hurtTime > 0)
 	{
 		this->GetComponent<Animation>()->ResetAnimation(L"Resources/Captain/Animations/hurt.png", 1, 3);
-		hurtTime -= _deltaTime;
+		this->GetComponent<Rigidbody>()->Move(Vector3(0, 0, 0));
 	}
+	hurtTime -= _deltaTime;
 }
 
 void Player::LateUpdate(float _deltaTime)
@@ -203,7 +204,7 @@ void Player::OnCollisionEnter(Collider* _other, Vector3 _normal)
 	}
 	if (_other->GetAttachedGameObject()->GetTag() == "EnemyBullet")
 	{
-		hurtTime = 1.0f;
+		hurtTime = 0.5f;
 	}
 	this->GetComponent<Collider>()->SetCollisionStatus(true);
 }
