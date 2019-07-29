@@ -173,7 +173,7 @@ void Player::LateUpdate(float _deltaTime)
 
 void Player::OnCollisionEnter(Collider* _other, Vector3 _normal)
 {
-	GameObject::OnCollisionEnter(_other, _normal);
+	
 
 	/*if (_normal.y != 0)
 	{
@@ -200,7 +200,11 @@ void Player::OnCollisionEnter(Collider* _other, Vector3 _normal)
 	{
 		hurtTime = 0.5f;
 	}
-	this->GetComponent<Collider>()->SetCollisionStatus(true);
+	else
+	{
+		GameObject::OnCollisionEnter(_other, _normal);
+		this->GetComponent<Collider>()->SetCollisionStatus(true);
+	}
 }
 
 

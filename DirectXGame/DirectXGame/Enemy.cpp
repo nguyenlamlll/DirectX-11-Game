@@ -135,13 +135,13 @@ void Enemy::Update(float _deltaTime)
 		{
 			//shooting code
 			float directionX = player->GetTransform()->GetPosition().x - this->GetTransform()->GetPosition().x;
-			if (directionX > 3.5f)
+			if (directionX > 10)
 			{
-				directionX = 3.5f;
+				directionX = 100;
 			}
-			else if (directionX < -3.5f)
+			else if (directionX < -10)
 			{
-				directionX = -3.5f;
+				directionX = -100;
 			}
 			else directionX = 0;
 			Bullet* bullet = new Bullet(L"Resources/Captain/Animations/enemy/shooter_bullet.png", m_dxBase, this->GetTransform()->GetPosition(), Vector3(3, 3, 1), Vector3(directionX,0,0));

@@ -17,10 +17,11 @@ DirectXCore::TileMap::TileMap(DirectXCore::DeviceResources *_deviceResource, con
 {
 	mapSize = Vector3(0, 0, 0);
 	position = Vector3(0, 0, 0);
+	//scale = Vector3(1, 1, 1);
 	scale = Vector3(3, 3, 1);
 	worldToScreenPosition = position;
 	gameObjectList = new std::vector<GameObject*>();
-	std::ifstream file("Resources/00/Charleston_1_1.CSV");
+	std::ifstream file(_txtPath);
 	data = new std::vector<int>();
 	positionList = new std::map<int, Vector3>();
 	if (file.good())
@@ -43,11 +44,11 @@ DirectXCore::TileMap::TileMap(DirectXCore::DeviceResources *_deviceResource, con
 		for (size_t n = 0; n < _columns; n++)
 		{
 			RECT* sourceRECT = new RECT();
-			int tileSetHorizontalCount = 20;
-			int tileSetVerticalCount = 4;
+			int tileSetHorizontalCount = _columns;
+			int tileSetVerticalCount = _rows;
 
 			//tile index
-			int tileID = (m * 20) + n;
+			int tileID = (m * _columns) + n;
 			int dataYIndex = tileID / tileSetHorizontalCount;
 			int dataXIndex = tileID % tileSetHorizontalCount;
 
@@ -55,10 +56,7 @@ DirectXCore::TileMap::TileMap(DirectXCore::DeviceResources *_deviceResource, con
 			sourceRECT->bottom = sourceRECT->top + 16;
 			sourceRECT->left = dataXIndex * 16;
 			sourceRECT->right = sourceRECT->left + 16;
-
 			listTileID.insert(std::pair<int, RECT*>(tileID, sourceRECT));
-
-
 			//listRECTPositions.insert(std::pair<int,Vector3>(tileID, Vector3((n * tileDataWidth) + position.x, (m * tileDataHeight) + position.y, 0)));
 		}
 	}

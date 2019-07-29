@@ -23,6 +23,7 @@ Bullet::Bullet(const wchar_t* _path, std::shared_ptr<DirectXCore::DxBase> _m_dxB
 	//this->AddComponent<Animation>(new Animation(this->GetComponent<Renderer>(), 1, 4, 0.03f, 1.0f, true));
 	//this->GetComponent<Animation>()->ResetAnimation(_path, 1, 4);
 	this->AddComponent<Collider>(new Collider(this, this->GetTransform()));
+	//this->GetComponent<Collider>()->SetTrigger(true);
 	direction = _dir;
 }
 
@@ -37,6 +38,7 @@ void Bullet::Update(float _deltaTime)
 	//if (this->GetName() == "BruteBullet") this->GetTransform()->LerpPosition(target, _deltaTime);
 	//this->GetTransform()->SetPosition(this->GetTransform()->GetPosition() + direction);
 	this->GetComponent<Rigidbody>()->Move(direction);
+	//this->GetTransform()->SetPosition(this->GetTransform()->GetPosition()+direction);
 	alivetime -= _deltaTime;
 	if (alivetime < 0)
 	{
