@@ -59,7 +59,38 @@ DirectXCore::Animation::Animation(std::string _name, Renderer * mainRenderer, in
 	loop = _loop;
 	frameWidth = (mainrender->GetRECT()->right - mainrender->GetRECT()->left) / _collums;
 	frameHeight = (mainrender->GetRECT()->bottom - mainrender->GetRECT()->top) / _rows;
+	for (int i = 0; i < _rows; i++)
+	{
+		for (int j = 0; j < _collums; j++)
+		{
+			RECT *rc = new RECT();
+			rc->left = frameWidth * j;
+			rc->top = frameHeight * i;
+			rc->right = frameWidth * (j + 1);
+			rc->bottom = frameHeight * (i + 1);
+			animationFrameRects.emplace_back(rc);
+		}
+	}
+	mainrender->SetPivot(Vector3(frameWidth / 2, frameHeight / 2, 0));
+	mainrender->SetRECT(*animationFrameRects[0]);
+	frameCount = _rows * _collums;
+}
 
+DirectXCore::Animation::Animation(const wchar_t * _charPath, std::string _name, Renderer * mainRenderer, int _rows, int _collums, float _timePerFrame, float _timeScale, bool _loop)
+{
+	currentRect = new RECT();
+	animationName = _name;
+	interupt = false;
+	loop = true;
+	mainrender = mainRenderer;
+	timePerFrame = _timePerFrame;
+	loop = _loop;
+
+	path = _charPath;
+	mainrender->LoadTexture(_charPath);
+	animationFrameRects.clear();
+	frameWidth = (mainrender->GetRECT()->right - mainrender->GetRECT()->left) / _collums;
+	frameHeight = (mainrender->GetRECT()->bottom - mainrender->GetRECT()->top) / _rows;
 	for (int i = 0; i < _rows; i++)
 	{
 		for (int j = 0; j < _collums; j++)
@@ -78,9 +109,9 @@ DirectXCore::Animation::Animation(std::string _name, Renderer * mainRenderer, in
 }
 
 void Animation::ResetAnimation(const wchar_t * _charPath, int _rows, int _collums) {
-	if (name != _charPath)
+	if (path != _charPath)
 	{
-		name = _charPath;
+		path = _charPath;
 		mainrender->LoadTexture(_charPath);
 		animationFrameRects.clear();
 		frameWidth = (mainrender->GetRECT()->right - mainrender->GetRECT()->left) / _collums;

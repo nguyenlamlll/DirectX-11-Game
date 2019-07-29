@@ -21,6 +21,8 @@ public:
 	void OnCollisionEnter(Collider* _other, Vector3 _normal) override;
 	~Player();
 private:
+	void AddAnimators();
+	void ManageAnimators();
 	std::shared_ptr<DirectXCore::DxBase> m_dxBase;
 	Vector3 lastFrameAcc, lastFrameMove;
 	float currentCountTimer = 0, weaponTimer = 0, cutsceneTimer = 0, jumpTime = 0, hurtTime = 0;

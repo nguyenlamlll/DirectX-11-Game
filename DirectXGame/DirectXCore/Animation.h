@@ -13,6 +13,7 @@ namespace DirectXCore
 		Animation(Sprite *_sprite, int _rows, int _collums, float _timePerFrame, float _scale = 1.0f);
 		Animation(int _rows, int _collums, float _timePerFrame, float _timeScale = 1.0f);
 		Animation(std::string _name, Renderer* mainRenderer, int _rows, int _collums, float _timePerFrame, float _timeScale, bool _loop);
+		Animation(const wchar_t * _charPath, std::string _name, Renderer* mainRenderer, int _rows, int _collums, float _timePerFrame, float _timeScale, bool _loop);
 		void ResetAnimation(const wchar_t * _charPath, int _rows, int _collums);
 		std::string GetAnimationName() { return animationName; }
 		void SetAnimationName(std::string _newName) { animationName = _newName; }
@@ -26,14 +27,14 @@ namespace DirectXCore
 		bool lastFrame = false;
 		SimpleMath::Vector3 GetFrameScale() { return SimpleMath::Vector3(frameWidth, frameHeight, 0); }
 		RECT* GetCurrentRect() { return currentRect; }
-		const wchar_t* GetPath() { return name; }
+		const wchar_t* GetPath() { return path; }
 	private:
 		int frameIndex = 0, frameCount, frameWidth, frameHeight;
 		std::vector<RECT*> animationFrameRects;
 		Sprite* mainSprite;
 		Renderer* mainrender;
 		float currentFrameTime = 0, timePerFrame = 0, scale = 0;
-		const wchar_t* name;
+		const wchar_t* path;
 		std::string animationName;
 		RECT* currentRect;
 	};

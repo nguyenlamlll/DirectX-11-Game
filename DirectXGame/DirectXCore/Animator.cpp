@@ -32,12 +32,12 @@ void DirectXCore::Animator::Update(float _deltaTime)
 {
 	if (currentAnimation != NULL)
 	{
-		currentAnimation->Update(_deltaTime);
 		Vector3 frameScale = currentAnimation->GetFrameScale();
 		frameScale.x /= 2;
 		frameScale.y /= 2;
 		renderer->SetPivot(frameScale);
 		renderer->SetRECT(*currentAnimation->GetCurrentRect());
+		currentAnimation->Update(_deltaTime);
 	}
 }
 
@@ -108,12 +108,34 @@ void DirectXCore::Animator::SetBool(std::string _firstAnim, std::string _secondA
 					if (_secondAnim == animationList->at(j)->GetAnimationName())
 					{
 						if (!currentAnimation->interupt)
+						{
 							if (currentAnimation->lastFrame)
+							{
 								if (currentAnimation->GetAnimationName() != animationList->at(j)->GetAnimationName())
 								{
 									currentAnimation = animationList->at(j);
 									renderer->LoadTexture(currentAnimation->GetPath());
+									Vector3 frameScale = currentAnimation->GetFrameScale();
+									frameScale.x /= 2;
+									frameScale.y /= 2;
+									renderer->SetPivot(frameScale);
+									renderer->SetRECT(*currentAnimation->GetCurrentRect());
 								}
+							}
+						}
+						else
+						{
+							if (currentAnimation->GetAnimationName() != animationList->at(j)->GetAnimationName())
+							{
+								currentAnimation = animationList->at(j);
+								renderer->LoadTexture(currentAnimation->GetPath());
+								Vector3 frameScale = currentAnimation->GetFrameScale();
+								frameScale.x /= 2;
+								frameScale.y /= 2;
+								renderer->SetPivot(frameScale);
+								renderer->SetRECT(*currentAnimation->GetCurrentRect());
+							}
+						}
 					}
 				}
 			}

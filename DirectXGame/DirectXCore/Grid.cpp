@@ -89,7 +89,7 @@ void Grid::Render()
 	Vector3 worldToScreenShift = Vector3(camera->GetWidth() / 2 - camera->GetPosition().x, camera->GetHeight() / 2 - camera->GetPosition().y, 0);
 	for (size_t i = 0; i < availableGrids->size(); i++)
 	{
-		if (i != 0) break;
+		//if (i != 0) break;
 		for (size_t j = 0; j < availableGrids->at(i)->tileObjects.size(); j++)
 		{
 			

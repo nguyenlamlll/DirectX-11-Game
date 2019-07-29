@@ -35,10 +35,14 @@ void Bullet::Update(float _deltaTime)
 {
 	GameObject::Update(_deltaTime);
 	//if (this->GetName() == "BruteBullet") this->GetTransform()->LerpPosition(target, _deltaTime);
-	this->GetTransform()->SetPosition(this->GetTransform()->GetPosition() + direction);
+	//this->GetTransform()->SetPosition(this->GetTransform()->GetPosition() + direction);
+	this->GetComponent<Rigidbody>()->Move(direction);
 	alivetime -= _deltaTime;
 	if (alivetime < 0)
+	{
 		m_dxBase->GetCurrentScene()->GetDynamicGameObjectList()->erase(std::remove(m_dxBase->GetCurrentScene()->GetDynamicGameObjectList()->begin(), m_dxBase->GetCurrentScene()->GetDynamicGameObjectList()->end(), this), m_dxBase->GetCurrentScene()->GetDynamicGameObjectList()->end());
+		delete this;
+	}
 }
 
 void Bullet::LateUpdate(float _deltaTime)

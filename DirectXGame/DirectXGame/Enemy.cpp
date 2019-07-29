@@ -147,6 +147,8 @@ void Enemy::Update(float _deltaTime)
 			Bullet* bullet = new Bullet(L"Resources/Captain/Animations/enemy/shooter_bullet.png", m_dxBase, this->GetTransform()->GetPosition(), Vector3(3, 3, 1), Vector3(directionX,0,0));
 			//Bullet* bullet = new Bullet(m_dxBase, this->GetTransform()->GetPosition());
 			bullet->SetTag("EnemyBullet");
+			bullet->AddComponent<Rigidbody>(new Rigidbody(bullet));
+			bullet->GetComponent<Rigidbody>()->SetKinematic(true);
 			m_dxBase->GetCurrentScene()->GetDynamicGameObjectList()->push_back(bullet);
 			//this->AddChild(bullet);
 			//asd->SetTag("EnemyBullet");

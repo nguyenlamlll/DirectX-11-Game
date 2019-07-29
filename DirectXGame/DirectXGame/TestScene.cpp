@@ -21,7 +21,7 @@ void TestScene::UpdateScene(float elapsedTime)
 	gameObjectList->clear();
 	for (size_t i = 0; i < gridTest->GetAvailableGrids()->size(); i++)
 	{
-		if (i != 0) break;
+		//if (i != 0) break;
 		gameObjectList->insert(gameObjectList->end(), gridTest->GetAvailableGrids()->at(i)->objects.begin(), gridTest->GetAvailableGrids()->at(i)->objects.end());
 	}
 
