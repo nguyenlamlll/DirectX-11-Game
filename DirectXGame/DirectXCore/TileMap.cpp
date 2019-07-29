@@ -6,6 +6,7 @@
 #include <vector>
 #include <iterator>
 #include <algorithm>
+#include <array>
 
 using namespace DirectXCore;
 
@@ -15,6 +16,24 @@ TileMap::TileMap()
 
 DirectXCore::TileMap::TileMap(DirectXCore::DeviceResources *_deviceResource, const wchar_t * _imagePath, const wchar_t * _txtPath, int _columns, int _rows, int _mapTileColumnCount, int _mapTileRowCount)
 {
+	std::vector<int> ObjectMarkedTilesetDataNUmber;
+	ObjectMarkedTilesetDataNUmber.push_back(24);
+	ObjectMarkedTilesetDataNUmber.push_back(25);
+	ObjectMarkedTilesetDataNUmber.push_back(26);
+	ObjectMarkedTilesetDataNUmber.push_back(61);
+	ObjectMarkedTilesetDataNUmber.push_back(62);
+	ObjectMarkedTilesetDataNUmber.push_back(87);
+	ObjectMarkedTilesetDataNUmber.push_back(88);
+	ObjectMarkedTilesetDataNUmber.push_back(89);
+	ObjectMarkedTilesetDataNUmber.push_back(99);
+	ObjectMarkedTilesetDataNUmber.push_back(114);
+	ObjectMarkedTilesetDataNUmber.push_back(115);
+	ObjectMarkedTilesetDataNUmber.push_back(116);
+	ObjectMarkedTilesetDataNUmber.push_back(154);
+	ObjectMarkedTilesetDataNUmber.push_back(155);
+	ObjectMarkedTilesetDataNUmber.push_back(158);
+
+	int ads = ObjectMarkedTilesetDataNUmber.size();
 	mapSize = Vector3(0, 0, 0);
 	position = Vector3(0, 0, 0);
 	//scale = Vector3(1, 1, 1);
@@ -33,8 +52,8 @@ DirectXCore::TileMap::TileMap(DirectXCore::DeviceResources *_deviceResource, con
 		{
 			i++;
 			int x = atoi(curData.c_str());
-			if (x != 0)
-				data->push_back(x);
+			//if (x != 0)
+			data->push_back(x);
 		}
 		file.close();
 	}
@@ -68,21 +87,24 @@ DirectXCore::TileMap::TileMap(DirectXCore::DeviceResources *_deviceResource, con
 			*currentPosition *= scale;
 			int tileIndex = (m * _mapTileColumnCount) + n;
 			positionList->insert(std::pair<int, Vector3>(tileIndex, *currentPosition));
-			if (data->at(tileIndex) == 57 || data->at(tileIndex) == 57 || data->at(tileIndex) == 12 || data->at(tileIndex) == 13 || data->at(tileIndex) == 14 || data->at(tileIndex) == 37 || data->at(tileIndex) == 61 || data->at(tileIndex) == 62)
+			for (int tileDex = 0; tileDex < ObjectMarkedTilesetDataNUmber.size(); tileDex++)
 			{
-				GameObject*gameObject = new GameObject();
-				gameObject->GetTransform()->SetPosition(position + *currentPosition);
-				gameObject->GetTransform()->SetScale(Vector3(16 * scale.x, 16 * scale.y, 1));
-				gameObject->AddComponent<Collider>(new Collider(gameObject, gameObject->GetTransform()));
-				gameObject->SetTag("Wall");
-				gameObjectList->push_back(gameObject);
+				if (data->at(tileIndex) == ObjectMarkedTilesetDataNUmber[tileDex])
+				{
+					GameObject*gameObject = new GameObject();
+					gameObject->GetTransform()->SetPosition(position + *currentPosition);
+					gameObject->GetTransform()->SetScale(Vector3(16 * scale.x, 16 * scale.y, 1));
+					gameObject->AddComponent<Collider>(new Collider(gameObject, gameObject->GetTransform()));
+					gameObject->SetTag("Wall");
+					gameObjectList->push_back(gameObject);
+				}
 			}
 		}
 	}
 	thisRenderer = new Renderer(_deviceResource, _imagePath);
 	thisRenderer->SetPivot(Vector3(16 / 2, 16 / 2, 0));
-	mapSize.x = _mapTileColumnCount*scale.x*16;
-	mapSize.y = _mapTileRowCount*scale.y*16;
+	mapSize.x = _mapTileColumnCount * scale.x * 16;
+	mapSize.y = _mapTileRowCount * scale.y * 16;
 }
 
 TileMap::TileMap(DirectXCore::DeviceResources *_deviceResource, const wchar_t * path)

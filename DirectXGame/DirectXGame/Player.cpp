@@ -173,8 +173,6 @@ void Player::LateUpdate(float _deltaTime)
 
 void Player::OnCollisionEnter(Collider* _other, Vector3 _normal)
 {
-	
-
 	/*if (_normal.y != 0)
 	{
 		this->GetComponent<Animation>()->ResetAnimation(L"Resources/Captain/Animations/move.png", 1, 6);

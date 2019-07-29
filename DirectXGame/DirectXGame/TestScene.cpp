@@ -153,8 +153,8 @@ void TestScene::LoadScene()
 	player = new Player(m_dxBase);
 	player->SetTag("Player");
 	camera = new Camera(m_dxBase->GetDeviceResource()->GetOutputSize().right / 2, m_dxBase->GetDeviceResource()->GetOutputSize().bottom / 2);
-	tilemap = new TileMap(m_dxBase->GetDeviceResource(), L"Resources/00/Charleston_1_1.BMP", L"Resources/00/Charleston_1_1.CSV", 20, 4, 128, 30);
-	//tilemap = new TileMap(m_dxBase->GetDeviceResource(), L"Resources/00/NewMap/Charleston.BMP", L"Resources/00/NewMap/Charleston.txt", 20, 9, 128, 29);
+	//tilemap = new TileMap(m_dxBase->GetDeviceResource(), L"Resources/00/Charleston_1_1.BMP", L"Resources/00/Charleston_1_1.CSV", 20, 4, 128, 30);
+	tilemap = new TileMap(m_dxBase->GetDeviceResource(), L"Resources/00/NewMap/Charleston.BMP", L"Resources/00/NewMap/Charleston.txt", 20, 9, 128, 29);
 	tilemap->SetCamera(camera);
 	gameObjectList->push_back(player);
 	gameObjectList->insert(gameObjectList->end(), tilemap->GetListGameObjects()->begin(), tilemap->GetListGameObjects()->end());
