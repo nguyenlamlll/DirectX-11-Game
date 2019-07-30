@@ -27,6 +27,7 @@ namespace DirectXCore
 		void AddTransition(std::string _firstAnim, std::string _secondAnim,bool _condition);
 		void SetBool(TransitionInfo* _transitionInfo, bool _status);
 		void SetBool(std::string _firstAnim, std::string _secondAnim, bool _status);
+		void SetBool(std::string _secondAnim, bool _status);
 		void SetCurrentAnimation(Animation* _anim);
 		Animation* GetCurrentAnimation() { return currentAnimation; }
 

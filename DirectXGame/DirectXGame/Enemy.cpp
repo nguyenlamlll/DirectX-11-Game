@@ -151,14 +151,6 @@ void Enemy::Update(float _deltaTime)
 			bullet->GetComponent<Rigidbody>()->SetKinematic(true);
 			m_dxBase->GetCurrentScene()->GetDynamicGameObjectList()->push_back(bullet);
 			//this->AddChild(bullet);
-			//asd->SetTag("EnemyBullet");
-			//asd->SetName("BruteBullet");
-			//asd->SetTarget(player->GetTransform()->GetPosition());
-			//asd->GetComponent<Animation>()->ResetAnimation(L"Resources/Animations/enemies/rocket.png", 1, 2);
-			//asd->GetTransform()->SetScale(Vector3(5, 5, 5));
-			//asd->AddComponent<Rigidbody>(new Rigidbody(asd));
-			//asd->GetComponent<Rigidbody>()->SetVelocity(Vector3(0, 100.0f, 0));
-			//asd->GetComponent<Rigidbody>()->AddForce(Vector3(-300, -200, 0));
 			bulletTimer = 0;
 		}
 		attackTimer += _deltaTime;

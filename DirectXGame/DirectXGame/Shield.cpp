@@ -18,8 +18,6 @@ Shield::Shield(std::shared_ptr<DirectXCore::DxBase> _m_dxBase, GameObject * _cap
 	this->AddComponent<Collider>(new Collider(this, this->GetTransform()));
 	this->GetComponent<Collider>()->SetTrigger(true);
 
-	targetLeftSide = captain->GetTransform()->GetPosition() + Vector3(-300, 0, 0);
-	targetRightside = captain->GetTransform()->GetPosition() + Vector3(300, 0, 0);
 	direction = Vector3(10, 0, 0);
 }
 
@@ -41,6 +39,8 @@ void Shield::Update(float _deltaTime)
 void Shield::LateUpdate(float _deltaTime)
 {
 	GameObject::LateUpdate(_deltaTime);
+	targetLeftSide = captain->GetTransform()->GetPosition();
+	targetRightside = captain->GetTransform()->GetPosition() + Vector3(300, 0, 0);
 	Vector3 offset = Vector3(0, -20, 0);
 	if (captain->GetTransform()->GetRotation().y > 120)
 	{
@@ -52,14 +52,22 @@ void Shield::LateUpdate(float _deltaTime)
 		this->GetTransform()->SetRotation(Vector3(0, 0, 0));
 		offset.x = -20;
 	}
-	//Vector3 pos = this->GetTransform()->GetPosition();
-	//pos.y = captain->GetTransform()->GetPosition().y;
-	/*if (pos.x > targetRightside.x && direction.x > 0)
-		direction.x *= -1;
-	else if (pos.x < targetLeftSide.x && direction.x < 0)
-		direction.x *= -1;
-	this->GetTransform()->SetPosition(this->GetTransform()->GetPosition() + direction);*/
-	this->GetTransform()->SetPosition(captain->GetTransform()->GetPosition() + offset);
+	Vector3 pos = this->GetTransform()->GetPosition();
+	pos.y = captain->GetTransform()->GetPosition().y;
+	if (pos.x > targetRightside.x && direction.x > 0) direction.x *= -1;
+	else if (pos.x < targetLeftSide.x && direction.x < 0) direction.x *= -1;
+	if (direction.x < 0)
+	{
+		/*if (captain->GetTransform()->GetPosition().y - this->GetTransform()->GetPosition().y > 10) direction.y = 10;
+		else if(captain->GetTransform()->GetPosition().y - this->GetTransform()->GetPosition().y<-10)direction.y = -10;
+		else direction.y = 0;*/
+		//this->GetTransform()->SetPosition(this->GetTransform()->GetPosition().Lerp(this->GetTransform()->GetPosition(), captain->GetTransform()->GetPosition(), _deltaTime*5));
+		Vector3 as = captain->GetTransform()->GetPosition() - this->GetTransform()->GetPosition();
+		as.Normalize();
+		this->GetTransform()->SetPosition(this->GetTransform()->GetPosition() + as*10);
+	}
+	else this->GetTransform()->SetPosition(this->GetTransform()->GetPosition() + direction);
+	//this->GetTransform()->SetPosition(captain->GetTransform()->GetPosition() + offset);
 }
 
 void Shield::Render()
