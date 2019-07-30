@@ -6,7 +6,7 @@ Player::Player(std::shared_ptr<DirectXCore::DxBase> _m_dxBase)
 	//this->GetTransform()->SetPosition(Vector3(500, 0, 0));
 	//this->GetTransform()->SetScale(Vector3(32, 40, 1));
 	//this->GetTransform()->SetScreenScale(Vector3(1, 1, 1));
-	this->GetTransform()->SetPosition(Vector3(500, 0, 0));
+	this->GetTransform()->SetPosition(Vector3(500, 300, 0));
 	this->GetTransform()->SetScale(Vector3(50, 120, 1));
 	this->GetTransform()->SetScreenScale(Vector3(3, 3, 1));
 	this->AddComponent<Renderer>(new Renderer(_m_dxBase->GetDeviceResource(), L"Resources/Captain/Animations/stand.png"));
@@ -48,6 +48,7 @@ void Player::PreUpdate(float _deltaTime)
 	{
 		if (this->GetComponent<Rigidbody>()->GetAcceleration().y >= 0 && this->GetComponent<Collider>()->GetCollisionStatus())this->GetComponent<Rigidbody>()->AddForce(Vector3(0, -1000, 0));
 	}
+
 
 	if (hurtTime <= 0)
 	{
@@ -146,7 +147,6 @@ void Player::PreUpdate(float _deltaTime)
 		//	}
 		//}
 	}
-
 	lastFrameAcc = this->GetComponent<Rigidbody>()->GetAcceleration();
 	lastFrameMove = this->GetComponent<Rigidbody>()->GetMovingVector();
 	if (lastFrameMove.x > 0) transform->SetRotation(Vector3(transform->GetRotation().x, 360, transform->GetRotation().z));
@@ -157,7 +157,6 @@ void Player::Update(float _deltaTime)
 {
 	GameObject::Update(_deltaTime);
 	ManageAnimators();
-
 	/*if (hurtTime > 0)
 	{
 		this->GetComponent<Animation>()->ResetAnimation(L"Resources/Captain/Animations/hurt.png", 1, 3);
@@ -173,8 +172,6 @@ void Player::LateUpdate(float _deltaTime)
 
 void Player::OnCollisionEnter(Collider* _other, Vector3 _normal)
 {
-	
-
 	/*if (_normal.y != 0)
 	{
 		this->GetComponent<Animation>()->ResetAnimation(L"Resources/Captain/Animations/move.png", 1, 6);
@@ -186,7 +183,6 @@ void Player::OnCollisionEnter(Collider* _other, Vector3 _normal)
 			this->GetComponent<Rigidbody>()->AddForce(Vector3(0, this->GetComponent<Rigidbody>()->GetVelocity().y / -2, 0));
 		}
 	}
-
 	else if (_other->GetAttachedGameObject()->GetTag() == "Door")
 	{
 		if (lastFrameMove.x >= 0)
@@ -215,30 +211,38 @@ Player::~Player()
 void Player::AddAnimators()
 {
 	this->AddComponent<Animator>(new Animator(this->GetComponent<Renderer>()));
-	Animation* moveAnim = new Animation(L"Resources/Captain/Animations/move.png","Move", this->GetComponent<Renderer>(), 1, 4, 0.1f, 1.0f, true);
-	Animation* standAnim = new Animation(L"Resources/Captain/Animations/stand.png","Stand", this->GetComponent<Renderer>(), 1, 1, 0.1f, 1.0f, true);
-	Animation* jumpAnim = new Animation(L"Resources/Captain/Animations/jump.png","Jump", this->GetComponent<Renderer>(), 1, 1, 0.1f, 1.0f, true);
-	Animation* attackAnim = new Animation(L"Resources/Captain/Animations/attack.png","Attack", this->GetComponent<Renderer>(), 1, 2, 0.1f, 1.0f, true);
+	Animation* moveAnim = new Animation(L"Resources/Captain/Animations/move.png", "Move", this->GetComponent<Renderer>(), 1, 4, 0.1f, 1.0f, true);
+	Animation* standAnim = new Animation(L"Resources/Captain/Animations/stand.png", "Stand", this->GetComponent<Renderer>(), 1, 1, 0.1f, 1.0f, true);
+	Animation* jumpAnim = new Animation(L"Resources/Captain/Animations/jump.png", "Jump", this->GetComponent<Renderer>(), 1, 1, 0.1f, 1.0f, true);
+	Animation* attackAnim = new Animation(L"Resources/Captain/Animations/shieldlessattack.png", "Attack", this->GetComponent<Renderer>(), 1, 2, 0.1f, 1.0f, true);
 	moveAnim->interupt = true;
 	this->GetComponent<Animator>()->AddAnimation(standAnim);
 	this->GetComponent<Animator>()->AddAnimation(moveAnim);
 	this->GetComponent<Animator>()->AddAnimation(jumpAnim);
+	this->GetComponent<Animator>()->AddAnimation(attackAnim);
 	this->GetComponent<Animator>()->AddTransition("Stand", "Move", true);
 	this->GetComponent<Animator>()->AddTransition("Stand", "Attack", true);
+	this->GetComponent<Animator>()->AddTransition("Stand", "Throw", true);
 	this->GetComponent<Animator>()->AddTransition("Stand", "Jump", true);
+
 	this->GetComponent<Animator>()->AddTransition("Move", "Stand", true);
 	this->GetComponent<Animator>()->AddTransition("Move", "Attack", true);
+	this->GetComponent<Animator>()->AddTransition("Move", "Throw", true);
 	this->GetComponent<Animator>()->AddTransition("Move", "Jump", true);
+
 	this->GetComponent<Animator>()->AddTransition("Jump", "Stand", true);
 	this->GetComponent<Animator>()->AddTransition("Jump", "Move", true);
+
+	this->GetComponent<Animator>()->AddTransition("Attack", "Stand", true);
+	this->GetComponent<Animator>()->AddTransition("Attack", "Move", true);
 
 	this->GetComponent<Animator>()->SetCurrentAnimation(moveAnim);
 }
 
 void Player::ManageAnimators()
 {
-	if (!this->GetComponent<Collider>()->GetCollisionStatus())
-		int asd = 1;
+	this->GetComponent<Animator>()->SetBool("Attack", m_dxBase->GetInputManager()->IsKeyDown("L") && this->GetComponent<Animator>()->GetCurrentAnimation()->GetAnimationName() != "Attack");
+
 	if (this->GetComponent<Animator>()->GetCurrentAnimation()->GetAnimationName() == "Move")
 	{
 		this->GetComponent<Animator>()->SetBool("Move", "Jump", !this->GetComponent<Collider>()->GetCollisionStatus());
@@ -254,5 +258,12 @@ void Player::ManageAnimators()
 	{
 		//this->GetComponent<Animator>()->SetBool("Jump", "Move", this->GetComponent<Collider>()->GetCollisionStatus());
 		this->GetComponent<Animator>()->SetBool("Jump", "Stand", this->GetComponent<Collider>()->GetCollisionStatus());
+	}
+	if (this->GetComponent<Animator>()->GetCurrentAnimation()->GetAnimationName() == "Attack")
+	{
+		/*this->GetComponent<Animator>()->SetBool("Attack", "Stand", !m_dxBase->GetInputManager()->IsKeyDown("L") && this->GetComponent<Rigidbody>()->GetVelocity().x == 0);
+		this->GetComponent<Animator>()->SetBool("Attack", "Move", !m_dxBase->GetInputManager()->IsKeyDown("L") && this->GetComponent<Rigidbody>()->GetVelocity().x != 0);*/
+		this->GetComponent<Animator>()->SetBool("Attack", "Stand",!m_dxBase->GetInputManager()->IsKeyDown("L") && this->GetComponent<Rigidbody>()->GetVelocity().x == 0);
+		this->GetComponent<Animator>()->SetBool("Attack", "Move",!m_dxBase->GetInputManager()->IsKeyDown("L") &&  this->GetComponent<Rigidbody>()->GetVelocity().x != 0);
 	}
 }

@@ -143,6 +143,49 @@ void DirectXCore::Animator::SetBool(std::string _firstAnim, std::string _secondA
 	}
 }
 
+void DirectXCore::Animator::SetBool(std::string _secondAnim, bool _status)
+{
+	if (_status)
+	{
+		for (size_t j = 0; j < animationList->size(); j++)
+		{
+			if (_secondAnim == animationList->at(j)->GetAnimationName())
+			{
+				if (!currentAnimation->interupt)
+				{
+					if (currentAnimation->lastFrame)
+					{
+						if (currentAnimation->GetAnimationName() != animationList->at(j)->GetAnimationName())
+						{
+							currentAnimation = animationList->at(j);
+							renderer->LoadTexture(currentAnimation->GetPath());
+							Vector3 frameScale = currentAnimation->GetFrameScale();
+							frameScale.x /= 2;
+							frameScale.y /= 2;
+							renderer->SetPivot(frameScale);
+							renderer->SetRECT(*currentAnimation->GetCurrentRect());
+						}
+					}
+				}
+				else
+				{
+					if (currentAnimation->GetAnimationName() != animationList->at(j)->GetAnimationName())
+					{
+						currentAnimation = animationList->at(j);
+						renderer->LoadTexture(currentAnimation->GetPath());
+						Vector3 frameScale = currentAnimation->GetFrameScale();
+						frameScale.x /= 2;
+						frameScale.y /= 2;
+						renderer->SetPivot(frameScale);
+						renderer->SetRECT(*currentAnimation->GetCurrentRect());
+					}
+				}
+			}
+		}
+	}
+	
+}
+
 void DirectXCore::Animator::SetCurrentAnimation(Animation * _anim)
 {
 	currentAnimation = _anim;
