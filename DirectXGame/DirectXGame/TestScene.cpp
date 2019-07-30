@@ -19,26 +19,15 @@ void TestScene::UpdateScene(float elapsedTime)
 	gridTest->Update(elapsedTime);
 	gridTest->LateUpdate(elapsedTime);
 	gameObjectList->clear();
-	for (size_t i = 0; i < gridTest->GetAvailableGrids()->size(); i++)
-	{
-		//if (i != 0) break;
-		gameObjectList->insert(gameObjectList->end(), gridTest->GetAvailableGrids()->at(i)->objects.begin(), gridTest->GetAvailableGrids()->at(i)->objects.end());
-	}
+	for (size_t i = 0; i < gridTest->GetAvailableGrids()->size(); i++) gameObjectList->insert(gameObjectList->end(), gridTest->GetAvailableGrids()->at(i)->objects.begin(), gridTest->GetAvailableGrids()->at(i)->objects.end());
 
-
-	////PRE UPDATE
-	//for (size_t i = 0; i < gameObjectList->size(); i++)
-	//{
-	//	gameObjectList->at(i)->PreUpdate(elapsedTime);
-	//	if (gameObjectList->at(i)->GetComponent<Collider>() != NULL) gameObjectList->at(i)->GetComponent<Collider>()->SetCollisionStatus(false);
-	//}
 	for (size_t i = 0; i < dynamicGameObjectList->size(); i++)
 	{
 		dynamicGameObjectList->at(i)->PreUpdate(elapsedTime);
 		if (dynamicGameObjectList->at(i)->GetComponent<Collider>() != NULL) dynamicGameObjectList->at(i)->GetComponent<Collider>()->SetCollisionStatus(false);
 	}
-	//PHYSICS
 	gameObjectList->insert(gameObjectList->end(), dynamicGameObjectList->begin(), dynamicGameObjectList->end());
+
 	for (size_t i = 0; i < gameObjectList->size(); i++)
 	{
 		for (size_t j = 0; j < dynamicGameObjectList->size(); j++)
@@ -62,47 +51,10 @@ void TestScene::UpdateScene(float elapsedTime)
 				}
 			}
 		}
+	}
 
-		/*for (size_t j = 0; j < gameObjectList->size(); j++)
-		{
-			if (gameObjectList->at(i) != gameObjectList->at(j))
-			{
-				if (gameObjectList->at(i)->GetComponent<Collider>() != NULL && gameObjectList->at(j)->GetComponent<Collider>() != NULL)
-				{
-					if (!gameObjectList->at(i)->GetComponent<Collider>()->IsTrigger() && !gameObjectList->at(j)->GetComponent<Collider>()->IsTrigger())
-					{
-						float normalX, normalY;
-						if (PhysicsManager::GetInstance()->CheckSweptAABB(gameObjectList->at(i), gameObjectList->at(j), normalX, normalY) < 1.0f)
-						{
-							Vector3* normalVector = new Vector3(normalX, normalY, 0);
-							gameObjectList->at(i)->OnCollisionEnter(gameObjectList->at(j)->GetComponent<Collider>(), *normalVector);
-							gameObjectList->at(j)->OnCollisionEnter(gameObjectList->at(i)->GetComponent<Collider>(), *normalVector*-1);
-							gameObjectList->at(i)->GetComponent<Collider>()->SetCollisionStatus(true);
-							gameObjectList->at(j)->GetComponent<Collider>()->SetCollisionStatus(true);
-						}
-					}
-				}
-			}
-		}*/
-	}
-	////UPDATE
-	//for (size_t i = 0; i < gameObjectList->size(); i++)
-	//{
-	//	gameObjectList->at(i)->Update(elapsedTime);
-	//}
-	for (size_t i = 0; i < dynamicGameObjectList->size(); i++)
-	{
-		dynamicGameObjectList->at(i)->Update(elapsedTime);
-	}
-	////LATE UPDATE
-	//for (size_t i = 0; i < gameObjectList->size(); i++)
-	//{
-	//	gameObjectList->at(i)->LateUpdate(elapsedTime);
-	//}
-	for (size_t i = 0; i < dynamicGameObjectList->size(); i++)
-	{
-		dynamicGameObjectList->at(i)->LateUpdate(elapsedTime);
-	}
+	for (size_t i = 0; i < dynamicGameObjectList->size(); i++) dynamicGameObjectList->at(i)->Update(elapsedTime);
+	for (size_t i = 0; i < dynamicGameObjectList->size(); i++) dynamicGameObjectList->at(i)->LateUpdate(elapsedTime);
 
 	camera->SetPosition(player->GetTransform()->GetPosition());
 }
@@ -129,6 +81,7 @@ void TestScene::RenderScene()
 			}
 		}
 	}
+
 	/*for (size_t i = 0; i < gameObjectList->size(); i++)
 	{
 		gameObjectList->at(i)->GetTransform()->SetWorldToScreenPosition(worldToScreenShift);
@@ -166,11 +119,12 @@ void TestScene::LoadScene()
 	Enemy* enemy = new Enemy(m_dxBase);
 	enemy->GetTransform()->SetPosition(player->GetTransform()->GetPosition() + Vector3(50, -30, 0));
 	enemy->AssignPlayer(player);
-	dynamicGameObjectList->push_back(player);
 	dynamicGameObjectList->push_back(enemy);
 
 	//WizardBoss* boss = new WizardBoss(m_dxBase,player);
-	//gameObjectList->push_back(boss);
+	//dynamicGameObjectList->push_back(boss);
+
+	dynamicGameObjectList->push_back(player);
 }
 
 

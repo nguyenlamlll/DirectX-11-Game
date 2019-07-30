@@ -58,10 +58,6 @@ void Shield::LateUpdate(float _deltaTime)
 	else if (pos.x < targetLeftSide.x && direction.x < 0) direction.x *= -1;
 	if (direction.x < 0)
 	{
-		/*if (captain->GetTransform()->GetPosition().y - this->GetTransform()->GetPosition().y > 10) direction.y = 10;
-		else if(captain->GetTransform()->GetPosition().y - this->GetTransform()->GetPosition().y<-10)direction.y = -10;
-		else direction.y = 0;*/
-		//this->GetTransform()->SetPosition(this->GetTransform()->GetPosition().Lerp(this->GetTransform()->GetPosition(), captain->GetTransform()->GetPosition(), _deltaTime*5));
 		Vector3 as = captain->GetTransform()->GetPosition() - this->GetTransform()->GetPosition();
 		as.Normalize();
 		this->GetTransform()->SetPosition(this->GetTransform()->GetPosition() + as*10);

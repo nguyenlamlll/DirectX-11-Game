@@ -185,9 +185,11 @@ namespace DirectXCore
 
 			Box boxI = GetSweptBroadphaseBox(*b1);
 			Box boxII = GetSweptBroadphaseBox(*b2);
-			if(AABBCheck(boxI, boxII)) 
-				return SweptAABB(*b1, *b2, normalx, normaly);
-			else return 1;
+
+			float result = (AABBCheck(boxI, boxII)) ? SweptAABB(*b1, *b2, normalx, normaly) : 1;
+			delete b1;
+			delete b2;
+			return result;
 		}
 		SimpleMath::Vector3 CheckBoundingBoxCollision(GameObject* obj1, GameObject* obj2)
 		{

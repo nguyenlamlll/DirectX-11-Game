@@ -25,5 +25,8 @@ public:
 private:
 	std::shared_ptr<DirectXCore::DxBase> m_dxBase;
 	Vector3 upleftPos, uprightPos,downrighPos;
+	std::vector<Vector3>* positionList;
+	int positionIndex = 0;
+	float stateTimeCycle = 0;
 };
 

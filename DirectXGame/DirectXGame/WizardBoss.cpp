@@ -8,25 +8,29 @@ WizardBoss::WizardBoss()
 
 WizardBoss::WizardBoss(std::shared_ptr<DirectXCore::DxBase> _m_dxBase, GameObject * _captain)
 {
-	Vector3 temPos = _captain->GetTransform()->GetPosition();
+	stateTimeCycle = 0;
+	positionIndex = 0;
+	positionList = new std::vector<Vector3>();
+	Vector3 capPos = _captain->GetTransform()->GetPosition();
+	positionList->push_back(capPos + Vector3(100, 0, 0));
+	positionList->push_back(capPos + Vector3(100, 100, 0));
+	positionList->push_back(capPos + Vector3(-100, 100, 0));
+	positionList->push_back(capPos + Vector3(-100, 0, 0));
+
 	m_dxBase = _m_dxBase;
 	cap = _captain;
 
-	this->GetTransform()->SetPosition(temPos + Vector3(100,0,0));
 	this->GetTransform()->SetScale(Vector3(100, 100, 1));
 	this->GetTransform()->SetScreenScale(Vector3(3, 3, 1));
-	
-	uprightPos = temPos + Vector3(0, -100, 0);
-	upleftPos = uprightPos + Vector3(-100, 0, 0);
 
 	this->AddComponent<Renderer>(new Renderer(m_dxBase->GetDeviceResource(), L"Resources/Captain/Animations/boss/wizard_1.png"));
-	this->AddComponent<Animation>(new Animation("asdsad",this->GetComponent<Renderer>(), 1, 11, 0.1f, 1.0f, true));
-	//this->AddComponent<Rigidbody>(new Rigidbody(this));
+	this->AddComponent<Animation>(new Animation("asdsad", this->GetComponent<Renderer>(), 1, 11, 0.1f, 1.0f, true));
+	this->AddComponent<Rigidbody>(new Rigidbody(this));
 	this->AddComponent<Collider>(new Collider(this, this->GetTransform()));
 
 	this->GetComponent<Collider>()->SetTrigger(true);
 	this->GetComponent<Animation>()->ResetAnimation(L"Resources/Captain/Animations/boss/wizard_1.png", 1, 5);
-	//this->GetComponent<Rigidbody>()->SetKinematic(true);
+	this->GetComponent<Rigidbody>()->SetKinematic(true);
 }
 
 void WizardBoss::PreUpdate(float _deltaTime)
@@ -37,13 +41,31 @@ void WizardBoss::PreUpdate(float _deltaTime)
 void WizardBoss::Update(float _deltaTime)
 {
 	GameObject::Update(_deltaTime);
-	Vector3 tempPos = this->GetTransform()->GetPosition();
-	if (tempPos.y > uprightPos.y) this->GetTransform()->SetPosition(tempPos + Vector3(0, -4, 0));
-	else
+
+	if (stateTimeCycle > 15.0f)
 	{
-		if (this->GetTransform()->GetPosition().x > upleftPos.x) this->GetTransform()->SetPosition(tempPos + Vector3(-4, 0, 0));
+		//shooting
+		this->GetComponent<Rigidbody>()->Move(Vector3(0, 0, 0));
 	}
-	//this->GetTransform()->SetPosition(tempPos + Vector3(-2, 0, 0));
+	else if (stateTimeCycle > 10.0f)
+	{
+		//running
+		this->GetComponent<Rigidbody>()->Move(Vector3(0, 0, 0));
+	}
+	else if (stateTimeCycle > 5.0f)
+	{
+		//flying
+		if (Vector3::Distance(this->GetTransform()->GetPosition(), positionList->at(positionIndex)) < 5) positionIndex = (positionIndex == positionList->size() - 1) ? 0 : positionIndex + 1;
+		else
+		{
+			Vector3 transformVector = positionList->at(positionIndex) - this->GetTransform()->GetPosition();
+			transformVector.Normalize();
+			this->GetComponent<Rigidbody>()->Move(transformVector * 400);
+			//this->GetTransform()->SetPosition(this->GetTransform()->GetPosition() + transformVector * 5);
+		}
+	}
+
+	stateTimeCycle = (stateTimeCycle > 15.0f) ? 0 : stateTimeCycle + _deltaTime;
 }
 
 void WizardBoss::LateUpdate(float _deltaTime)

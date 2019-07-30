@@ -128,7 +128,8 @@ void Enemy::Update(float _deltaTime)
 		}
 		else if (attackTimer > 0 && attackTimer < 2.0f)
 		{
-			this->GetComponent<Rigidbody>()->Move(Vector3(50, 0, 0));
+			float dirX = (player->GetTransform()->GetPosition().x - this->GetTransform()->GetPosition().x) > 0 ? 50 : -50;
+			this->GetComponent<Rigidbody>()->Move(Vector3(dirX, 0, 0));
 		}
 		//SHOOT
 		if (bulletTimer > 3.0f)

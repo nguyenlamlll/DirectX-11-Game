@@ -6,7 +6,7 @@ Player::Player(std::shared_ptr<DirectXCore::DxBase> _m_dxBase)
 	//this->GetTransform()->SetPosition(Vector3(500, 0, 0));
 	//this->GetTransform()->SetScale(Vector3(32, 40, 1));
 	//this->GetTransform()->SetScreenScale(Vector3(1, 1, 1));
-	this->GetTransform()->SetPosition(Vector3(500, 300, 0));
+	this->GetTransform()->SetPosition(Vector3(500, 500, 0));
 	this->GetTransform()->SetScale(Vector3(50, 120, 1));
 	this->GetTransform()->SetScreenScale(Vector3(3, 3, 1));
 	this->AddComponent<Renderer>(new Renderer(_m_dxBase->GetDeviceResource(), L"Resources/Captain/Animations/stand.png"));
@@ -151,6 +151,9 @@ void Player::PreUpdate(float _deltaTime)
 	lastFrameMove = this->GetComponent<Rigidbody>()->GetMovingVector();
 	if (lastFrameMove.x > 0) transform->SetRotation(Vector3(transform->GetRotation().x, 360, transform->GetRotation().z));
 	else if (lastFrameMove.x < 0) transform->SetRotation(Vector3(transform->GetRotation().x, 0, transform->GetRotation().z));
+
+	if (this->GetComponent<Collider>()->GetCollisionStatus()) jumpTime = 0;
+	else jumpTime += _deltaTime;
 }
 
 void Player::Update(float _deltaTime)
@@ -214,12 +217,14 @@ void Player::AddAnimators()
 	Animation* moveAnim = new Animation(L"Resources/Captain/Animations/move.png", "Move", this->GetComponent<Renderer>(), 1, 4, 0.1f, 1.0f, true);
 	Animation* standAnim = new Animation(L"Resources/Captain/Animations/stand.png", "Stand", this->GetComponent<Renderer>(), 1, 1, 0.1f, 1.0f, true);
 	Animation* jumpAnim = new Animation(L"Resources/Captain/Animations/jump.png", "Jump", this->GetComponent<Renderer>(), 1, 1, 0.1f, 1.0f, true);
+	Animation* spinJumpAnim = new Animation(L"Resources/Captain/Animations/spin.png", "SpinJump", this->GetComponent<Renderer>(), 1, 2, 0.1f, 1.0f, true);
 	Animation* attackAnim = new Animation(L"Resources/Captain/Animations/shieldlessattack.png", "Attack", this->GetComponent<Renderer>(), 1, 2, 0.1f, 1.0f, true);
 	moveAnim->interupt = true;
 	this->GetComponent<Animator>()->AddAnimation(standAnim);
 	this->GetComponent<Animator>()->AddAnimation(moveAnim);
 	this->GetComponent<Animator>()->AddAnimation(jumpAnim);
 	this->GetComponent<Animator>()->AddAnimation(attackAnim);
+	this->GetComponent<Animator>()->AddAnimation(spinJumpAnim);
 	this->GetComponent<Animator>()->AddTransition("Stand", "Move", true);
 	this->GetComponent<Animator>()->AddTransition("Stand", "Attack", true);
 	this->GetComponent<Animator>()->AddTransition("Stand", "Throw", true);
@@ -232,6 +237,10 @@ void Player::AddAnimators()
 
 	this->GetComponent<Animator>()->AddTransition("Jump", "Stand", true);
 	this->GetComponent<Animator>()->AddTransition("Jump", "Move", true);
+	this->GetComponent<Animator>()->AddTransition("Jump", "SpinJump", true);
+
+	this->GetComponent<Animator>()->AddTransition("SpinJump", "Stand", true);
+	this->GetComponent<Animator>()->AddTransition("SpinJump", "Move", true);
 
 	this->GetComponent<Animator>()->AddTransition("Attack", "Stand", true);
 	this->GetComponent<Animator>()->AddTransition("Attack", "Move", true);
@@ -258,6 +267,11 @@ void Player::ManageAnimators()
 	{
 		//this->GetComponent<Animator>()->SetBool("Jump", "Move", this->GetComponent<Collider>()->GetCollisionStatus());
 		this->GetComponent<Animator>()->SetBool("Jump", "Stand", this->GetComponent<Collider>()->GetCollisionStatus());
+		this->GetComponent<Animator>()->SetBool("Jump", "SpinJump", jumpTime>0.3f);
+	}
+	if (this->GetComponent<Animator>()->GetCurrentAnimation()->GetAnimationName() == "SpinJump")
+	{
+		this->GetComponent<Animator>()->SetBool("SpinJump", "Stand", this->GetComponent<Collider>()->GetCollisionStatus());
 	}
 	if (this->GetComponent<Animator>()->GetCurrentAnimation()->GetAnimationName() == "Attack")
 	{
