@@ -8,6 +8,7 @@ Enemy::Enemy()
 
 Enemy::Enemy(std::shared_ptr<DirectXCore::DxBase> _m_dxBase)
 {
+	stateTimeCycle = 0;
 	player = NULL;
 	bulletTimer = 0;
 	deathTimer = 0;
@@ -20,7 +21,7 @@ Enemy::Enemy(std::shared_ptr<DirectXCore::DxBase> _m_dxBase)
 	this->AddComponent<Renderer>(new Renderer(m_dxBase->GetDeviceResource(), L"Resources/Captain/Animations/enemy/shooter_sit.png"));
 	this->AddComponent<Rigidbody>(new Rigidbody(this));
 	this->AddComponent<Collider>(new Collider(this, this->GetTransform()));
-	this->AddComponent<Animation>(new Animation("asd",this->GetComponent<Renderer>(), 1, 11, 0.1f, 1.0f, true));
+	this->AddComponent<Animation>(new Animation("asd", this->GetComponent<Renderer>(), 1, 11, 0.1f, 1.0f, true));
 	std::vector<std::string>* stringStates = new std::vector<std::string>();
 	stringStates->push_back("shoot");
 	stringStates->push_back("stand");
@@ -42,34 +43,43 @@ void Enemy::PreUpdate(float _deltaTime)
 void Enemy::Update(float _deltaTime)
 {
 	GameObject::Update(_deltaTime);
-	if (!death)
+	//if (!death)
+	//{
+	//	//JUMP
+	//	if (attackTimer > 2.0f)
+	//	{
+	//		this->GetComponent<Rigidbody>()->AddForce(Vector3(0, -300, 0));
+	//		attackTimer = 0;
+	//	}
+	//	else if (attackTimer > 0 && attackTimer < 2.0f)
+	//	{
+	//		float dirX = (player->GetTransform()->GetPosition().x - this->GetTransform()->GetPosition().x) > 0 ? 50 : -50;
+	//		this->GetComponent<Rigidbody>()->Move(Vector3(dirX, 0, 0));
+	//	}
+	//	
+	//}
+	//else
+	//{
+	//	//this->GetComponent<Animation>()->ResetAnimation(L"Resources/Animations/enemies/stand.png", 1, 4);
+	//	if (deathTimer > 1.5f)
+	//	{
+	//		m_dxBase->GetCurrentScene()->GetDynamicGameObjectList()->erase(std::remove(m_dxBase->GetCurrentScene()->GetDynamicGameObjectList()->begin(), m_dxBase->GetCurrentScene()->GetDynamicGameObjectList()->end(), this), m_dxBase->GetCurrentScene()->GetDynamicGameObjectList()->end());
+	//	}
+	//	else deathTimer += _deltaTime;
+	//}
+
+	// STAGE 2
+	if (stateTimeCycle > 2.0f)
 	{
-		//JUMP
-		if (attackTimer > 2.0f)
-		{
-			this->GetComponent<Rigidbody>()->AddForce(Vector3(0, -300, 0));
-			attackTimer = 0;
-		}
-		else if (attackTimer > 0 && attackTimer < 2.0f)
-		{
-			float dirX = (player->GetTransform()->GetPosition().x - this->GetTransform()->GetPosition().x) > 0 ? 50 : -50;
-			this->GetComponent<Rigidbody>()->Move(Vector3(dirX, 0, 0));
-		}
 		//SHOOT
-		if (bulletTimer > 3.0f)
+		if (bulletTimer > 1.0f)
 		{
 			//shooting code
 			float directionX = player->GetTransform()->GetPosition().x - this->GetTransform()->GetPosition().x;
-			if (directionX > 10)
-			{
-				directionX = 100;
-			}
-			else if (directionX < -10)
-			{
-				directionX = -100;
-			}
+			if (directionX > 10) directionX = 400;
+			else if (directionX < -10) directionX = -400;
 			else directionX = 0;
-			Bullet* bullet = new Bullet(L"Resources/Captain/Animations/enemy/shooter_bullet.png", m_dxBase, this->GetTransform()->GetPosition(), Vector3(3, 3, 1), Vector3(directionX,0,0));
+			Bullet* bullet = new Bullet(L"Resources/Captain/Animations/enemy/shooter_bullet.png", m_dxBase, this->GetTransform()->GetPosition(), Vector3(3, 3, 1), Vector3(directionX, 0, 0));
 			//Bullet* bullet = new Bullet(m_dxBase, this->GetTransform()->GetPosition());
 			bullet->SetTag("EnemyBullet");
 			bullet->AddComponent<Rigidbody>(new Rigidbody(bullet));
@@ -78,18 +88,18 @@ void Enemy::Update(float _deltaTime)
 			//this->AddChild(bullet);
 			bulletTimer = 0;
 		}
-		attackTimer += _deltaTime;
 		bulletTimer += _deltaTime;
 	}
-	else
+	// STAGE 1
+	else if (stateTimeCycle > 0)
 	{
-		//this->GetComponent<Animation>()->ResetAnimation(L"Resources/Animations/enemies/stand.png", 1, 4);
-		if (deathTimer > 1.5f)
-		{
-			m_dxBase->GetCurrentScene()->GetDynamicGameObjectList()->erase(std::remove(m_dxBase->GetCurrentScene()->GetDynamicGameObjectList()->begin(), m_dxBase->GetCurrentScene()->GetDynamicGameObjectList()->end(), this), m_dxBase->GetCurrentScene()->GetDynamicGameObjectList()->end());
-		}
-		else deathTimer += _deltaTime;
+		//JUMP
+		if (this->GetComponent<Collider>()->GetCollisionStatus() && this->GetComponent<Rigidbody>()->GetVelocity().y >= 0) this->GetComponent<Rigidbody>()->AddForce(Vector3(0, -300, 0));
+		float dirX = (player->GetTransform()->GetPosition().x - this->GetTransform()->GetPosition().x) > 0 ? 50 : -50;
+		this->GetComponent<Rigidbody>()->Move(Vector3(dirX, 0, 0));
 	}
+
+	stateTimeCycle = (stateTimeCycle > 4.0f) ? 0 : stateTimeCycle + _deltaTime;
 }
 
 void Enemy::LateUpdate(float _deltaTime)

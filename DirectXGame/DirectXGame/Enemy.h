@@ -23,7 +23,7 @@ public:
 	~Enemy();
 private:
 	std::shared_ptr<DirectXCore::DxBase> m_dxBase;
-	float bulletTimer,deathTimer,attackTimer;
+	float bulletTimer,deathTimer,attackTimer, stateTimeCycle;
 	bool death;
 	GameObject* player;
 };

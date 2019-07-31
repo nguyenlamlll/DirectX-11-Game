@@ -35,10 +35,7 @@ void Bullet::PreUpdate(float _deltaTime)
 void Bullet::Update(float _deltaTime)
 {
 	GameObject::Update(_deltaTime);
-	//if (this->GetName() == "BruteBullet") this->GetTransform()->LerpPosition(target, _deltaTime);
-	//this->GetTransform()->SetPosition(this->GetTransform()->GetPosition() + direction);
 	this->GetComponent<Rigidbody>()->Move(direction);
-	//this->GetTransform()->SetPosition(this->GetTransform()->GetPosition()+direction);
 	alivetime -= _deltaTime;
 	if (alivetime < 0)
 	{
