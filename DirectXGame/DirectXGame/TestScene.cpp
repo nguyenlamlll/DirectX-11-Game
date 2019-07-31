@@ -118,7 +118,7 @@ void TestScene::LoadScene()
 	gridTest->AddRenderTile(tilemap->GetListTileIDs(), tilemap->GetData(), tilemap->GetPositionList(), tilemap->GetTilemapScale());
 
 	Enemy* enemy = new Enemy(m_dxBase);
-	enemy->GetTransform()->SetPosition(player->GetTransform()->GetPosition() + Vector3(100, -30, 0));
+	enemy->GetTransform()->SetPosition(player->GetTransform()->GetPosition() + Vector3(200, -30, 0));
 	enemy->AssignPlayer(player);
 	dynamicGameObjectList->push_back(enemy);
 
@@ -133,7 +133,6 @@ void TestScene::LoadScene()
 	water->GetTransform()->SetScale(Vector3(2200* tilemap->GetTilemapScale().x, 16* tilemap->GetTilemapScale().y, 1));
 	water->AddComponent<Collider>(new Collider(water,water->GetTransform()));
 }
-
 
 void TestScene::UnloadScene()
 {

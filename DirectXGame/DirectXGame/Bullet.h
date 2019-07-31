@@ -6,6 +6,7 @@
 #include "Renderer.h"
 #include "Animation.h"
 #include "State.h"
+#include "Player.h"
 
 using namespace DirectXCore;
 

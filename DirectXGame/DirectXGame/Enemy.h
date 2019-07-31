@@ -22,6 +22,8 @@ public:
 	void AssignPlayer(GameObject* _player) { player = _player; }
 	~Enemy();
 private:
+	void AddAnimators();
+	void ManageAnimators();
 	std::shared_ptr<DirectXCore::DxBase> m_dxBase;
 	float bulletTimer,deathTimer,attackTimer, stateTimeCycle;
 	bool death;

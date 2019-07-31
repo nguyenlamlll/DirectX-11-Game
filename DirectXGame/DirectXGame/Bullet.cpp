@@ -65,6 +65,12 @@ void Bullet::OnCollisionEnter(Collider * _other, Vector3 _normal)
 		if ((_other->GetAttachedGameObject()->GetTag() == "Wall" && _normal.y < 0) || _other->GetAttachedGameObject()->GetTag() == "Player")
 			m_dxBase->GetCurrentScene()->GetGameObjectList()->erase(std::remove(m_dxBase->GetCurrentScene()->GetGameObjectList()->begin(), m_dxBase->GetCurrentScene()->GetGameObjectList()->end(), this), m_dxBase->GetCurrentScene()->GetGameObjectList()->end());
 	}*/
+	if (_other->GetAttachedGameObject()->GetTag() == "Player" && tag == "EnemyBullet")
+
+	{
+		Player* a = (Player*)(_other->GetAttachedGameObject());
+		a->TakeDamage();
+	}
 }
 
 void Bullet::SetTarget(Vector3 _target)
