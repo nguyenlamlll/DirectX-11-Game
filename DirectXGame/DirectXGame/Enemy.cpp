@@ -65,8 +65,14 @@ void Enemy::Update(float _deltaTime)
 	//	else deathTimer += _deltaTime;
 	//}
 
+	// STAGE 3
+	if (stateTimeCycle > 6.0f)
+	{
+		this->GetComponent<Rigidbody>()->Move(Vector3(0, 0, 0));
+
+	}
 	// STAGE 2
-	if (stateTimeCycle > 2.0f)
+	else if (stateTimeCycle > 2.0f)
 	{
 		//SHOOT
 		if (bulletTimer > 1.0f && this->GetComponent<Collider>()->GetCollisionStatus())

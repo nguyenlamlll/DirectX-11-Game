@@ -102,6 +102,14 @@ void WizardBoss::Render()
 void WizardBoss::OnCollisionEnter(Collider * _other, Vector3 _normal)
 {
 	if (_other->GetAttachedGameObject()->GetTag() != "Player") GameObject::OnCollisionEnter(_other, _normal);
+	else if (_other->GetAttachedGameObject()->GetTag() == "Player")
+	{
+		if (this->GetTag() == "Boss")
+		{
+			Player* a = (Player*)(_other->GetAttachedGameObject());
+			a->TakeDamage();
+		}
+	}
 }
 
 
