@@ -60,7 +60,7 @@ void Shield::LateUpdate(float _deltaTime)
 	{
 		Vector3 as = captain->GetTransform()->GetPosition() - this->GetTransform()->GetPosition();
 		as.Normalize();
-		this->GetTransform()->SetPosition(this->GetTransform()->GetPosition() + as*10);
+		this->GetTransform()->SetPosition(this->GetTransform()->GetPosition() + as*15);
 	}
 	else this->GetTransform()->SetPosition(this->GetTransform()->GetPosition() + direction);
 	//this->GetTransform()->SetPosition(captain->GetTransform()->GetPosition() + offset);

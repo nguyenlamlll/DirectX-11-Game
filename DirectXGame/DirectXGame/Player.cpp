@@ -6,7 +6,7 @@ Player::Player(std::shared_ptr<DirectXCore::DxBase> _m_dxBase)
 	//this->GetTransform()->SetPosition(Vector3(500, 0, 0));
 	//this->GetTransform()->SetScale(Vector3(32, 40, 1));
 	//this->GetTransform()->SetScreenScale(Vector3(1, 1, 1));
-	this->GetTransform()->SetPosition(Vector3(500, 500, 0));
+	this->GetTransform()->SetPosition(Vector3(50, 500, 0));
 	this->GetTransform()->SetScale(Vector3(50, 120, 1));
 	this->GetTransform()->SetScreenScale(Vector3(3, 3, 1));
 	this->AddComponent<Renderer>(new Renderer(_m_dxBase->GetDeviceResource(), L"Resources/Captain/Animations/stand.png"));
@@ -25,6 +25,8 @@ Player::Player(std::shared_ptr<DirectXCore::DxBase> _m_dxBase)
 
 	capshield = new Shield(_m_dxBase, this);
 	this->AddChild(capshield);
+
+	this->SetTag("Player");
 }
 
 void Player::PreUpdate(float _deltaTime)
@@ -175,29 +177,14 @@ void Player::LateUpdate(float _deltaTime)
 
 void Player::OnCollisionEnter(Collider* _other, Vector3 _normal)
 {
-	/*if (_normal.y != 0)
-	{
-		this->GetComponent<Animation>()->ResetAnimation(L"Resources/Captain/Animations/move.png", 1, 6);
-	}*/
-	if (_other->GetAttachedGameObject()->GetTag() == "Elevator")
-	{
-		if (_normal.x != 0 && this->GetComponent<Rigidbody>()->GetVelocity().y > 0 && lastFrameMove.x != 0)
-		{
-			this->GetComponent<Rigidbody>()->AddForce(Vector3(0, this->GetComponent<Rigidbody>()->GetVelocity().y / -2, 0));
-		}
-	}
-	else if (_other->GetAttachedGameObject()->GetTag() == "Door")
-	{
-		if (lastFrameMove.x >= 0)
-		{
-			cutscene = true;
-			this->GetTransform()->SetPosition(this->GetTransform()->GetPosition() + Vector3(3, 0, 0));
-		}
-		else if (lastFrameMove.x < 0) GameObject::OnCollisionEnter(_other, _normal);
-	}
-	if (_other->GetAttachedGameObject()->GetTag() == "EnemyBullet")
+	if (_other->GetAttachedGameObject()->GetTag() == "Enemy" || _other->GetAttachedGameObject()->GetTag() == "Boss" || _other->GetAttachedGameObject()->GetTag() == "EnemyBullet")
 	{
 		hurtTime = 0.5f;
+	}
+	else if (_other->GetAttachedGameObject()->GetTag() == "Water")
+	{
+		GameObject::OnCollisionEnter(_other, _normal);
+		if (this->GetComponent<Rigidbody>()->GetAcceleration().y >= 0 && this->GetComponent<Collider>()->GetCollisionStatus())this->GetComponent<Rigidbody>()->AddForce(Vector3(0, -1000, 0));
 	}
 	else
 	{

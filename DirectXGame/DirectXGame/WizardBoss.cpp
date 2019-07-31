@@ -8,14 +8,15 @@ WizardBoss::WizardBoss()
 
 WizardBoss::WizardBoss(std::shared_ptr<DirectXCore::DxBase> _m_dxBase, GameObject * _captain)
 {
+	loopDirection = 1;
 	stateTimeCycle = 0;
 	positionIndex = 0;
 	positionList = new std::vector<Vector3>();
 	Vector3 capPos = _captain->GetTransform()->GetPosition();
-	positionList->push_back(capPos + Vector3(100, 0, 0));
-	positionList->push_back(capPos + Vector3(100, 100, 0));
-	positionList->push_back(capPos + Vector3(-100, 100, 0));
-	positionList->push_back(capPos + Vector3(-100, 0, 0));
+	positionList->push_back(capPos + Vector3(200, 0, 0));
+	positionList->push_back(capPos + Vector3(200, -200, 0));
+	positionList->push_back(capPos + Vector3(-200, -200, 0));
+	positionList->push_back(capPos + Vector3(-200, 0, 0));
 
 	m_dxBase = _m_dxBase;
 	cap = _captain;
@@ -28,9 +29,11 @@ WizardBoss::WizardBoss(std::shared_ptr<DirectXCore::DxBase> _m_dxBase, GameObjec
 	this->AddComponent<Rigidbody>(new Rigidbody(this));
 	this->AddComponent<Collider>(new Collider(this, this->GetTransform()));
 
-	this->GetComponent<Collider>()->SetTrigger(true);
+	//this->GetComponent<Collider>()->SetTrigger(true);
 	this->GetComponent<Animation>()->ResetAnimation(L"Resources/Captain/Animations/boss/wizard_1.png", 1, 5);
 	this->GetComponent<Rigidbody>()->SetKinematic(true);
+
+	this->SetTag("Boss");
 }
 
 void WizardBoss::PreUpdate(float _deltaTime)
@@ -42,20 +45,38 @@ void WizardBoss::Update(float _deltaTime)
 {
 	GameObject::Update(_deltaTime);
 
+	// STAGE 4
 	if (stateTimeCycle > 15.0f)
 	{
 		//shooting
 		this->GetComponent<Rigidbody>()->Move(Vector3(0, 0, 0));
 	}
+	// STAGE 3
 	else if (stateTimeCycle > 10.0f)
 	{
-		//running
-		this->GetComponent<Rigidbody>()->Move(Vector3(0, 0, 0));
+		
 	}
+	// STAGE 2
 	else if (stateTimeCycle > 5.0f)
 	{
+		//running
+		this->GetComponent<Rigidbody>()->SetKinematic(false);
+		this->GetComponent<Rigidbody>()->Move(Vector3(0, 0, 0));
+	}
+	// STAGE 1
+	else if (stateTimeCycle > 0)
+	{
+		this->GetComponent<Rigidbody>()->SetKinematic(true);
 		//flying
-		if (Vector3::Distance(this->GetTransform()->GetPosition(), positionList->at(positionIndex)) < 5) positionIndex = (positionIndex == positionList->size() - 1) ? 0 : positionIndex + 1;
+		if (Vector3::Distance(this->GetTransform()->GetPosition(), positionList->at(positionIndex)) < 5)
+		{
+			if ((positionIndex == positionList->size() - 1) && loopDirection == 1)
+				loopDirection *= -1;
+			if ((positionIndex == 0) && loopDirection == -1)
+				loopDirection *= -1;
+			positionIndex += loopDirection;
+			//positionIndex = (positionIndex == positionList->size() - 1) ? 0 : positionIndex + 1;
+		}
 		else
 		{
 			Vector3 transformVector = positionList->at(positionIndex) - this->GetTransform()->GetPosition();
@@ -65,7 +86,7 @@ void WizardBoss::Update(float _deltaTime)
 		}
 	}
 
-	stateTimeCycle = (stateTimeCycle > 15.0f) ? 0 : stateTimeCycle + _deltaTime;
+	stateTimeCycle = (stateTimeCycle > 10.0f) ? 0 : stateTimeCycle + _deltaTime;
 }
 
 void WizardBoss::LateUpdate(float _deltaTime)
@@ -80,7 +101,7 @@ void WizardBoss::Render()
 
 void WizardBoss::OnCollisionEnter(Collider * _other, Vector3 _normal)
 {
-	GameObject::OnCollisionEnter(_other, _normal);
+	if (_other->GetAttachedGameObject()->GetTag() != "Player") GameObject::OnCollisionEnter(_other, _normal);
 }
 
 

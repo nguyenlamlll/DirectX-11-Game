@@ -28,8 +28,7 @@ private:
 	std::shared_ptr<DirectXCore::DxBase> m_dxBase;
 	//std::vector<GameObject*>* gameObjectList;
 	DirectXCore::Camera* camera;
-	GameObject* box1;
-	GameObject* box2;
+	GameObject* water;
 	TileMap* tilemap;
 	Player* player;
 	Grid* gridTest;

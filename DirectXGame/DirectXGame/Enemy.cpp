@@ -27,6 +27,7 @@ Enemy::Enemy(std::shared_ptr<DirectXCore::DxBase> _m_dxBase)
 	this->AddComponent<State>(new State(this, *stringStates));
 
 	this->GetComponent<Animation>()->ResetAnimation(L"Resources/Captain/Animations/enemy/shooter_move.png", 1, 3);
+	this->SetTag("Enemy");
 }
 
 
@@ -43,83 +44,6 @@ void Enemy::Update(float _deltaTime)
 	GameObject::Update(_deltaTime);
 	if (!death)
 	{
-		//if (this->GetName() == "Brute")
-		//{
-		//	if (player == NULL)
-		//	{
-		//		for (size_t i = 0; i < m_dxBase->GetCurrentScene()->GetDynamicGameObjectList()->size(); i++)
-		//		{
-		//			if (m_dxBase->GetCurrentScene()->GetDynamicGameObjectList()->at(i)->GetTag() == "Player") player = m_dxBase->GetCurrentScene()->GetDynamicGameObjectList()->at(i);
-		//		}
-		//	}
-		//	if (this->GetComponent<State>())
-		//	{
-		//		if (this->GetComponent<State>()->GetState() != "stand") {
-		//			this->GetComponent<State>()->SetState("stand");
-		//			this->GetComponent<Animation>()->ResetAnimation(L"Resources/Animations/enemies/enemies11.png", 1, 4);
-		//			this->GetTransform()->SetScale(Vector3(this->GetComponent<Animation>()->GetFrameScale().x / 2, this->GetComponent<Animation>()->GetFrameScale().y / 2, 1)*this->GetTransform()->GetScreenScale());
-		//		}
-		//	}
-		//	if (bulletTimer >= 3.0f)
-		//	{
-		//		Bullet* asd = new Bullet(L"Resources/Animations/bullet/lv1.png", m_dxBase, this->GetTransform()->GetPosition() + Vector3(transform->GetRotation().y == 0 ? 10 : -10, -10, 0), Vector3(2, 2, 2), Vector3(transform->GetRotation().y == 0 ? 20 : -20, 0, 0));
-		//		asd->SetTag("EnemyBullet");
-		//		asd->SetName("BruteBullet");
-		//		asd->SetTarget(player->GetTransform()->GetPosition());
-		//		asd->GetComponent<Animation>()->ResetAnimation(L"Resources/Animations/enemies/rocket.png", 1, 2);
-		//		asd->GetTransform()->SetScale(Vector3(5, 5, 5));
-		//		//asd->AddComponent<Rigidbody>(new Rigidbody(asd));
-		//		//asd->GetComponent<Rigidbody>()->SetVelocity(Vector3(0, 100.0f, 0));
-		//		//asd->GetComponent<Rigidbody>()->AddForce(Vector3(-300, -200, 0));
-		//		bulletTimer = 0;
-		//	}
-		//	else bulletTimer += _deltaTime;
-		//}
-		//else if (this->GetName() == "Copter")
-		//{
-		//	if (this->GetComponent<State>())
-		//	{
-		//		if (this->GetComponent<State>()->GetState() != "stand") {
-		//			this->GetComponent<State>()->SetState("stand");
-		//			this->GetComponent<Animation>()->ResetAnimation(L"Resources/Animations/enemies/enemies15.png", 1, 4);
-		//			this->GetTransform()->SetScale(Vector3(this->GetComponent<Animation>()->GetFrameScale().x / 2, this->GetComponent<Animation>()->GetFrameScale().y / 2, 1)*this->GetTransform()->GetScreenScale());
-		//		}
-		//	}
-		//	if (bulletTimer >= 3.0f)
-		//	{
-		//		Bullet* asd = new Bullet(L"Resources/Animations/bullet/lv1.png", m_dxBase, this->GetTransform()->GetPosition() + Vector3(transform->GetRotation().y == 0 ? 10 : -10, -10, 0), Vector3(2, 2, 2), Vector3(transform->GetRotation().y == 0 ? 20 : -20, 0, 0));
-		//		asd->SetTag("EnemyBullet");
-		//		asd->GetComponent<Animation>()->ResetAnimation(L"Resources/Animations/enemies/enemies17.png", 1, 4);
-		//		asd->GetTransform()->SetScale(Vector3(5, 5, 5));
-		//		asd->AddComponent<Rigidbody>(new Rigidbody(asd));
-		//		bulletTimer = 0;
-		//	}
-		//	else bulletTimer += _deltaTime;
-		//}
-		//else
-		//{
-		//	if (this->GetComponent<State>())
-		//	{
-		//		if (this->GetComponent<State>()->GetState() != "stand") {
-		//			this->GetComponent<State>()->SetState("stand");
-		//			this->GetComponent<Animation>()->ResetAnimation(L"Resources/Animations/enemies/stand.png", 1, 4);
-		//			this->GetTransform()->SetScale(Vector3(this->GetComponent<Animation>()->GetFrameScale().x / 2, this->GetComponent<Animation>()->GetFrameScale().y / 2, 1)*this->GetTransform()->GetScreenScale());
-		//		}
-		//	}
-		//	if (bulletTimer >= 3.0f)
-		//	{
-		//		Bullet* asd = new Bullet(L"Resources/Animations/bullet/lv1.png", m_dxBase, this->GetTransform()->GetPosition() + Vector3(transform->GetRotation().y == 0 ? 10 : -10, -10, 0), Vector3(2, 2, 2), Vector3(transform->GetRotation().y == 0 ? 20 : -20, 0, 0));
-		//		asd->SetTag("EnemyBullet");
-		//		asd->GetComponent<Animation>()->ResetAnimation(L"Resources/Animations/enemies/1.png", 1, 1);
-		//		asd->GetTransform()->SetScale(Vector3(5, 5, 5));
-		//		asd->AddComponent<Rigidbody>(new Rigidbody(asd));
-		//		asd->GetComponent<Rigidbody>()->SetVelocity(Vector3(0, 100.0f, 0));
-		//		asd->GetComponent<Rigidbody>()->AddForce(Vector3(-300, -200, 0));
-		//		bulletTimer = 0;
-		//	}
-		//	else bulletTimer += _deltaTime;
-		//}
-
 		//JUMP
 		if (attackTimer > 2.0f)
 		{
@@ -175,7 +99,7 @@ void Enemy::LateUpdate(float _deltaTime)
 
 void Enemy::OnCollisionEnter(Collider * _other, Vector3 _normal)
 {
-	GameObject::OnCollisionEnter(_other, _normal);
+	if (_other->GetAttachedGameObject()->GetTag() != "Player") GameObject::OnCollisionEnter(_other, _normal);
 	/*if (_other->GetAttachedGameObject()->GetTag() == "Wall") GameObject::OnCollisionEnter(_other, _normal);
 	if (_other->GetAttachedGameObject()->GetTag() == "PlayerBullet") death = true;*/
 }
