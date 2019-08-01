@@ -29,100 +29,6 @@ void Player::PreUpdate(float _deltaTime)
 
 	if (hurtTime <= 0)
 	{
-		//if (m_dxBase->GetInputManager()->IsKeyDown("M") && weaponTimer < 0)
-		//{
-		//	if (!this->GetComponent<Collider>()->GetCollisionStatus()) this->GetComponent<Animation>()->ResetAnimation(L"Resources/Captain/Animations/kick.png", 1, 1);
-		//	else this->GetComponent<Animation>()->ResetAnimation(L"Resources/Captain/Animations/dash.png", 1, 2);
-		//	weaponTimer = 0.6f;
-		//}
-		//else if (m_dxBase->GetInputManager()->IsKeyDown("L") && weaponTimer < 0)
-		//{
-		//	if (!this->GetComponent<Collider>()->GetCollisionStatus()) this->GetComponent<Animation>()->ResetAnimation(L"Resources/Captain/Animations/kick.png", 1, 1);
-		//	else
-		//	{
-		//		this->GetComponent<Animation>()->ResetAnimation(L"Resources/Captain/Animations/attack.png", 1, 2);
-		//	}
-		//	weaponTimer = 0.6f;
-		//}
-		//else if (m_dxBase->GetInputManager()->IsKeyDown("L") && weaponTimer < 0.4f)
-		//{
-		//	this->GetComponent<Animation>()->ResetAnimation(L"Resources/Captain/Animations/shieldlessattack.png", 1, 2);
-		//}
-		//else if (m_dxBase->GetInputManager()->IsKeyDown("L") && m_dxBase->GetInputManager()->IsKeyDown("S") && weaponTimer < 0)
-		//{
-		//	if (this->GetComponent<Collider>()->GetCollisionStatus()) this->GetComponent<Animation>()->ResetAnimation(L"Resources/Captain/Animations/sit_attack.png", 1, 2);
-		//	weaponTimer = 0.6f;
-		//}
-		//weaponTimer -= _deltaTime;
-		//if (this->GetComponent<Collider>()->GetCollisionStatus())
-		//{
-		//	if (m_dxBase->GetInputManager()->IsKeyDown("W"))
-		//	{
-		//		this->GetComponent<Animation>()->ResetAnimation(L"Resources/Captain/Animations/lookup.png", 1, 1);
-		//	}
-		//	else if (m_dxBase->GetInputManager()->IsKeyDown("S"))
-		//	{
-		//		if (m_dxBase->GetInputManager()->IsKeyDown("L") && weaponTimer < 0)
-		//		{
-		//			this->GetComponent<Animation>()->ResetAnimation(L"Resources/Captain/Animations/sit_attack.png", 1, 2);
-		//			//weaponTimer = 0.5f;
-		//		}
-		//		else this->GetComponent<Animation>()->ResetAnimation(L"Resources/Captain/Animations/sit.png", 1, 1);
-		//	}
-		//	else if (m_dxBase->GetInputManager()->IsKeyDown("O"))
-		//	{
-		//		this->GetComponent<Animation>()->ResetAnimation(L"Resources/Captain/Animations/damage.png", 1, 1);
-		//	}
-		//	else if (m_dxBase->GetInputManager()->IsKeyDown("P"))
-		//	{
-		//		this->GetComponent<Animation>()->ResetAnimation(L"Resources/Captain/Animations/die.png", 1, 2);
-		//	}
-		//	else
-		//	{
-		//		if (m_dxBase->GetInputManager()->IsKeyDown("D"))
-		//		{
-		//			this->GetComponent<Rigidbody>()->Move(Vector3(160, 0, 0));
-		//			if (weaponTimer < 0)  this->GetComponent<Animation>()->ResetAnimation(L"Resources/Captain/Animations/move.png", 1, 4);
-		//		}
-		//		if (m_dxBase->GetInputManager()->IsKeyDown("A"))
-		//		{
-		//			this->GetComponent<Rigidbody>()->Move(Vector3(-160, 0, 0));
-		//			if (weaponTimer < 0)  this->GetComponent<Animation>()->ResetAnimation(L"Resources/Captain/Animations/move.png", 1, 4);
-		//		}
-		//		if (m_dxBase->GetInputManager()->IsKeyDown("K"))
-		//		{
-		//			if (this->GetComponent<Rigidbody>()->GetAcceleration().y >= 0 && this->GetComponent<Collider>()->GetCollisionStatus())this->GetComponent<Rigidbody>()->AddForce(Vector3(0, -1000, 0));
-		//			jumpTime = -0.5f;
-		//		}
-		//		if (!m_dxBase->GetInputManager()->IsKeyDown("D") && !m_dxBase->GetInputManager()->IsKeyDown("A"))
-		//		{
-		//			this->GetComponent<Rigidbody>()->Move(Vector3(0, 0, 0));
-		//			if (weaponTimer < 0) this->GetComponent<Animation>()->ResetAnimation(L"Resources/Captain/Animations/stand.png", 1, 1);
-		//		}
-		//	}
-		//}
-		//else
-		//{
-		//	jumpTime += _deltaTime;
-		//	if (weaponTimer < 0)
-		//	{
-		//		//if (jumpTime > 0.5f) 
-		//		this->GetComponent<Animation>()->ResetAnimation(L"Resources/Captain/Animations/jump.png", 1, 1);
-		//		if (jumpTime > 0 && m_dxBase->GetInputManager()->IsKeyDown("K"))
-		//		{
-		//			//jumpTime = 0;
-		//			this->GetComponent<Animation>()->ResetAnimation(L"Resources/Captain/Animations/spin.png", 1, 2);
-		//		}
-		//	}
-		//	if (m_dxBase->GetInputManager()->IsKeyDown("D"))
-		//	{
-		//		this->GetComponent<Rigidbody>()->Move(Vector3(360, 0, 0));
-		//	}
-		//	if (m_dxBase->GetInputManager()->IsKeyDown("A"))
-		//	{
-		//		this->GetComponent<Rigidbody>()->Move(Vector3(-360, 0, 0));
-		//	}
-		//}
 		if (!m_dxBase->GetInputManager()->IsKeyDown("D") && !m_dxBase->GetInputManager()->IsKeyDown("A"))
 		{
 			this->GetComponent<Rigidbody>()->Move(Vector3(0, 0, 0));
@@ -154,7 +60,7 @@ void Player::Update(float _deltaTime)
 	GameObject::Update(_deltaTime);
 	ManageAnimators();
 	jumpTime = (this->GetComponent<Collider>()->GetCollisionStatus()) ? 0 : jumpTime + _deltaTime;
-	if (this->GetComponent<Animator>()->GetCurrentAnimation()->GetAnimationName() == "Sit")
+	if (this->GetComponent<Animator>()->GetCurrentAnimation()->GetAnimationName() == "Sit" || this->GetComponent<Animator>()->GetCurrentAnimation()->GetAnimationName() == "SitAttack")
 	{
 		if (this->GetTransform()->GetScale().y != 60)
 		{
@@ -209,6 +115,7 @@ void Player::AddAnimators()
 	Animation* spinJumpAnim = new Animation(L"Resources/Captain/Animations/spin.png", "SpinJump", this->GetComponent<Renderer>(), 1, 2, 0.1f, 1.0f, true);
 	Animation* attackAnim = new Animation(L"Resources/Captain/Animations/shieldlessattack.png", "Attack", this->GetComponent<Renderer>(), 1, 2, 0.1f, 1.0f, true);
 	Animation* throwAnim = new Animation(L"Resources/Captain/Animations/attack.png", "Attack", this->GetComponent<Renderer>(), 1, 2, 0.1f, 1.0f, true);
+	Animation* sitAttackAnim = new Animation(L"Resources/Captain/Animations/sit_attack.png", "SitAttack", this->GetComponent<Renderer>(), 1, 2, 0.1f, 1.0f, true);
 	Animation* sitAnim = new Animation(L"Resources/Captain/Animations/sit.png", "Sit", this->GetComponent<Renderer>(), 1, 1, 0.1f, 1.0f, true);
 	Animation* hurtAnim = new Animation(L"Resources/Captain/Animations/hurt.png", "Hurt", this->GetComponent<Renderer>(), 1, 3, 0.1f, 1.0f, true);
 
@@ -217,6 +124,7 @@ void Player::AddAnimators()
 	this->GetComponent<Animator>()->AddAnimation(moveAnim);
 	this->GetComponent<Animator>()->AddAnimation(jumpAnim);
 	this->GetComponent<Animator>()->AddAnimation(attackAnim);
+	this->GetComponent<Animator>()->AddAnimation(sitAttackAnim);
 	this->GetComponent<Animator>()->AddAnimation(spinJumpAnim);
 	this->GetComponent<Animator>()->AddAnimation(sitAnim);
 	this->GetComponent<Animator>()->AddAnimation(throwAnim);
@@ -241,8 +149,11 @@ void Player::AddAnimators()
 
 	this->GetComponent<Animator>()->AddTransition("Attack", "Stand", true);
 	this->GetComponent<Animator>()->AddTransition("Attack", "Move", true);
+	this->GetComponent<Animator>()->AddTransition("SitAttack", "Stand", true);
+	this->GetComponent<Animator>()->AddTransition("SitAttack", "Move", true);
 
 	this->GetComponent<Animator>()->AddTransition("Sit", "Stand", true);
+	this->GetComponent<Animator>()->AddTransition("Sit", "SitAttack", true);
 
 	this->GetComponent<Animator>()->AddTransition("Throw", "Stand", true);
 
@@ -291,7 +202,13 @@ void Player::ManageAnimators()
 	}
 	if (this->GetComponent<Animator>()->GetCurrentAnimation()->GetAnimationName() == "Sit")
 	{
+		this->GetComponent<Animator>()->SetBool("Sit", "SitAttack", this->GetComponent<Animator>()->GetCurrentAnimation()->GetAnimationName() != "SitAttack" && m_dxBase->GetInputManager()->IsKeyDown("L") && this->GetComponent<Collider>()->GetCollisionStatus());
 		this->GetComponent<Animator>()->SetBool("Sit", "Stand", !m_dxBase->GetInputManager()->IsKeyDown("S") && this->GetComponent<Collider>()->GetCollisionStatus());
+	}
+	if (this->GetComponent<Animator>()->GetCurrentAnimation()->GetAnimationName() == "SitAttack")
+	{
+		this->GetComponent<Animator>()->SetBool("SitAttack", "Sit", m_dxBase->GetInputManager()->IsKeyDown("S") && !m_dxBase->GetInputManager()->IsKeyDown("L"));
+		this->GetComponent<Animator>()->SetBool("Sit", "Stand", !m_dxBase->GetInputManager()->IsKeyDown("S") && !m_dxBase->GetInputManager()->IsKeyDown("L"));
 	}
 	if (this->GetComponent<Animator>()->GetCurrentAnimation()->GetAnimationName() == "Hurt")
 	{

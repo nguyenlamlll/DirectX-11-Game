@@ -11,6 +11,7 @@ WizardBoss::WizardBoss(std::shared_ptr<DirectXCore::DxBase> _m_dxBase, GameObjec
 	loopDirection = 1;
 	stateTimeCycle = 0;
 	positionIndex = 0;
+	bulletTimer = 0;
 	positionList = new std::vector<Vector3>();
 	Vector3 capPos = _captain->GetTransform()->GetPosition();
 	positionList->push_back(capPos + Vector3(200, 0, 0));
@@ -59,9 +60,41 @@ void WizardBoss::Update(float _deltaTime)
 	// STAGE 2
 	else if (stateTimeCycle > 5.0f)
 	{
-		//running
-		this->GetComponent<Rigidbody>()->SetKinematic(false);
-		this->GetComponent<Rigidbody>()->Move(Vector3(0, 0, 0));
+		if (Vector3::Distance(this->GetTransform()->GetPosition(), positionList->at(positionIndex)) >5 && this->GetComponent<Rigidbody>()->IsKinematic())
+		{
+			//this->GetComponent<Rigidbody>()->SetKinematic(true);
+			Vector3 transformVector = positionList->at(positionIndex) - this->GetTransform()->GetPosition();
+			transformVector.Normalize();
+			this->GetComponent<Rigidbody>()->Move(transformVector * 400);
+		}
+		else
+		{
+			this->GetComponent<Rigidbody>()->SetKinematic(false);
+		}
+		if(!this->GetComponent<Rigidbody>()->IsKinematic())
+		{
+			// RUNN
+			this->GetComponent<Rigidbody>()->SetKinematic(false);
+			this->GetComponent<Rigidbody>()->Move(Vector3(0, 0, 0));
+			//SHOOT
+			if (bulletTimer > 1.0f && this->GetComponent<Collider>()->GetCollisionStatus())
+			{
+				this->GetComponent<Rigidbody>()->Move(Vector3(0, 0, 0));
+
+				//shooting code
+				float directionX = cap->GetTransform()->GetPosition().x - this->GetTransform()->GetPosition().x;
+				if (directionX > 10) directionX = 400;
+				else if (directionX < -10) directionX = -400;
+				else directionX = 0;
+				Bullet* bullet = new Bullet(L"Resources/Captain/Animations/boss/single_bullet.png", m_dxBase, this->GetTransform()->GetPosition(), Vector3(3, 3, 1), Vector3(directionX, 0, 0));
+				bullet->SetTag("EnemyBullet");
+				bullet->AddComponent<Rigidbody>(new Rigidbody(bullet));
+				bullet->GetComponent<Rigidbody>()->SetKinematic(true);
+				m_dxBase->GetCurrentScene()->GetDynamicGameObjectList()->push_back(bullet);
+				//this->AddChild(bullet);
+				bulletTimer = 0;
+			}
+		}
 	}
 	// STAGE 1
 	else if (stateTimeCycle > 0)
@@ -70,10 +103,8 @@ void WizardBoss::Update(float _deltaTime)
 		//flying
 		if (Vector3::Distance(this->GetTransform()->GetPosition(), positionList->at(positionIndex)) < 5)
 		{
-			if ((positionIndex == positionList->size() - 1) && loopDirection == 1)
-				loopDirection *= -1;
-			if ((positionIndex == 0) && loopDirection == -1)
-				loopDirection *= -1;
+			if ((positionIndex == positionList->size() - 1) && loopDirection == 1) loopDirection *= -1;
+			if ((positionIndex == 0) && loopDirection == -1) loopDirection *= -1;
 			positionIndex += loopDirection;
 			//positionIndex = (positionIndex == positionList->size() - 1) ? 0 : positionIndex + 1;
 		}
@@ -82,10 +113,25 @@ void WizardBoss::Update(float _deltaTime)
 			Vector3 transformVector = positionList->at(positionIndex) - this->GetTransform()->GetPosition();
 			transformVector.Normalize();
 			this->GetComponent<Rigidbody>()->Move(transformVector * 400);
-			//this->GetTransform()->SetPosition(this->GetTransform()->GetPosition() + transformVector * 5);
+			if (this->GetTransform()->GetPosition().y < cap->GetTransform()->GetPosition().y && abs(this->GetTransform()->GetPosition().x - cap->GetTransform()->GetPosition().x) < 10)
+			{
+				//SHOOT
+				if (bulletTimer > 1.0f)
+				{
+					Bullet* bullet = new Bullet(L"Resources/Captain/Animations/boss/single_bullet.png", m_dxBase, this->GetTransform()->GetPosition(), Vector3(3, 3, 1), Vector3(0, 400, 0));
+					bullet->GetTransform()->SetRotation(Vector3(0.4f, 0, 0));
+					bullet->SetTag("EnemyBullet");
+					bullet->AddComponent<Rigidbody>(new Rigidbody(bullet));
+					bullet->GetComponent<Rigidbody>()->SetKinematic(true);
+					m_dxBase->GetCurrentScene()->GetDynamicGameObjectList()->push_back(bullet);
+					//this->AddChild(bullet);
+					bulletTimer = 0;
+				}
+			}
 		}
 	}
 
+	bulletTimer += _deltaTime;
 	stateTimeCycle = (stateTimeCycle > 10.0f) ? 0 : stateTimeCycle + _deltaTime;
 }
 

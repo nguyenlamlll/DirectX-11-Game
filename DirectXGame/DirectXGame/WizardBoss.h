@@ -28,6 +28,6 @@ private:
 	int loopDirection = 1;;
 	std::vector<Vector3>* positionList;
 	int positionIndex = 0;
-	float stateTimeCycle = 0;
+	float stateTimeCycle = 0, bulletTimer = 0;
 };
 
