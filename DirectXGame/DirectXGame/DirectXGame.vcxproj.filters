@@ -39,12 +39,6 @@
     <ClCompile Include="Bullet.cpp">
       <Filter>Source Files\GameObjects</Filter>
     </ClCompile>
-    <ClCompile Include="ShurikenBoss.cpp">
-      <Filter>Source Files\GameObjects</Filter>
-    </ClCompile>
-    <ClCompile Include="HornetBoss.cpp">
-      <Filter>Source Files\GameObjects</Filter>
-    </ClCompile>
     <ClCompile Include="MenuScene.cpp">
       <Filter>Source Files\Scenes</Filter>
     </ClCompile>
@@ -69,12 +63,6 @@
       <Filter>Header Files\GameObjects</Filter>
     </ClInclude>
     <ClInclude Include="Bullet.h">
-      <Filter>Header Files\GameObjects</Filter>
-    </ClInclude>
-    <ClInclude Include="ShurikenBoss.h">
-      <Filter>Header Files\GameObjects</Filter>
-    </ClInclude>
-    <ClInclude Include="HornetBoss.h">
       <Filter>Header Files\GameObjects</Filter>
     </ClInclude>
     <ClInclude Include="MenuScene.h">

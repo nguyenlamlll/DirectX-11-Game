@@ -19,6 +19,7 @@ public:
 	void LateUpdate(float _deltaTime) override;
 	void Render() override;
 	void OnCollisionEnter(Collider* _other, Vector3 _normal) override;
+	void TakeDamage() { hurtTime = 1.0f; }
 	~WizardBoss();
 
 	GameObject* cap;
@@ -28,6 +29,8 @@ private:
 	int loopDirection = 1;;
 	std::vector<Vector3>* positionList;
 	int positionIndex = 0;
-	float stateTimeCycle = 0, bulletTimer = 0;
+	float stateTimeCycle = 0, bulletTimer = 0, hurtTime = 0;;
+	void AddAnimation();
+	void ManageAnimation();
 };
 

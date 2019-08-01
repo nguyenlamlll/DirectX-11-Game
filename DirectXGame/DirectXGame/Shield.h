@@ -21,6 +21,7 @@ public:
 	void Render() override;
 	void OnCollisionEnter(Collider* _other, Vector3 _normal) override;
 	void SetTarget(Vector3 _target);
+	Vector3 startpoint, endpoint;
 private:
 	std::shared_ptr<DirectXCore::DxBase> m_dxBase;
 	GameObject* captain;

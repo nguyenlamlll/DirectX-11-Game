@@ -8,6 +8,7 @@ Enemy::Enemy()
 
 Enemy::Enemy(std::shared_ptr<DirectXCore::DxBase> _m_dxBase)
 {
+	hurtTime = 0;
 	stateTimeCycle = 0;
 	player = NULL;
 	bulletTimer = 0;
@@ -20,15 +21,10 @@ Enemy::Enemy(std::shared_ptr<DirectXCore::DxBase> _m_dxBase)
 	this->AddComponent<Renderer>(new Renderer(m_dxBase->GetDeviceResource(), L"Resources/Captain/Animations/enemy/shooter_sit.png"));
 	this->AddComponent<Rigidbody>(new Rigidbody(this));
 	this->AddComponent<Collider>(new Collider(this, this->GetTransform()));
-
 	this->AddComponent<Animator>(new Animator(this->GetComponent<Renderer>()));
 	AddAnimators();
 	this->SetTag("Enemy");
 }
-
-
-
-
 
 void Enemy::PreUpdate(float _deltaTime)
 {
@@ -106,6 +102,12 @@ void Enemy::Update(float _deltaTime)
 
 	ManageAnimators();
 	stateTimeCycle = (stateTimeCycle > 4.0f) ? 0 : stateTimeCycle + _deltaTime;
+	if (hurtTime > 0 && hurtTime < 0.5)
+	{
+		m_dxBase->GetCurrentScene()->GetDynamicGameObjectList()->erase(std::remove(m_dxBase->GetCurrentScene()->GetDynamicGameObjectList()->begin(), m_dxBase->GetCurrentScene()->GetDynamicGameObjectList()->end(), this), m_dxBase->GetCurrentScene()->GetDynamicGameObjectList()->end());
+		delete this;
+	}
+	else if (hurtTime > 0) hurtTime -= _deltaTime;
 }
 
 void Enemy::LateUpdate(float _deltaTime)
@@ -116,6 +118,17 @@ void Enemy::LateUpdate(float _deltaTime)
 void Enemy::OnCollisionEnter(Collider * _other, Vector3 _normal)
 {
 	if (_other->GetAttachedGameObject()->GetTag() != "Player") GameObject::OnCollisionEnter(_other, _normal);
+	else
+	{
+		if (_other->GetAttachedGameObject()->GetComponent<Animator>()->GetCurrentAnimation()->GetAnimationName() == "Attack"
+			|| _other->GetAttachedGameObject()->GetComponent<Animator>()->GetCurrentAnimation()->GetAnimationName() == "SitAttack"
+			|| _other->GetAttachedGameObject()->GetComponent<Animator>()->GetCurrentAnimation()->GetAnimationName() == "JumpAttack")
+		{
+			hurtTime = 1.0f;
+		}
+	}
+	if (_other->GetAttachedGameObject()->GetTag() == "Shield") 
+		hurtTime = 1.0f;
 	/*if (_other->GetAttachedGameObject()->GetTag() == "Wall") GameObject::OnCollisionEnter(_other, _normal);
 	if (_other->GetAttachedGameObject()->GetTag() == "PlayerBullet") death = true;*/
 }
@@ -129,14 +142,16 @@ void Enemy::AddAnimators()
 	Animation* moveAnim = new Animation(L"Resources/Captain/Animations/enemy/shooter_move.png", "Move", this->GetComponent<Renderer>(), 1, 3, 0.1f, 1.0f, true);
 	//Animation* standAnim = new Animation(L"Resources/Captain/Animations/enemy/stand.png", "Stand", this->GetComponent<Renderer>(), 1, 1, 0.1f, 1.0f, true);
 	Animation* jumpAnim = new Animation(L"Resources/Captain/Animations/enemy/shooter_sit.png", "Jump", this->GetComponent<Renderer>(), 1, 1, 0.1f, 1.0f, true);
-	Animation* throwAnim = new Animation(L"Resources/Captain/Animations/enemy/shooter_shoot.png", "Attack", this->GetComponent<Renderer>(), 1, 1, 0.1f, 1.0f, true);
+	Animation* attackAnim = new Animation(L"Resources/Captain/Animations/enemy/shooter_shoot.png", "Attack", this->GetComponent<Renderer>(), 1, 1, 0.1f, 1.0f, true);
 	Animation* sitAnim = new Animation(L"Resources/Captain/Animations/enemy/shooter_sit.png", "Sit", this->GetComponent<Renderer>(), 1, 1, 0.1f, 1.0f, true);
+	Animation* dieAnim = new Animation(L"Resources/Captain/Animations/enemy/shooter_die.png", "Die", this->GetComponent<Renderer>(), 1, 1, 0.1f, 1.0f, true);
 	moveAnim->interupt = true;
 	//this->GetComponent<Animator>()->AddAnimation(standAnim);
 	this->GetComponent<Animator>()->AddAnimation(moveAnim);
 	this->GetComponent<Animator>()->AddAnimation(jumpAnim);
 	this->GetComponent<Animator>()->AddAnimation(sitAnim);
-	this->GetComponent<Animator>()->AddAnimation(throwAnim);
+	this->GetComponent<Animator>()->AddAnimation(attackAnim);
+	this->GetComponent<Animator>()->AddAnimation(dieAnim);
 	this->GetComponent<Animator>()->AddTransition("Stand", "Move", true);
 	this->GetComponent<Animator>()->AddTransition("Stand", "Attack", true);
 	this->GetComponent<Animator>()->AddTransition("Stand", "Jump", true);
@@ -153,8 +168,6 @@ void Enemy::AddAnimators()
 
 	this->GetComponent<Animator>()->AddTransition("Sit", "Stand", true);
 
-	this->GetComponent<Animator>()->AddTransition("Throw", "Stand", true);
-
 	this->GetComponent<Animator>()->SetCurrentAnimation(moveAnim);
 }
 
@@ -162,6 +175,7 @@ void Enemy::ManageAnimators()
 {
 	this->GetComponent<Animator>()->SetBool("Attack", this->GetComponent<Animator>()->GetCurrentAnimation()->GetAnimationName() != "Attack" && stateTimeCycle > 2.0f &&  this->GetComponent<Collider>()->GetCollisionStatus());
 	//this->GetComponent<Animator>()->SetBool("Sit",this->GetComponent<Animator>()->GetCurrentAnimation()->GetAnimationName() != "Sit" && this->GetComponent<Collider>()->GetCollisionStatus());
+	this->GetComponent<Animator>()->SetBool("Die", hurtTime > 0.5f);
 
 	if (this->GetComponent<Animator>()->GetCurrentAnimation()->GetAnimationName() == "Move")
 	{

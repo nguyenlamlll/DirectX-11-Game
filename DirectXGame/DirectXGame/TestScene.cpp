@@ -116,13 +116,13 @@ void TestScene::LoadScene()
 	gridTest->SetRenderer(tilemap->GetTilepRenderer());
 	gridTest->AddRenderTile(tilemap->GetListTileIDs(), tilemap->GetData(), tilemap->GetPositionList(), tilemap->GetTilemapScale());
 
-	/*Enemy* enemy = new Enemy(m_dxBase);
+	Enemy* enemy = new Enemy(m_dxBase);
 	enemy->GetTransform()->SetPosition(player->GetTransform()->GetPosition() + Vector3(200, -30, 0));
 	enemy->AssignPlayer(player);
-	dynamicGameObjectList->push_back(enemy);*/
+	dynamicGameObjectList->push_back(enemy);
 
-	WizardBoss* boss = new WizardBoss(m_dxBase,player);
-	dynamicGameObjectList->push_back(boss);
+	/*WizardBoss* boss = new WizardBoss(m_dxBase,player);
+	dynamicGameObjectList->push_back(boss);*/
 
 	dynamicGameObjectList->push_back(player);
 

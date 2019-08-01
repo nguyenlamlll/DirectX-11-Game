@@ -20,12 +20,13 @@ public:
 	void OnCollisionEnter(Collider* _other, Vector3 _normal) override;
 
 	void AssignPlayer(GameObject* _player) { player = _player; }
+	void TakeDamage() { hurtTime = 1.0f; }
 	~Enemy();
 private:
 	void AddAnimators();
 	void ManageAnimators();
 	std::shared_ptr<DirectXCore::DxBase> m_dxBase;
-	float bulletTimer,deathTimer,attackTimer, stateTimeCycle;
+	float bulletTimer,deathTimer,attackTimer, stateTimeCycle,hurtTime;
 	bool death;
 	GameObject* player;
 };
