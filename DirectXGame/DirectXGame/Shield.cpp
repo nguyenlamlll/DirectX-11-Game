@@ -72,16 +72,26 @@ void Shield::LateUpdate(float _deltaTime)
 	}
 	if (pos.x > targetRightside.x && direction.x > 0) direction.x *= -1;
 	else if (pos.x < targetLeftSide.x && direction.x < 0) this->GetTransform()->SetPosition(captain->GetTransform()->GetPosition() + offset);*/
-	if (Vector3::Distance(this->GetTransform()->GetPosition(), endpoint) > 10)
+	if (Vector3::Distance(this->GetTransform()->GetPosition(), endpoint) > 5)
 	{
-		Vector3 as = endpoint - this->GetTransform()->GetPosition();
-		as.Normalize();
-		//this->GetTransform()->SetPosition(this->GetTransform()->GetPosition() + as * 15);
-		this->GetComponent<Rigidbody>()->Move(as * 600);
+		/*if (endpoint == startpoint)
+		{
+			this->GetTransform()->SetPosition(endpoint);
+		}
+		else*/
+		{
+			Vector3 as = endpoint - this->GetTransform()->GetPosition();
+			as.Normalize();
+			//this->GetTransform()->SetPosition(this->GetTransform()->GetPosition() + as * 15);
+			this->GetComponent<Rigidbody>()->Move(as * 600);
+		}
 	}
 	else 
 	{
-		if(endpoint != startpoint) endpoint = startpoint;
+		if(endpoint != startpoint) 
+			endpoint = startpoint;
+		else 
+			this->GetTransform()->SetPosition(endpoint);
 	}
 }
 
