@@ -15,10 +15,12 @@ WizardBoss::WizardBoss(std::shared_ptr<DirectXCore::DxBase> _m_dxBase, GameObjec
 	bulletTimer = 0;
 	positionList = new std::vector<Vector3>();
 	Vector3 capPos = _captain->GetTransform()->GetPosition();
-	positionList->push_back(capPos + Vector3(200, 0, 0));
-	positionList->push_back(capPos + Vector3(200, -200, 0));
-	positionList->push_back(capPos + Vector3(-200, -200, 0));
-	positionList->push_back(capPos + Vector3(-200, 0, 0));
+	transform->SetPosition(Vector3(953, 4207, 0));
+	Vector3 currPos = transform->GetPosition();
+	positionList->push_back(currPos + Vector3(300, 0, 0));
+	positionList->push_back(currPos + Vector3(300, -350, 0));
+	positionList->push_back(currPos + Vector3(-500, -350, 0));
+	positionList->push_back(currPos + Vector3(-500, 0, 0));
 
 	m_dxBase = _m_dxBase;
 	cap = _captain;
@@ -48,22 +50,18 @@ void WizardBoss::PreUpdate(float _deltaTime)
 void WizardBoss::Update(float _deltaTime)
 {
 	GameObject::Update(_deltaTime);
+	if (cap->GetTransform()->GetPosition().x - this->GetTransform()->GetPosition().x > 0) this->GetTransform()->SetRotation(Vector3(0,360,0));
+	else this->GetTransform()->SetRotation(Vector3(0,0,0));
 
-	// STAGE 4
-	if (stateTimeCycle > 15.0f)
+	if (stateTimeCycle > 10.0f)
 	{
-		//shooting
+		// shooting
 		this->GetComponent<Rigidbody>()->Move(Vector3(0, 0, 0));
-	}
-	// STAGE 3
-	else if (stateTimeCycle > 10.0f)
-	{
-		
 	}
 	// STAGE 2
 	else if (stateTimeCycle > 5.0f)
 	{
-		if (Vector3::Distance(this->GetTransform()->GetPosition(), positionList->at(positionIndex)) >5 && this->GetComponent<Rigidbody>()->IsKinematic())
+		if (Vector3::Distance(this->GetTransform()->GetPosition(), positionList->at(positionIndex)) > 5 && this->GetComponent<Rigidbody>()->IsKinematic())
 		{
 			//this->GetComponent<Rigidbody>()->SetKinematic(true);
 			Vector3 transformVector = positionList->at(positionIndex) - this->GetTransform()->GetPosition();
@@ -74,9 +72,9 @@ void WizardBoss::Update(float _deltaTime)
 		{
 			this->GetComponent<Rigidbody>()->SetKinematic(false);
 		}
-		if(!this->GetComponent<Rigidbody>()->IsKinematic())
+		if (!this->GetComponent<Rigidbody>()->IsKinematic())
 		{
-			// RUNN
+			// RUN
 			this->GetComponent<Rigidbody>()->SetKinematic(false);
 			this->GetComponent<Rigidbody>()->Move(Vector3(0, 0, 0));
 			//SHOOT
@@ -93,9 +91,12 @@ void WizardBoss::Update(float _deltaTime)
 				bullet->SetTag("EnemyBullet");
 				bullet->AddComponent<Rigidbody>(new Rigidbody(bullet));
 				bullet->GetComponent<Rigidbody>()->SetKinematic(true);
+				if (cap->GetTransform()->GetPosition().x - bullet->GetTransform()->GetPosition().x > 0) bullet->GetTransform()->SetRotation(Vector3(0, 360, 0));
+				else this->GetTransform()->SetRotation(Vector3(0, 0, 0));
 				m_dxBase->GetCurrentScene()->GetDynamicGameObjectList()->push_back(bullet);
 				//this->AddChild(bullet);
 				bulletTimer = 0;
+
 			}
 		}
 	}
@@ -121,11 +122,13 @@ void WizardBoss::Update(float _deltaTime)
 				//SHOOT
 				if (bulletTimer > 1.0f)
 				{
-					Bullet* bullet = new Bullet(L"Resources/Captain/Animations/boss/single_bullet.png", m_dxBase, this->GetTransform()->GetPosition(), Vector3(3, 3, 1), Vector3(0, 400, 0));
-					bullet->GetTransform()->SetRotation(Vector3(0.4f, 0, 0));
+					Bullet* bullet = new Bullet(L"Resources/Captain/Animations/boss/bullet3.png", m_dxBase, this->GetTransform()->GetPosition(), Vector3(3, 3, 1), Vector3(0, 400, 0));
+					//bullet->GetTransform()->SetRotation(Vector3(0.4f, 0, 0));
 					bullet->SetTag("EnemyBullet");
 					bullet->AddComponent<Rigidbody>(new Rigidbody(bullet));
 					bullet->GetComponent<Rigidbody>()->SetKinematic(true);
+					if (cap->GetTransform()->GetPosition().x - bullet->GetTransform()->GetPosition().x > 0) bullet->GetTransform()->SetRotation(Vector3(0, 360, 0));
+					else this->GetTransform()->SetRotation(Vector3(0, 0, 0));
 					m_dxBase->GetCurrentScene()->GetDynamicGameObjectList()->push_back(bullet);
 					//this->AddChild(bullet);
 					bulletTimer = 0;
@@ -136,7 +139,7 @@ void WizardBoss::Update(float _deltaTime)
 
 	ManageAnimation();
 	bulletTimer += _deltaTime;
-	stateTimeCycle = (stateTimeCycle > 10.0f) ? 0 : stateTimeCycle + _deltaTime;
+	stateTimeCycle = (stateTimeCycle > 15.0f) ? 0 : stateTimeCycle + _deltaTime;
 	if (hurtTime > 0 && hurtTime < 0.5)
 	{
 		m_dxBase->GetCurrentScene()->GetDynamicGameObjectList()->erase(std::remove(m_dxBase->GetCurrentScene()->GetDynamicGameObjectList()->begin(), m_dxBase->GetCurrentScene()->GetDynamicGameObjectList()->end(), this), m_dxBase->GetCurrentScene()->GetDynamicGameObjectList()->end());
@@ -162,7 +165,8 @@ void WizardBoss::OnCollisionEnter(Collider * _other, Vector3 _normal)
 	{
 		if (_other->GetAttachedGameObject()->GetComponent<Animator>()->GetCurrentAnimation()->GetAnimationName() == "Attack"
 			|| _other->GetAttachedGameObject()->GetComponent<Animator>()->GetCurrentAnimation()->GetAnimationName() == "SitAttack"
-			|| _other->GetAttachedGameObject()->GetComponent<Animator>()->GetCurrentAnimation()->GetAnimationName() == "JumpAttack")
+			|| _other->GetAttachedGameObject()->GetComponent<Animator>()->GetCurrentAnimation()->GetAnimationName() == "JumpAttack"
+			|| _other->GetAttachedGameObject()->GetComponent<Animator>()->GetCurrentAnimation()->GetAnimationName() == "Dash")
 		{
 			hurtTime = 1.0f;
 		}
@@ -182,14 +186,18 @@ WizardBoss::~WizardBoss()
 void WizardBoss::AddAnimation()
 {
 	//Animation* moveAnim = new Animation(L"Resources/Captain/Animations/boss/wizard_1.png", "Move", this->GetComponent<Renderer>(), 1, 3, 0.1f, 1.0f, true);
-	Animation* standAnim = new Animation(L"Resources/Captain/Animations/boss/stand.png", "Stand", this->GetComponent<Renderer>(), 1, 5, 0.1f, 1.0f, true);
+	Animation* standAnim = new Animation(L"Resources/Captain/Animations/boss/stand.png", "Stand", this->GetComponent<Renderer>(), 1, 2, 0.1f, 1.0f, true);
 	Animation* jumpAnim = new Animation(L"Resources/Captain/Animations/boss/fly.png", "Jump", this->GetComponent<Renderer>(), 1, 4, 0.1f, 1.0f, true);
+	Animation* attackAnim = new Animation(L"Resources/Captain/Animations/boss/attack.png", "Attack", this->GetComponent<Renderer>(), 1, 3, 0.1f, 1.0f, true);
+	Animation* dieAnim = new Animation(L"Resources/Captain/Animations/boss/die.png", "Die", this->GetComponent<Renderer>(), 1, 3, 0.1f, 1.0f, true);
 	//Animation* attackAnim = new Animation(L"Resources/Captain/Animations/boss/wizard_1.png", "Attack", this->GetComponent<Renderer>(), 1, 1, 0.1f, 1.0f, true);
 	//Animation* dieAnim = new Animation(L"Resources/Captain/Animations/boss/wizard_1.png", "Die", this->GetComponent<Renderer>(), 1, 1, 0.1f, 1.0f, true);
 	//moveAnim->interupt = true;
 	this->GetComponent<Animator>()->AddAnimation(standAnim);
 	//this->GetComponent<Animator>()->AddAnimation(moveAnim);
 	this->GetComponent<Animator>()->AddAnimation(jumpAnim);
+	this->GetComponent<Animator>()->AddAnimation(attackAnim);
+	this->GetComponent<Animator>()->AddAnimation(dieAnim);
 	//this->GetComponent<Animator>()->AddAnimation(attackAnim);
 	//this->GetComponent<Animator>()->AddAnimation(dieAnim);
 	this->GetComponent<Animator>()->AddTransition("Stand", "Move", true);
@@ -213,8 +221,20 @@ void WizardBoss::AddAnimation()
 
 void WizardBoss::ManageAnimation()
 {
-	if (!this->GetComponent<Collider>()->GetCollisionStatus() && this->GetComponent<Animator>()->GetCurrentAnimation()->GetAnimationName() != "Jump")
-		int a = 1;
-	this->GetComponent<Animator>()->SetBool("Jump", !this->GetComponent<Collider>()->GetCollisionStatus() && this->GetComponent<Animator>()->GetCurrentAnimation()->GetAnimationName()!="Jump");
-	this->GetComponent<Animator>()->SetBool("Stand", this->GetComponent<Collider>()->GetCollisionStatus() && this->GetComponent<Animator>()->GetCurrentAnimation()->GetAnimationName() != "Stand");
+
+	this->GetComponent<Animator>()->SetBool("Jump", !this->GetComponent<Collider>()->GetCollisionStatus() && this->GetComponent<Animator>()->GetCurrentAnimation()->GetAnimationName() != "Jump");
+	if (stateTimeCycle > 5.0f && this->GetComponent<Collider>()->GetCollisionStatus())
+	{
+		int aasdasd = 1;
+	}
+	this->GetComponent<Animator>()->SetBool("Attack", stateTimeCycle > 5.0f && this->GetComponent<Collider>()->GetCollisionStatus());
+	if (this->GetComponent<Animator>()->GetCurrentAnimation()->GetAnimationName() == "Attack")
+	{
+		this->GetComponent<Animator>()->SetBool("Attack", "Stand", stateTimeCycle < 5.0f && this->GetComponent<Collider>()->GetCollisionStatus());
+	}
+	else
+	{
+		this->GetComponent<Animator>()->SetBool("Stand", this->GetComponent<Collider>()->GetCollisionStatus() && this->GetComponent<Animator>()->GetCurrentAnimation()->GetAnimationName() != "Stand");
+	}
+
 }

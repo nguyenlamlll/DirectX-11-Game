@@ -2,12 +2,13 @@
 
 Player::Player(std::shared_ptr<DirectXCore::DxBase> _m_dxBase)
 {
+	dashTime = 0;
 	cutscene = false;
 	weaponTimer = 0;
 	this->SetTag("Player");
 	m_dxBase = _m_dxBase;
 
-	this->GetTransform()->SetPosition(Vector3(500, 500, 0));
+	this->GetTransform()->SetPosition(Vector3(5000, 500, 0));
 	this->GetTransform()->SetScale(Vector3(50, 120, 1));
 	this->GetTransform()->SetScreenScale(Vector3(3, 3, 1));
 	this->AddComponent<Renderer>(new Renderer(_m_dxBase->GetDeviceResource(), L"Resources/Captain/Animations/stand.png"));
@@ -20,7 +21,7 @@ Player::Player(std::shared_ptr<DirectXCore::DxBase> _m_dxBase)
 
 
 	capshield = new Shield(_m_dxBase, this);
-	m_dxBase->GetCurrentScene()->GetDynamicGameObjectList()->push_back(capshield);
+	//m_dxBase->GetCurrentScene()->GetDynamicGameObjectList()->push_back(capshield);
 	//this->AddChild(capshield);
 }
 
@@ -49,10 +50,11 @@ void Player::PreUpdate(float _deltaTime)
 		if (this->GetComponent<Rigidbody>()->GetVelocity().x > 0) transform->SetRotation(Vector3(transform->GetRotation().x, 360, transform->GetRotation().z));
 		else if (this->GetComponent<Rigidbody>()->GetVelocity().x < 0) transform->SetRotation(Vector3(transform->GetRotation().x, 0, transform->GetRotation().z));
 
-
-		if (m_dxBase->GetInputManager()->IsKeyDown("L") && Vector3::Distance(this->GetTransform()->GetPosition(), capshield->GetTransform()->GetPosition()) < 50)
+		if (m_dxBase->GetInputManager()->IsKeyDown("L") && this->GetComponent<Collider>()->GetCollisionStatus() && Vector3::Distance(this->GetTransform()->GetPosition(), capshield->GetTransform()->GetPosition()) < 40 && weaponTimer < 0)
 		{
 			capshield->endpoint = this->GetTransform()->GetPosition() + Vector3((transform->GetRotation().y == 360) ? 300 : -300, 0, 0);
+			weaponTimer = 1.5f;
+			capshield->holded = false;
 		}
 	}
 	else
@@ -60,12 +62,16 @@ void Player::PreUpdate(float _deltaTime)
 		hurtTime -= _deltaTime;
 		this->GetComponent<Rigidbody>()->Move(Vector3(0, 0, 0));
 	}
+	weaponTimer -= _deltaTime;
 }
 
 void Player::Update(float _deltaTime)
 {
 	GameObject::Update(_deltaTime);
 	ManageAnimators();
+	if (m_dxBase->GetInputManager()->IsKeyDown("P") && dashTime <= 0) dashTime = 0.5f;
+	else if (dashTime > 0 && dashTime < 0.3f) this->GetComponent<Rigidbody>()->Move(Vector3((transform->GetRotation().y == 360) ? 500 : -500, 0, 0));
+	dashTime -= _deltaTime;
 	jumpTime = (this->GetComponent<Collider>()->GetCollisionStatus()) ? 0 : jumpTime + _deltaTime;
 	if (this->GetComponent<Animator>()->GetCurrentAnimation()->GetAnimationName() == "Sit" || this->GetComponent<Animator>()->GetCurrentAnimation()->GetAnimationName() == "SitAttack")
 	{
@@ -111,6 +117,12 @@ void Player::OnCollisionEnter(Collider* _other, Vector3 _normal)
 		GameObject::OnCollisionEnter(_other, _normal);
 		if (this->GetComponent<Rigidbody>()->GetAcceleration().y >= 0 && this->GetComponent<Collider>()->GetCollisionStatus())this->GetComponent<Rigidbody>()->AddForce(Vector3(0, -1000, 0));
 	}
+	else if (_other->GetAttachedGameObject()->GetTag() == "Trigger")
+	{
+		cutscene = true;
+		//m_dxBase->GetCurrentScene();
+		this->transform->SetPosition(Vector3(539, 4000, 0));
+	}
 	else
 	{
 		GameObject::OnCollisionEnter(_other, _normal);
@@ -130,11 +142,12 @@ void Player::AddAnimators()
 	Animation* jumpAnim = new Animation(L"Resources/Captain/Animations/jump.png", "Jump", this->GetComponent<Renderer>(), 1, 1, 0.1f, 1.0f, true);
 	Animation* spinJumpAnim = new Animation(L"Resources/Captain/Animations/spin.png", "SpinJump", this->GetComponent<Renderer>(), 1, 2, 0.1f, 1.0f, true);
 	Animation* attackAnim = new Animation(L"Resources/Captain/Animations/shieldlessattack.png", "Attack", this->GetComponent<Renderer>(), 1, 2, 0.1f, 1.0f, true);
-	Animation* throwAnim = new Animation(L"Resources/Captain/Animations/attack.png", "Attack", this->GetComponent<Renderer>(), 1, 2, 0.1f, 1.0f, true);
+	Animation* throwAnim = new Animation(L"Resources/Captain/Animations/attack.png", "Throw", this->GetComponent<Renderer>(), 1, 2, 0.1f, 1.0f, true);
 	Animation* sitAttackAnim = new Animation(L"Resources/Captain/Animations/sit_attack.png", "SitAttack", this->GetComponent<Renderer>(), 1, 2, 0.1f, 1.0f, true);
 	Animation* jumpAttack = new Animation(L"Resources/Captain/Animations/jump_attack.png", "JumpAttack", this->GetComponent<Renderer>(), 1, 1, 0.1f, 1.0f, true);
 	Animation* sitAnim = new Animation(L"Resources/Captain/Animations/sit.png", "Sit", this->GetComponent<Renderer>(), 1, 1, 0.1f, 1.0f, true);
 	Animation* hurtAnim = new Animation(L"Resources/Captain/Animations/hurt.png", "Hurt", this->GetComponent<Renderer>(), 1, 3, 0.1f, 1.0f, true);
+	Animation* dashAnim = new Animation(L"Resources/Captain/Animations/dash.png", "Dash", this->GetComponent<Renderer>(), 1, 2, 0.1f, 1.0f, true);
 
 	moveAnim->interupt = true;
 	this->GetComponent<Animator>()->AddAnimation(standAnim);
@@ -147,6 +160,7 @@ void Player::AddAnimators()
 	this->GetComponent<Animator>()->AddAnimation(sitAnim);
 	this->GetComponent<Animator>()->AddAnimation(throwAnim);
 	this->GetComponent<Animator>()->AddAnimation(hurtAnim);
+	this->GetComponent<Animator>()->AddAnimation(dashAnim);
 
 	this->GetComponent<Animator>()->AddTransition("Stand", "Move", true);
 	this->GetComponent<Animator>()->AddTransition("Stand", "Attack", true);
@@ -178,16 +192,18 @@ void Player::AddAnimators()
 	this->GetComponent<Animator>()->AddTransition("Hurt", "Stand", true);
 
 	this->GetComponent<Animator>()->AddTransition("JumpAttack", "Jump", true);
+	this->GetComponent<Animator>()->AddTransition("Dash", "Stand", true);
 
 	this->GetComponent<Animator>()->SetCurrentAnimation(moveAnim);
 }
 
 void Player::ManageAnimators()
 {
-	this->GetComponent<Animator>()->SetBool("Throw", m_dxBase->GetInputManager()->IsKeyDown("L") && this->GetComponent<Animator>()->GetCurrentAnimation()->GetAnimationName() != "Attack" && Vector3::Distance(capshield->GetTransform()->GetPosition(), this->GetTransform()->GetPosition()) < 10);
-	this->GetComponent<Animator>()->SetBool("Attack", m_dxBase->GetInputManager()->IsKeyDown("L") && this->GetComponent<Animator>()->GetCurrentAnimation()->GetAnimationName() != "Attack" && Vector3::Distance(capshield->GetTransform()->GetPosition(), this->GetTransform()->GetPosition()) > 10);
+	this->GetComponent<Animator>()->SetBool("Throw", m_dxBase->GetInputManager()->IsKeyDown("L") && this->GetComponent<Animator>()->GetCurrentAnimation()->GetAnimationName() != "Throw" && Vector3::Distance(capshield->GetTransform()->GetPosition(), this->GetTransform()->GetPosition()) < 40);
+	this->GetComponent<Animator>()->SetBool("Attack", m_dxBase->GetInputManager()->IsKeyDown("L") && this->GetComponent<Animator>()->GetCurrentAnimation()->GetAnimationName() != "Attack" && Vector3::Distance(capshield->GetTransform()->GetPosition(), this->GetTransform()->GetPosition()) > 50);
 	this->GetComponent<Animator>()->SetBool("Sit", m_dxBase->GetInputManager()->IsKeyDown("S") && this->GetComponent<Animator>()->GetCurrentAnimation()->GetAnimationName() != "Sit" && this->GetComponent<Collider>()->GetCollisionStatus());
 	this->GetComponent<Animator>()->SetBool("Hurt", this->GetComponent<Animator>()->GetCurrentAnimation()->GetAnimationName() != "Hurt" && hurtTime > 0);
+	this->GetComponent<Animator>()->SetBool("Dash", this->GetComponent<Animator>()->GetCurrentAnimation()->GetAnimationName() != "Dash" && (dashTime > 0 && dashTime < 0.3f) && this->GetComponent<Collider>()->GetCollisionStatus());
 	this->GetComponent<Animator>()->SetBool("JumpAttack", this->GetComponent<Animator>()->GetCurrentAnimation()->GetAnimationName() != "JumpAttack" &&  m_dxBase->GetInputManager()->IsKeyDown("L") && !this->GetComponent<Collider>()->GetCollisionStatus());
 
 	if (this->GetComponent<Animator>()->GetCurrentAnimation()->GetAnimationName() == "Move")
@@ -238,5 +254,9 @@ void Player::ManageAnimators()
 	if (this->GetComponent<Animator>()->GetCurrentAnimation()->GetAnimationName() == "JumpAttack")
 	{
 		this->GetComponent<Animator>()->SetBool("JumpAttack", "Jump", !m_dxBase->GetInputManager()->IsKeyDown("L") && !this->GetComponent<Collider>()->GetCollisionStatus());
+	}
+	if (this->GetComponent<Animator>()->GetCurrentAnimation()->GetAnimationName() == "Dash")
+	{
+		this->GetComponent<Animator>()->SetBool("Dash", "Stand", this->GetComponent<Collider>()->GetCollisionStatus() && (dashTime <= 0));
 	}
 }

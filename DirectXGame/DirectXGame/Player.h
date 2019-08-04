@@ -20,14 +20,16 @@ public:
 	void LateUpdate(float _deltaTime) override;
 	void OnCollisionEnter(Collider* _other, Vector3 _normal) override;
 	void TakeDamage() { hurtTime = 0.7f; }
+	Shield* GetShield() { return capshield; }
+	bool cutscene = false;
 	~Player();
 private:
 	void AddAnimators();
 	void ManageAnimators();
 	std::shared_ptr<DirectXCore::DxBase> m_dxBase;
 	Vector3 lastFrameAcc, lastFrameMove;
-	float currentCountTimer = 0, weaponTimer = 0, cutsceneTimer = 0, jumpTime = 0, hurtTime = 0;
-	bool shoot = false, cutscene = false;
+	float currentCountTimer = 0, weaponTimer = 0, cutsceneTimer = 0, jumpTime = 0, hurtTime = 0, dashTime = 0;
+	bool shoot = false;
 	Shield* capshield;
 };
 

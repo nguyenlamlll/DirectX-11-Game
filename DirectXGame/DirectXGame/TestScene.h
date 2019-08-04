@@ -3,6 +3,7 @@
 #include "Player.h"
 #include "Enemy.h"
 #include "WizardBoss.h"
+#include "Jumper.h"
 
 class TestScene : public DirectXCore::Scene
 {
@@ -28,8 +29,8 @@ private:
 	std::shared_ptr<DirectXCore::DxBase> m_dxBase;
 	//std::vector<GameObject*>* gameObjectList;
 	DirectXCore::Camera* camera;
-	GameObject* water;
-	TileMap* tilemap;
+	GameObject* water, *trigger;
+	TileMap* tilemap, *bossTilemap;
 	Player* player;
 	Grid* gridTest;
 };

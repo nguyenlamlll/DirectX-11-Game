@@ -9,14 +9,16 @@ Shield::Shield()
 
 Shield::Shield(std::shared_ptr<DirectXCore::DxBase> _m_dxBase, GameObject * _captain)
 {
+	holded = true;
 	startpoint = endpoint = Vector3(0, 0, 0);
 	m_dxBase = _m_dxBase;
 	captain = _captain;
 	this->GetTransform()->SetPosition(_captain->GetTransform()->GetPosition());
 	this->GetTransform()->SetScale(Vector3(51, 60, 1));
 	this->GetTransform()->SetScreenScale(Vector3(3, 3, 1));
-	this->AddComponent<Renderer>(new Renderer(m_dxBase->GetDeviceResource(), L"Resources/Captain/Animations/shield_1.png"));
-	//this->AddComponent<Animation>(new Animation(this->GetComponent<Renderer>(), 1, 4, 0.03f, 1.0f, true));
+	this->AddComponent<Renderer>(new Renderer(m_dxBase->GetDeviceResource(), L"Resources/Captain/Animations/shield_strait.png"));
+	this->AddComponent<Animator>(new Animator(this->GetComponent<Renderer>()));
+	Addanimation();
 	this->AddComponent<Collider>(new Collider(this, this->GetTransform()));
 	//this->GetComponent<Collider>()->SetTrigger(true);
 	this->AddComponent<Rigidbody>(new Rigidbody(this));
@@ -38,6 +40,7 @@ void Shield::PreUpdate(float _deltaTime)
 void Shield::Update(float _deltaTime)
 {
 	GameObject::Update(_deltaTime);
+	ManageAnimation();
 }
 
 void Shield::LateUpdate(float _deltaTime)
@@ -86,12 +89,20 @@ void Shield::LateUpdate(float _deltaTime)
 			this->GetComponent<Rigidbody>()->Move(as * 600);
 		}
 	}
-	else 
+	else
 	{
-		if(endpoint != startpoint) 
-			endpoint = startpoint;
-		else 
-			this->GetTransform()->SetPosition(endpoint);
+		if (endpoint != startpoint) endpoint = startpoint;
+		else
+		{
+			holded = true;
+			/*this->GetTransform()->SetPosition(startpoint);
+			this->GetComponent<Rigidbody>()->Move(Vector3(0, 0, 0));*/
+		}
+	}
+	if (holded)
+	{
+		this->GetTransform()->SetPosition(startpoint);
+		this->GetComponent<Rigidbody>()->Move(Vector3(0, 0, 0));
 	}
 }
 
@@ -103,18 +114,38 @@ void Shield::Render()
 void Shield::OnCollisionEnter(Collider * _other, Vector3 _normal)
 {
 	//GameObject::OnCollisionEnter(_other, _normal);
-	if (_other->GetAttachedGameObject()->GetTag() == "Boss")
+	if (this->GetComponent<Rigidbody>()->GetVelocity().x != 0)
 	{
-		WizardBoss* a = (WizardBoss*)(_other->GetAttachedGameObject());
-		a->TakeDamage();
-	}
-	if (_other->GetAttachedGameObject()->GetTag() == "Enemy")
-	{
-		Enemy* a = (Enemy*)(_other->GetAttachedGameObject());
-		a->TakeDamage();
+		if (_other->GetAttachedGameObject()->GetTag() == "Boss")
+		{
+			WizardBoss* a = (WizardBoss*)(_other->GetAttachedGameObject());
+			a->TakeDamage();
+		}
+		if (_other->GetAttachedGameObject()->GetTag() == "Enemy")
+		{
+			Enemy* a = (Enemy*)(_other->GetAttachedGameObject());
+			a->TakeDamage();
+		}
 	}
 }
 
 void Shield::SetTarget(Vector3 _target)
 {
+}
+
+void Shield::Addanimation()
+{
+	Animation* stillAnim = new Animation(L"Resources/Captain/Animations/shield_still.png", "Still", this->GetComponent<Renderer>(), 1, 1, 0.1f, 1.0f, true);
+	Animation* flyAnim = new Animation(L"Resources/Captain/Animations/shield_fly.png", "Fly", this->GetComponent<Renderer>(), 1, 1, 0.1f, 1.0f, true);
+	this->GetComponent<Animator>()->AddAnimation(stillAnim);
+	this->GetComponent<Animator>()->AddAnimation(flyAnim);
+	//this->GetComponent<Animator>()->AddTransition("Stand", "Move", true);
+	this->GetComponent<Animator>()->SetCurrentAnimation(stillAnim);
+}
+
+void Shield::ManageAnimation()
+{
+	this->GetComponent<Animator>()->SetBool("Still", Vector3::Distance(this->GetTransform()->GetPosition(), startpoint) < 10);
+	this->GetComponent<Animator>()->SetBool("Fly", Vector3::Distance(this->GetTransform()->GetPosition(), startpoint) > 10);
+
 }

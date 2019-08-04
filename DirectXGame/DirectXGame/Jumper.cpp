@@ -1,12 +1,14 @@
-#include "Enemy.h"
+#include "Jumper.h"
 
 
 
-Enemy::Enemy()
+
+
+Jumper::Jumper()
 {
 }
 
-Enemy::Enemy(std::shared_ptr<DirectXCore::DxBase> _m_dxBase)
+Jumper::Jumper(std::shared_ptr<DirectXCore::DxBase> _m_dxBase)
 {
 	hurtTime = 0;
 	stateTimeCycle = 0;
@@ -26,14 +28,14 @@ Enemy::Enemy(std::shared_ptr<DirectXCore::DxBase> _m_dxBase)
 	this->SetTag("Enemy");
 }
 
-void Enemy::PreUpdate(float _deltaTime)
+void Jumper::PreUpdate(float _deltaTime)
 {
 	GameObject::PreUpdate(_deltaTime);
 	if (this->GetComponent<Rigidbody>()->GetVelocity().x > 0) transform->SetRotation(Vector3(transform->GetRotation().x, 360, transform->GetRotation().z));
 	else if (this->GetComponent<Rigidbody>()->GetVelocity().x < 0) transform->SetRotation(Vector3(transform->GetRotation().x, 0, transform->GetRotation().z));
 }
 
-void Enemy::Update(float _deltaTime)
+void Jumper::Update(float _deltaTime)
 {
 	GameObject::Update(_deltaTime);
 	//if (!death)
@@ -61,61 +63,17 @@ void Enemy::Update(float _deltaTime)
 	//	else deathTimer += _deltaTime;
 	//}
 
-	// STAGE 3
-	if (stateTimeCycle > 6.0f)
+	if (stateTimeCycle > 0)
 	{
-
-	}
-	// STAGE 2
-	else if (stateTimeCycle > 2.0f)
-	{
-		this->GetComponent<Rigidbody>()->Move(Vector3(0, 0, 0));
-		//SHOOT
-		if (bulletTimer > 1.5f && this->GetComponent<Collider>()->GetCollisionStatus())
-		{
-			this->GetComponent<Rigidbody>()->Move(Vector3(0, 0, 0));
-			Vector3 offset = Vector3(0, -50, 0);
-			if (this->GetTransform()->GetRotation().y > 120)
-			{
-				this->GetTransform()->SetRotation(Vector3(0, 360, 0));
-				offset.x = 80;
-			}
-			else
-			{
-				this->GetTransform()->SetRotation(Vector3(0, 0, 0));
-				offset.x = -80;
-			}
-
-			//shooting code
-			float directionX = player->GetTransform()->GetPosition().x - this->GetTransform()->GetPosition().x;
-			if (directionX > 10) directionX = 400;
-			else if (directionX < -10) directionX = -400;
-			else directionX = 0;
-			Vector3 dir = player->GetTransform()->GetPosition() - this->transform->GetPosition();
-			dir.Normalize();
-			Bullet* bullet = new Bullet(L"Resources/Captain/Animations/enemy/shooter_bullet.png", m_dxBase, this->GetTransform()->GetPosition() + offset, Vector3(3, 3, 1), Vector3(directionX, 0, 0));
-			bullet->SetTag("EnemyBullet");
-			bullet->AddComponent<Rigidbody>(new Rigidbody(bullet));
-			bullet->GetComponent<Rigidbody>()->SetKinematic(true);
-			m_dxBase->GetCurrentScene()->GetDynamicGameObjectList()->push_back(bullet);
-			//this->AddChild(bullet);
-			bulletTimer = 0;
-		}
-		bulletTimer += _deltaTime;
-	}
-	// STAGE 1
-	else if (stateTimeCycle > 0)
-	{
+		//JUMP
+		if (this->GetComponent<Collider>()->GetCollisionStatus() && this->GetComponent<Rigidbody>()->GetVelocity().y >= 0 && Vector3::Distance(player->GetTransform()->GetPosition(),this->GetTransform()->GetPosition())<300)
+			this->GetComponent<Rigidbody>()->AddForce(Vector3(0, -300, 0));
 		Vector3 dir = player->GetTransform()->GetPosition() - this->GetTransform()->GetPosition();
 		dir.Normalize();
-		this->GetComponent<Rigidbody>()->Move(dir*10);
-		
-		////JUMP
-		//if (this->GetComponent<Collider>()->GetCollisionStatus() && this->GetComponent<Rigidbody>()->GetVelocity().y >= 0) this->GetComponent<Rigidbody>()->AddForce(Vector3(0, -300, 0));
+		dir.y = 0;
 		//float dirX = (player->GetTransform()->GetPosition().x - this->GetTransform()->GetPosition().x) > 0 ? 50 : -50;
-		//this->GetComponent<Rigidbody>()->Move(Vector3(dirX, 0, 0));
+		this->GetComponent<Rigidbody>()->Move(dir * 70);
 	}
-
 
 	ManageAnimators();
 	stateTimeCycle = (stateTimeCycle > 4.0f) ? 0 : stateTimeCycle + _deltaTime;
@@ -127,12 +85,12 @@ void Enemy::Update(float _deltaTime)
 	else if (hurtTime > 0) hurtTime -= _deltaTime;
 }
 
-void Enemy::LateUpdate(float _deltaTime)
+void Jumper::LateUpdate(float _deltaTime)
 {
 	GameObject::LateUpdate(_deltaTime);
 }
 
-void Enemy::OnCollisionEnter(Collider * _other, Vector3 _normal)
+void Jumper::OnCollisionEnter(Collider * _other, Vector3 _normal)
 {
 	if (_other->GetAttachedGameObject()->GetTag() != "Player") GameObject::OnCollisionEnter(_other, _normal);
 	else
@@ -145,24 +103,26 @@ void Enemy::OnCollisionEnter(Collider * _other, Vector3 _normal)
 			hurtTime = 1.0f;
 		}
 	}
-	if (_other->GetAttachedGameObject()->GetTag() == "Shield")
+	if (_other->GetAttachedGameObject()->GetTag() == "Shield" && _other->GetAttachedGameObject()->GetComponent<Rigidbody>()->GetVelocity().x != 0)
+	{
 		hurtTime = 1.0f;
+	}
 	/*if (_other->GetAttachedGameObject()->GetTag() == "Wall") GameObject::OnCollisionEnter(_other, _normal);
 	if (_other->GetAttachedGameObject()->GetTag() == "PlayerBullet") death = true;*/
 }
 
-Enemy::~Enemy()
+Jumper::~Jumper()
 {
 }
 
-void Enemy::AddAnimators()
+void Jumper::AddAnimators()
 {
-	Animation* moveAnim = new Animation(L"Resources/Captain/Animations/enemy/shooter_move.png", "Move", this->GetComponent<Renderer>(), 1, 3, 0.1f, 1.0f, true);
+	Animation* moveAnim = new Animation(L"Resources/Captain/Animations/enemy/brawler_move.png", "Move", this->GetComponent<Renderer>(), 1, 3, 0.1f, 1.0f, true);
 	//Animation* standAnim = new Animation(L"Resources/Captain/Animations/enemy/stand.png", "Stand", this->GetComponent<Renderer>(), 1, 1, 0.1f, 1.0f, true);
-	Animation* jumpAnim = new Animation(L"Resources/Captain/Animations/enemy/shooter_sit.png", "Jump", this->GetComponent<Renderer>(), 1, 1, 0.1f, 1.0f, true);
-	Animation* attackAnim = new Animation(L"Resources/Captain/Animations/enemy/shooter_shoot.png", "Attack", this->GetComponent<Renderer>(), 1, 1, 0.1f, 1.0f, true);
-	Animation* sitAnim = new Animation(L"Resources/Captain/Animations/enemy/shooter_sit.png", "Sit", this->GetComponent<Renderer>(), 1, 1, 0.1f, 1.0f, true);
-	Animation* dieAnim = new Animation(L"Resources/Captain/Animations/enemy/shooter_die.png", "Die", this->GetComponent<Renderer>(), 1, 1, 0.1f, 1.0f, true);
+	Animation* jumpAnim = new Animation(L"Resources/Captain/Animations/enemy/brawler_sit.png", "Jump", this->GetComponent<Renderer>(), 1, 1, 0.1f, 1.0f, true);
+	Animation* attackAnim = new Animation(L"Resources/Captain/Animations/enemy/brawler_attack.png", "Attack", this->GetComponent<Renderer>(), 1, 1, 0.1f, 1.0f, true);
+	Animation* sitAnim = new Animation(L"Resources/Captain/Animations/enemy/brawler_sit.png", "Sit", this->GetComponent<Renderer>(), 1, 1, 0.1f, 1.0f, true);
+	Animation* dieAnim = new Animation(L"Resources/Captain/Animations/enemy/brawler_die.png", "Die", this->GetComponent<Renderer>(), 1, 1, 0.1f, 1.0f, true);
 	moveAnim->interupt = true;
 	//this->GetComponent<Animator>()->AddAnimation(standAnim);
 	this->GetComponent<Animator>()->AddAnimation(moveAnim);
@@ -189,7 +149,7 @@ void Enemy::AddAnimators()
 	this->GetComponent<Animator>()->SetCurrentAnimation(moveAnim);
 }
 
-void Enemy::ManageAnimators()
+void Jumper::ManageAnimators()
 {
 	this->GetComponent<Animator>()->SetBool("Attack", this->GetComponent<Animator>()->GetCurrentAnimation()->GetAnimationName() != "Attack" && stateTimeCycle > 2.0f &&  this->GetComponent<Collider>()->GetCollisionStatus());
 	//this->GetComponent<Animator>()->SetBool("Sit",this->GetComponent<Animator>()->GetCurrentAnimation()->GetAnimationName() != "Sit" && this->GetComponent<Collider>()->GetCollisionStatus());

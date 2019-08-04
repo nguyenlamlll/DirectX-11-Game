@@ -12,7 +12,7 @@ namespace DirectXCore
 	{
 	public:
 		TileMap();
-		TileMap(DirectXCore::DeviceResources *_deviceResource, const wchar_t * _imagePath, const wchar_t * _txtPath, int _columns, int _rows, int _mapTileColumnCount, int _mapTileRowCount);
+		TileMap(DirectXCore::DeviceResources *_deviceResource, const wchar_t * _imagePath, const wchar_t * _txtPath, int _columns, int _rows, int _mapTileColumnCount, int _mapTileRowCount,std::string _name);
 		TileMap(DirectXCore::DeviceResources *_deviceResource, const wchar_t *path);
 		void SetCamera(Camera* _cam) { mainCamera = _cam; }
 		void Update();

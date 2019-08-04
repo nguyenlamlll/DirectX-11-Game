@@ -14,30 +14,44 @@ TileMap::TileMap()
 {
 }
 
-DirectXCore::TileMap::TileMap(DirectXCore::DeviceResources *_deviceResource, const wchar_t * _imagePath, const wchar_t * _txtPath, int _columns, int _rows, int _mapTileColumnCount, int _mapTileRowCount)
+DirectXCore::TileMap::TileMap(DirectXCore::DeviceResources *_deviceResource, const wchar_t * _imagePath, const wchar_t * _txtPath, int _columns, int _rows, int _mapTileColumnCount, int _mapTileRowCount, std::string _name)
 {
 	std::vector<int> ObjectMarkedTilesetDataNUmber;
-	ObjectMarkedTilesetDataNUmber.push_back(24);
-	ObjectMarkedTilesetDataNUmber.push_back(25);
-	ObjectMarkedTilesetDataNUmber.push_back(26);
-	ObjectMarkedTilesetDataNUmber.push_back(61);
-	ObjectMarkedTilesetDataNUmber.push_back(62);
-	ObjectMarkedTilesetDataNUmber.push_back(87);
-	ObjectMarkedTilesetDataNUmber.push_back(88);
-	ObjectMarkedTilesetDataNUmber.push_back(89);
-	ObjectMarkedTilesetDataNUmber.push_back(99);
-	ObjectMarkedTilesetDataNUmber.push_back(114);
-	ObjectMarkedTilesetDataNUmber.push_back(115);
-	ObjectMarkedTilesetDataNUmber.push_back(116);
-	ObjectMarkedTilesetDataNUmber.push_back(154);
-	ObjectMarkedTilesetDataNUmber.push_back(155);
-	ObjectMarkedTilesetDataNUmber.push_back(158);
-
+	
 	int ads = ObjectMarkedTilesetDataNUmber.size();
 	mapSize = Vector3(0, 0, 0);
-	position = Vector3(0, 0, 0);
-	//scale = Vector3(1, 1, 1);
 	scale = Vector3(3, 3, 1);
+
+	if (_name == "Charleston")
+	{
+		position = Vector3(0, 0, 0);
+		ObjectMarkedTilesetDataNUmber.push_back(24);
+		ObjectMarkedTilesetDataNUmber.push_back(25);
+		ObjectMarkedTilesetDataNUmber.push_back(26);
+		ObjectMarkedTilesetDataNUmber.push_back(61);
+		ObjectMarkedTilesetDataNUmber.push_back(62);
+		ObjectMarkedTilesetDataNUmber.push_back(87);
+		ObjectMarkedTilesetDataNUmber.push_back(88);
+		ObjectMarkedTilesetDataNUmber.push_back(89);
+		ObjectMarkedTilesetDataNUmber.push_back(99);
+		ObjectMarkedTilesetDataNUmber.push_back(114);
+		ObjectMarkedTilesetDataNUmber.push_back(115);
+		ObjectMarkedTilesetDataNUmber.push_back(116);
+		ObjectMarkedTilesetDataNUmber.push_back(154);
+		ObjectMarkedTilesetDataNUmber.push_back(155);
+		ObjectMarkedTilesetDataNUmber.push_back(158);
+	}
+	else if (_name == "CharlestonBoss")
+	{
+		scale = Vector3(4, 4, 1);
+		SetTilemapPosition(Vector3(350, 3500, 0));
+		ObjectMarkedTilesetDataNUmber.push_back(6);
+		ObjectMarkedTilesetDataNUmber.push_back(7);
+		ObjectMarkedTilesetDataNUmber.push_back(16);
+		ObjectMarkedTilesetDataNUmber.push_back(17);
+		ObjectMarkedTilesetDataNUmber.push_back(18);
+	}
+
 	worldToScreenPosition = position;
 	gameObjectList = new std::vector<GameObject*>();
 	std::ifstream file(_txtPath);

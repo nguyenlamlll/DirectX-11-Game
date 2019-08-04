@@ -6,30 +6,29 @@
 #include "Renderer.h"
 #include "Animation.h"
 #include "State.h"
+#include "Bullet.h"
 
-//using namespace DirectXCore;
+using namespace DirectXCore;
 
-class Shield : public GameObject
+class Jumper :public DirectXCore::GameObject
 {
 public:
-	Shield();
-	Shield(std::shared_ptr<DirectXCore::DxBase> _m_dxBase, GameObject* _captain);
-	~Shield();
+	Jumper();
+	Jumper(std::shared_ptr<DirectXCore::DxBase> _m_dxBase);
 	void PreUpdate(float _deltaTime) override;
 	void Update(float _deltaTime) override;
 	void LateUpdate(float _deltaTime) override;
-	void Render() override;
 	void OnCollisionEnter(Collider* _other, Vector3 _normal) override;
-	void SetTarget(Vector3 _target);
-	Vector3 startpoint, endpoint;
-	bool holded;
 
+	void AssignPlayer(GameObject* _player) { player = _player; }
+	void TakeDamage() { hurtTime = 1.0f; }
+	~Jumper();
 private:
+	void AddAnimators();
+	void ManageAnimators();
 	std::shared_ptr<DirectXCore::DxBase> m_dxBase;
-	GameObject* captain;
-	Vector3 captainPosition;
-	Vector3 direction, target,targetLeftSide,targetRightside;
-	void Addanimation();
-	void ManageAnimation();
+	float bulletTimer, deathTimer, attackTimer, stateTimeCycle, hurtTime;
+	bool death;
+	GameObject* player;
 };
 
