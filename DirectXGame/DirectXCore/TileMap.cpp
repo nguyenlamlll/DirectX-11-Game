@@ -21,10 +21,11 @@ DirectXCore::TileMap::TileMap(DirectXCore::DeviceResources *_deviceResource, con
 	int ads = ObjectMarkedTilesetDataNUmber.size();
 	mapSize = Vector3(0, 0, 0);
 	scale = Vector3(3, 3, 1);
+	position = Vector3(0, 0, 0);
 
 	if (_name == "Charleston")
 	{
-		position = Vector3(0, 0, 0);
+		scale = Vector3(3, 3, 1);
 		ObjectMarkedTilesetDataNUmber.push_back(24);
 		ObjectMarkedTilesetDataNUmber.push_back(25);
 		ObjectMarkedTilesetDataNUmber.push_back(26);
@@ -44,12 +45,29 @@ DirectXCore::TileMap::TileMap(DirectXCore::DeviceResources *_deviceResource, con
 	else if (_name == "CharlestonBoss")
 	{
 		scale = Vector3(4, 3.8f, 1);
-		SetTilemapPosition(Vector3(0, 0, 0));
 		ObjectMarkedTilesetDataNUmber.push_back(6);
 		ObjectMarkedTilesetDataNUmber.push_back(7);
 		ObjectMarkedTilesetDataNUmber.push_back(16);
 		ObjectMarkedTilesetDataNUmber.push_back(17);
 		ObjectMarkedTilesetDataNUmber.push_back(18);
+	}
+	else if (_name == "Pittsburgh")
+	{
+		scale = Vector3(3, 3, 1);
+		ObjectMarkedTilesetDataNUmber.push_back(26);
+		ObjectMarkedTilesetDataNUmber.push_back(27);
+		ObjectMarkedTilesetDataNUmber.push_back(45);
+		ObjectMarkedTilesetDataNUmber.push_back(46);
+		ObjectMarkedTilesetDataNUmber.push_back(47);
+		ObjectMarkedTilesetDataNUmber.push_back(58);
+		ObjectMarkedTilesetDataNUmber.push_back(59);
+		ObjectMarkedTilesetDataNUmber.push_back(60);
+		ObjectMarkedTilesetDataNUmber.push_back(83);
+		ObjectMarkedTilesetDataNUmber.push_back(84);
+		ObjectMarkedTilesetDataNUmber.push_back(85);
+		ObjectMarkedTilesetDataNUmber.push_back(86);
+		ObjectMarkedTilesetDataNUmber.push_back(87);
+		ObjectMarkedTilesetDataNUmber.push_back(88);
 	}
 
 	worldToScreenPosition = position;
@@ -66,8 +84,12 @@ DirectXCore::TileMap::TileMap(DirectXCore::DeviceResources *_deviceResource, con
 		{
 			i++;
 			int x = atoi(curData.c_str());
-			//if (x != 0)
-			data->push_back(x);
+			//
+			if (_name == "Pittsburgh")
+			{
+				if (x != 0) data->push_back(x);
+			}
+			else data->push_back(x);
 		}
 		file.close();
 	}

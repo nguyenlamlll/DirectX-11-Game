@@ -5,6 +5,8 @@
 #include "MenuScene.h"
 #include "TestScene.h"
 #include "WizardScene.h"
+#include "PittsburghScene.h"
+#include "SecondBossScene.h"
 
 #if defined(DEBUG) | defined(_DEBUG)
 #define _CRTDBG_MAP_ALLOC  
@@ -95,9 +97,11 @@ int WINAPI wWinMain(
 	//game->AddScene(new TilemapScene(game.get()));
 	game->AddScene(new TestScene(game.get()));
 	game->AddScene(new WizardScene(game.get()));
+	game->AddScene(new PittsburghScene(game.get()));
+	game->AddScene(new SecondBossScene(game.get()));
 	//game->SetCurrentScene(0);
 
-	game->InitializeWithScene(1);
+	game->InitializeWithScene(0);
 	// Main message loop
 	MSG msg = { 0 };
 	while (msg.message != WM_QUIT)

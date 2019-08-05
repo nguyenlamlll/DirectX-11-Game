@@ -120,8 +120,7 @@ void Player::OnCollisionEnter(Collider* _other, Vector3 _normal)
 	else if (_other->GetAttachedGameObject()->GetTag() == "Trigger")
 	{
 		cutscene = true;
-		//m_dxBase->GetCurrentScene();
-		this->transform->SetPosition(Vector3(539, 4000, 0));
+		m_dxBase->SwitchToScene(1);
 	}
 	else
 	{
