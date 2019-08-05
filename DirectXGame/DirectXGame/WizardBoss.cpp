@@ -15,12 +15,12 @@ WizardBoss::WizardBoss(std::shared_ptr<DirectXCore::DxBase> _m_dxBase, GameObjec
 	bulletTimer = 0;
 	positionList = new std::vector<Vector3>();
 	Vector3 capPos = _captain->GetTransform()->GetPosition();
-	transform->SetPosition(Vector3(953, 4207, 0));
+	transform->SetPosition(Vector3(900, 660, 0));
 	Vector3 currPos = transform->GetPosition();
-	positionList->push_back(currPos + Vector3(300, 0, 0));
-	positionList->push_back(currPos + Vector3(300, -350, 0));
-	positionList->push_back(currPos + Vector3(-500, -350, 0));
-	positionList->push_back(currPos + Vector3(-500, 0, 0));
+	positionList->push_back(currPos + Vector3(0, 0, 0));
+	positionList->push_back(currPos + Vector3(0, -450, 0));
+	positionList->push_back(currPos + Vector3(-800, -450, 0));
+	positionList->push_back(currPos + Vector3(-800, 0, 0));
 
 	m_dxBase = _m_dxBase;
 	cap = _captain;
@@ -31,12 +31,8 @@ WizardBoss::WizardBoss(std::shared_ptr<DirectXCore::DxBase> _m_dxBase, GameObjec
 	this->AddComponent<Renderer>(new Renderer(m_dxBase->GetDeviceResource(), L"Resources/Captain/Animations/boss/stand.png"));
 	this->AddComponent<Animator>(new Animator(this->GetComponent<Renderer>()));
 	AddAnimation();
-	//this->AddComponent<Animation>(new Animation("asdsad", this->GetComponent<Renderer>(), 1, 11, 0.1f, 1.0f, true));
 	this->AddComponent<Rigidbody>(new Rigidbody(this));
 	this->AddComponent<Collider>(new Collider(this, this->GetTransform()));
-
-	//this->GetComponent<Collider>()->SetTrigger(true);
-	//this->GetComponent<Animation>()->ResetAnimation(L"Resources/Captain/Animations/boss/wizard_1.png", 1, 5);
 	this->GetComponent<Rigidbody>()->SetKinematic(true);
 
 	this->SetTag("Boss");

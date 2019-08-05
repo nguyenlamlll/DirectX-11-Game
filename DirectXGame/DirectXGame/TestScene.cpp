@@ -15,15 +15,6 @@ TestScene::TestScene(DirectXCore::DxBase * dxBase)
 
 void TestScene::UpdateScene(float elapsedTime)
 {
-	if (player->cutscene == true && bossTilemap == NULL)
-	{
-		bossTilemap = new TileMap(m_dxBase->GetDeviceResource(), L"Resources/00/NewMap/CharlestonBoss.BMP", L"Resources/00/NewMap/CharlestonBoss.txt", 20, 2, 16, 14, "CharlestonBoss");
-		bossTilemap->SetCamera(camera);
-
-		WizardBoss* boss = new WizardBoss(m_dxBase, player);
-		dynamicGameObjectList->push_back(boss);
-	}
-	
 	gridTest->PreUpdate(elapsedTime);
 	gridTest->Update(elapsedTime);
 	gridTest->LateUpdate(elapsedTime);
@@ -37,7 +28,6 @@ void TestScene::UpdateScene(float elapsedTime)
 		if (dynamicGameObjectList->at(i)->GetComponent<Collider>() != NULL) dynamicGameObjectList->at(i)->GetComponent<Collider>()->SetCollisionStatus(false);
 	}
 	gameObjectList->insert(gameObjectList->end(), dynamicGameObjectList->begin(), dynamicGameObjectList->end());
-	if (bossTilemap != NULL) gameObjectList->insert(gameObjectList->end(), bossTilemap->GetListGameObjects()->begin(), bossTilemap->GetListGameObjects()->end());
 
 	for (size_t i = 0; i < gameObjectList->size(); i++)
 	{
@@ -66,20 +56,13 @@ void TestScene::UpdateScene(float elapsedTime)
 
 	for (size_t i = 0; i < dynamicGameObjectList->size(); i++) dynamicGameObjectList->at(i)->Update(elapsedTime);
 	for (size_t i = 0; i < dynamicGameObjectList->size(); i++) dynamicGameObjectList->at(i)->LateUpdate(elapsedTime);
-	if (bossTilemap != NULL)
-	{
-		camera->SetPosition(Vector3(880, 4000, 0));
-	}
-	else
-	{
-		camera->SetPosition(player->GetTransform()->GetPosition());
-	}
+
+	camera->SetPosition(player->GetTransform()->GetPosition());
 }
 
 void TestScene::RenderScene()
 {
 	Vector3 worldToScreenShift = Vector3(camera->GetWidth() / 2 - camera->GetPosition().x, camera->GetHeight() / 2 - camera->GetPosition().y, 0);
-	if (bossTilemap != NULL)bossTilemap->Render();
 	gridTest->Render();
 	for (size_t i = 0; i < dynamicGameObjectList->size(); i++)
 	{
@@ -122,45 +105,39 @@ void TestScene::LoadScene()
 {
 	trigger = NULL;
 	water = NULL;
-	bossTilemap = NULL;
-	player = new Player(m_dxBase);
-	player->SetTag("Player");
 	camera = new Camera(m_dxBase->GetDeviceResource()->GetOutputSize().right / 2, m_dxBase->GetDeviceResource()->GetOutputSize().bottom / 2);
 	tilemap = new TileMap(m_dxBase->GetDeviceResource(), L"Resources/00/NewMap/Charleston.BMP", L"Resources/00/NewMap/Charleston.txt", 20, 9, 128, 29, "Charleston");
-
 	tilemap->SetCamera(camera);
-	gameObjectList->push_back(player);
-	dynamicGameObjectList->push_back(player->GetShield());
-
 	gridTest = new Grid(tilemap->GetMapSize(), 2, 8, tilemap->GetListGameObjects(), camera);
 	gridTest->SetRenderer(tilemap->GetTilepRenderer());
 	gridTest->AddRenderTile(tilemap->GetListTileIDs(), tilemap->GetData(), tilemap->GetPositionList(), tilemap->GetTilemapScale());
 
+	player = new Player(m_dxBase);
+	player->SetTag("Player");
 	Enemy* enemy = new Enemy(m_dxBase);
 	enemy->GetTransform()->SetPosition(player->GetTransform()->GetPosition() + Vector3(800, -30, 0));
 	enemy->AssignPlayer(player);
-	dynamicGameObjectList->push_back(enemy);
-
 	Jumper* jumper = new Jumper(m_dxBase);
 	jumper->GetTransform()->SetPosition(player->GetTransform()->GetPosition() + Vector3(200, -30, 0));
 	jumper->AssignPlayer(player);
-	dynamicGameObjectList->push_back(jumper);
-
 	
 
-	dynamicGameObjectList->push_back(player);
-
-	/*water = new GameObject();
+	water = new GameObject();
 	water->SetTag("Water");
 	water->GetTransform()->SetPosition(Vector3(1032* tilemap->GetTilemapScale().x, 472* tilemap->GetTilemapScale().y-50, 0));
 	water->GetTransform()->SetScale(Vector3(2200* tilemap->GetTilemapScale().x, 16* tilemap->GetTilemapScale().y, 1));
-	water->AddComponent<Collider>(new Collider(water,water->GetTransform()));*/
-
+	water->AddComponent<Collider>(new Collider(water,water->GetTransform()));
 	trigger = new GameObject();
 	trigger->SetTag("Trigger");
 	trigger->GetTransform()->SetPosition(Vector3(5900, 1235, 0));
 	trigger->GetTransform()->SetScale(Vector3(100, 100, 1));
 	trigger->AddComponent<Collider>(new Collider(trigger, trigger->GetTransform()));
+
+
+	dynamicGameObjectList->push_back(player);
+	dynamicGameObjectList->push_back(player->GetShield());
+	dynamicGameObjectList->push_back(enemy);
+	dynamicGameObjectList->push_back(jumper);
 }
 
 void TestScene::UnloadScene()

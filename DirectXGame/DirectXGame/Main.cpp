@@ -4,6 +4,7 @@
 #include <DirectXCore.h>
 #include "MenuScene.h"
 #include "TestScene.h"
+#include "WizardScene.h"
 
 #if defined(DEBUG) | defined(_DEBUG)
 #define _CRTDBG_MAP_ALLOC  
@@ -93,11 +94,10 @@ int WINAPI wWinMain(
 	//game->AddScene(new MenuScene(game.get()));
 	//game->AddScene(new TilemapScene(game.get()));
 	game->AddScene(new TestScene(game.get()));
+	game->AddScene(new WizardScene(game.get()));
+	//game->SetCurrentScene(0);
 
-	//game->CreateSprite(L"Resources/untitled.tmx");
-	//game->AddScene(new PingPongScene(game.get()));
-
-	game->InitializeWithScene(0);
+	game->InitializeWithScene(1);
 	// Main message loop
 	MSG msg = { 0 };
 	while (msg.message != WM_QUIT)

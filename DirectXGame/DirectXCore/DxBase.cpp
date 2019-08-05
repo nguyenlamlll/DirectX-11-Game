@@ -97,21 +97,7 @@ void DxBase::Update(StepTimer const& timer)
 	float elapsedTime = float(timer.GetElapsedSeconds());
 
 	// TODO: Add your game logic here.
-	//sprite->SetScreenPosition(sprite->GetScreenPosition() + DirectX::SimpleMath::Vector2(0.4f, -0.4f));
-	//animation->Update(elapsedTime);
 
-	//if (mainCamera)
-	//{
-	//	mainCamera->SetPosition(mainCamera->GetPosition() + DirectX::SimpleMath::Vector2(0.4f, 0.4f));
-	//}
-
-
-	//BoundingBox _bdBox, _bdBox2;
-	//_bdBox.Center = DirectX::SimpleMath::Vector3(0, 0, 0);
-	//_bdBox.Extents = DirectX::SimpleMath::Vector3(4, 4, 4);
-	//_bdBox2.Center = DirectX::SimpleMath::Vector3(1, 1, 1);
-	//_bdBox2.Extents = DirectX::SimpleMath::Vector3(1, 1, 1);
-	//ContainmentType containtype = _bdBox.Contains(_bdBox2);
 
 	if (m_activeScene)
 	{

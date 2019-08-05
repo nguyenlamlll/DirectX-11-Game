@@ -15,7 +15,7 @@
 #include "Animator.h"
 #include "Grid.h"
 
-namespace DirectXCore 
+namespace DirectXCore
 {
 	class DxBase : public IDeviceNotify
 	{
@@ -62,11 +62,12 @@ namespace DirectXCore
 		// Recommended way to handle input (comparing with OnKeyUp and OnKeyDown).
 		// Each scene should get the input manager and ask for key states during UpdateScene method.
 		Input* GetInputManager() { return m_input.get(); }
-		
+
 		// Properties
 		void GetDefaultSize(int& width, int& height) const;
 		//Get current Scene
 		Scene* GetCurrentScene() { return m_activeScene; }
+		void SetCurrentScene(Scene* _scene) { m_activeScene = _scene; }
 
 	private:
 		void Update(StepTimer const& timer);

@@ -43,8 +43,8 @@ DirectXCore::TileMap::TileMap(DirectXCore::DeviceResources *_deviceResource, con
 	}
 	else if (_name == "CharlestonBoss")
 	{
-		scale = Vector3(4, 4, 1);
-		SetTilemapPosition(Vector3(350, 3500, 0));
+		scale = Vector3(4, 3.8f, 1);
+		SetTilemapPosition(Vector3(0, 0, 0));
 		ObjectMarkedTilesetDataNUmber.push_back(6);
 		ObjectMarkedTilesetDataNUmber.push_back(7);
 		ObjectMarkedTilesetDataNUmber.push_back(16);
