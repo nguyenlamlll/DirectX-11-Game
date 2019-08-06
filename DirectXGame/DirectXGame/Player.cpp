@@ -53,7 +53,7 @@ void Player::PreUpdate(float _deltaTime)
 		if (m_dxBase->GetInputManager()->IsKeyDown("L") && this->GetComponent<Collider>()->GetCollisionStatus() && Vector3::Distance(this->GetTransform()->GetPosition(), capshield->GetTransform()->GetPosition()) < 40 && weaponTimer < 0)
 		{
 			capshield->endpoint = this->GetTransform()->GetPosition() + Vector3((transform->GetRotation().y == 360) ? 300 : -300, 0, 0);
-			weaponTimer = 1.5f;
+			weaponTimer = 0.8f;
 			capshield->holded = false;
 		}
 	}

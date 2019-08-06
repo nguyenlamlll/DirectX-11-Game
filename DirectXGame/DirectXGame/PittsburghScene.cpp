@@ -18,6 +18,8 @@ void PittsburghScene::UpdateScene(float elapsedTime)
 	grid->PreUpdate(elapsedTime);
 	grid->Update(elapsedTime);
 	grid->LateUpdate(elapsedTime);
+
+	gameObjectList->push_back(wall);
 	for (size_t i = 0; i < grid->GetAvailableGrids()->size(); i++) gameObjectList->insert(gameObjectList->end(), grid->GetAvailableGrids()->at(i)->objects.begin(), grid->GetAvailableGrids()->at(i)->objects.end());
 	for (size_t i = 0; i < dynamicGameObjectList->size(); i++)
 	{
@@ -85,7 +87,7 @@ void PittsburghScene::LoadScene()
 	tilemap = new TileMap(m_dxBase->GetDeviceResource(), L"Resources/00/Pittsburgh.BMP", L"Resources/00/Pittsburgh.CSV", 20, 7, 80, 60, "Pittsburgh");
 	tilemap->SetCamera(camera);
 
-	grid = new Grid(tilemap->GetMapSize(), 4, 4, tilemap->GetListGameObjects(), camera);
+	grid = new Grid(tilemap->GetMapSize(), 16, 16, tilemap->GetListGameObjects(), camera);
 	grid->SetRenderer(tilemap->GetTilepRenderer());
 	grid->AddRenderTile(tilemap->GetListTileIDs(), tilemap->GetData(), tilemap->GetPositionList(), tilemap->GetTilemapScale());
 
@@ -94,6 +96,13 @@ void PittsburghScene::LoadScene()
 	player->GetTransform()->SetPosition(Vector3(400, 200, 0));
 	dynamicGameObjectList->push_back(player);
 	dynamicGameObjectList->push_back(player->GetShield());
+
+	//3400, 2700
+	wall = new GameObject();
+	wall->SetTag("Wall");
+	wall->GetTransform()->SetPosition(Vector3(3400, 2760, 0));
+	wall->GetTransform()->SetScale(Vector3(500, 20, 0));
+	wall->AddComponent<Collider>(new Collider(wall,wall->GetTransform()));
 }
 
 void PittsburghScene::UnloadScene()

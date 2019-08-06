@@ -131,11 +131,13 @@
   <ItemGroup>
     <ClCompile Include="Bullet.cpp" />
     <ClCompile Include="Enemy.cpp" />
+    <ClCompile Include="Flyer.cpp" />
     <ClCompile Include="Jumper.cpp" />
     <ClCompile Include="Main.cpp" />
     <ClCompile Include="MenuScene.cpp" />
     <ClCompile Include="PittsburghScene.cpp" />
     <ClCompile Include="Player.cpp" />
+    <ClCompile Include="SecondBoss.cpp" />
     <ClCompile Include="SecondBossScene.cpp" />
     <ClCompile Include="Shield.cpp" />
     <ClCompile Include="TestScene.cpp" />
@@ -150,11 +152,13 @@
   <ItemGroup>
     <ClInclude Include="Bullet.h" />
     <ClInclude Include="Enemy.h" />
+    <ClInclude Include="Flyer.h" />
     <ClInclude Include="Jumper.h" />
     <ClInclude Include="MenuScene.h" />
     <ClInclude Include="PittsburghScene.h" />
     <ClInclude Include="Player.h" />
     <ClInclude Include="resource.h" />
+    <ClInclude Include="SecondBoss.h" />
     <ClInclude Include="SecondBossScene.h" />
     <ClInclude Include="Shield.h" />
     <ClInclude Include="TestScene.h" />

@@ -29,5 +29,6 @@ private:
 	TileMap* tilemap;
 	Player* player;
 	Grid* grid;
+	GameObject* wall;
 };
 
