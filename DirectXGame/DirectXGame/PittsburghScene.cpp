@@ -87,7 +87,7 @@ void PittsburghScene::LoadScene()
 	tilemap = new TileMap(m_dxBase->GetDeviceResource(), L"Resources/00/Pittsburgh.BMP", L"Resources/00/Pittsburgh.CSV", 20, 7, 80, 60, "Pittsburgh");
 	tilemap->SetCamera(camera);
 
-	grid = new Grid(tilemap->GetMapSize(), 16, 16, tilemap->GetListGameObjects(), camera);
+	grid = new Grid(tilemap->GetMapSize(), 20, 20, tilemap->GetListGameObjects(), camera);
 	grid->SetRenderer(tilemap->GetTilepRenderer());
 	grid->AddRenderTile(tilemap->GetListTileIDs(), tilemap->GetData(), tilemap->GetPositionList(), tilemap->GetTilemapScale());
 
@@ -103,6 +103,13 @@ void PittsburghScene::LoadScene()
 	wall->GetTransform()->SetPosition(Vector3(3400, 2760, 0));
 	wall->GetTransform()->SetScale(Vector3(500, 20, 0));
 	wall->AddComponent<Collider>(new Collider(wall,wall->GetTransform()));
+
+	GameObject* trigger = new GameObject();
+	trigger->SetTag("TriggerSecondBoss");
+	trigger->GetTransform()->SetPosition(Vector3(3670, 2765, 0));
+	trigger->GetTransform()->SetScale(Vector3(100, 100, 1));
+	trigger->AddComponent<Collider>(new Collider(trigger, trigger->GetTransform()));
+	dynamicGameObjectList->push_back(trigger);
 }
 
 void PittsburghScene::UnloadScene()

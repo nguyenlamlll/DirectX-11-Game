@@ -41,25 +41,16 @@ Grid::Grid(SimpleMath::Vector3 _mapSize, int _rows, int _columns, std::vector<Ga
 
 void Grid::PreUpdate(float _deltaTime)
 {
+	Vector3 cameraPos = camera->GetPosition();
+	Vector3 camereScale = Vector3(camera->GetWidth(), camera->GetHeight(), 0);
 	availableGrids->clear();
 	for (size_t j = 0; j < Grids->size(); j++)
 	{
-		Vector3 cameraPos = camera->GetPosition();
-		Vector3 camereScale = Vector3(camera->GetWidth(), camera->GetHeight(), 0);
 		bool notContainX = (cameraPos.x + camereScale.x<Grids->at(j)->Position.x - Grids->at(j)->Size.x / 2 || cameraPos.x - camereScale.x>Grids->at(j)->Position.x + Grids->at(j)->Size.x / 2);
 		bool notContainY = (cameraPos.y + camereScale.y<Grids->at(j)->Position.y - Grids->at(j)->Size.y / 2 || cameraPos.y - camereScale.y>Grids->at(j)->Position.y + Grids->at(j)->Size.y / 2);
-		if (!notContainX && !notContainY)
-		{
-			availableGrids->push_back(Grids->at(j));
-		}
+		if (!notContainX && !notContainY) availableGrids->push_back(Grids->at(j));
 	}
-	for (size_t i = 0; i < availableGrids->size(); i++)
-	{
-		for (size_t j = 0; j < availableGrids->at(i)->objects.size() ; j++)
-		{
-			availableGrids->at(i)->objects.at(j)->PreUpdate(_deltaTime);
-		}
-	}
+	for (size_t i = 0; i < availableGrids->size(); i++) for (size_t j = 0; j < availableGrids->at(i)->objects.size(); j++) availableGrids->at(i)->objects.at(j)->PreUpdate(_deltaTime);
 }
 
 void Grid::Update(float _deltaTime)

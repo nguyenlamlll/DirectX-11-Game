@@ -101,7 +101,7 @@ int WINAPI wWinMain(
 	game->AddScene(new SecondBossScene(game.get()));
 	//game->SetCurrentScene(0);
 
-	game->InitializeWithScene(0);
+	game->InitializeWithScene(2);
 	// Main message loop
 	MSG msg = { 0 };
 	while (msg.message != WM_QUIT)
