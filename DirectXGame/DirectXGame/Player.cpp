@@ -77,7 +77,7 @@ void Player::Update(float _deltaTime)
 		if (this->GetTransform()->GetScale().y != 60)
 		{
 			this->GetTransform()->SetPosition(this->GetTransform()->GetPosition() + Vector3(0, 30, 0));
-			this->GetTransform()->SetScale(Vector3(25, 60, 0));
+			this->GetTransform()->SetScale(Vector3(50, 60, 0));
 		}
 	}
 	else
@@ -117,10 +117,14 @@ void Player::OnCollisionEnter(Collider* _other, Vector3 _normal)
 		GameObject::OnCollisionEnter(_other, _normal);
 		if (this->GetComponent<Rigidbody>()->GetAcceleration().y >= 0 && this->GetComponent<Collider>()->GetCollisionStatus())this->GetComponent<Rigidbody>()->AddForce(Vector3(0, -1000, 0));
 	}
-	else if (_other->GetAttachedGameObject()->GetTag() == "Trigger")
+	else if (_other->GetAttachedGameObject()->GetTag() == "TriggerFirstBoss")
 	{
 		cutscene = true;
 		m_dxBase->SwitchToScene(1);
+	}
+	else if (_other->GetAttachedGameObject()->GetTag()=="TriggerSecondBoss")
+	{
+		m_dxBase->SwitchToScene(3);
 	}
 	else
 	{

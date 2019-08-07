@@ -35,6 +35,24 @@ void Shooter::Update(float _deltaTime)
 {
 	GameObject::Update(_deltaTime);
 	transform->SetRotation(Vector3(transform->GetRotation().x, (player->GetTransform()->GetPosition().x - this->transform->GetPosition().x > 0) ? 360 : 0, transform->GetRotation().z));
+	
+	if (this->GetComponent<Animator>()->GetCurrentAnimation()->GetAnimationName() == "Sit")
+	{
+		if (this->GetTransform()->GetScale().y != 70)
+		{
+			this->GetTransform()->SetPosition(this->GetTransform()->GetPosition() + Vector3(0, 35, 0));
+			this->GetTransform()->SetScale(Vector3(93, 70, 0));
+		}
+	}
+	else
+	{
+		if (this->GetTransform()->GetScale().y != 141)
+		{
+			this->GetTransform()->SetPosition(this->GetTransform()->GetPosition() + Vector3(0, -45, 0));
+			this->GetTransform()->SetScale(Vector3(93, 141, 0));
+		}
+	}
+
 	// STAGE 2
 	if (stateTimeCycle > 2.0f)
 	{
@@ -66,8 +84,6 @@ void Shooter::Update(float _deltaTime)
 	else if (stateTimeCycle > 0)
 	{
 	}
-
-
 	ManageAnimators();
 	stateTimeCycle = (stateTimeCycle > 4.0f) ? 0 : stateTimeCycle + _deltaTime;
 	if (hurtTime > 0 && hurtTime < 0.5)

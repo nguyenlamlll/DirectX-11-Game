@@ -81,24 +81,6 @@ void TestScene::RenderScene()
 			}
 		}
 	}
-
-	/*for (size_t i = 0; i < gameObjectList->size(); i++)
-	{
-		gameObjectList->at(i)->GetTransform()->SetWorldToScreenPosition(worldToScreenShift);
-		std::vector<GameObject*>* childrens = gameObjectList->at(i)->GetChildrens();
-		if (camera->IsContain(gameObjectList->at(i)->GetTransform()->GetWorldToScreenPosition(), gameObjectList->at(i)->GetTransform()->GetScreenScale()))
-		{
-			gameObjectList->at(i)->Render();
-		}
-		for (size_t k = 0; k < childrens->size(); k++)
-		{
-			childrens->at(k)->GetTransform()->SetWorldToScreenPosition(worldToScreenShift);
-			if (camera->IsContain(childrens->at(k)->GetTransform()->GetWorldToScreenPosition(), childrens->at(k)->GetTransform()->GetScreenScale()))
-			{
-				childrens->at(k)->Render();
-			}
-		}
-	}*/
 }
 
 void TestScene::LoadScene()
@@ -108,7 +90,7 @@ void TestScene::LoadScene()
 	camera = new Camera(m_dxBase->GetDeviceResource()->GetOutputSize().right / 2, m_dxBase->GetDeviceResource()->GetOutputSize().bottom / 2);
 	tilemap = new TileMap(m_dxBase->GetDeviceResource(), L"Resources/00/NewMap/Charleston.BMP", L"Resources/00/NewMap/Charleston.txt", 20, 9, 128, 29, "Charleston");
 	tilemap->SetCamera(camera);
-	gridTest = new Grid(tilemap->GetMapSize(), 2, 8, tilemap->GetListGameObjects(), camera);
+	gridTest = new Grid(tilemap->GetMapSize(), 8, 8, tilemap->GetListGameObjects(), camera);
 	gridTest->SetRenderer(tilemap->GetTilepRenderer());
 	gridTest->AddRenderTile(tilemap->GetListTileIDs(), tilemap->GetData(), tilemap->GetPositionList(), tilemap->GetTilemapScale());
 
@@ -133,7 +115,7 @@ void TestScene::LoadScene()
 	water->GetTransform()->SetScale(Vector3(2200* tilemap->GetTilemapScale().x, 16* tilemap->GetTilemapScale().y, 1));
 	water->AddComponent<Collider>(new Collider(water,water->GetTransform()));
 	trigger = new GameObject();
-	trigger->SetTag("Trigger");
+	trigger->SetTag("TriggerFirstBoss");
 	trigger->GetTransform()->SetPosition(Vector3(5900, 1235, 0));
 	trigger->GetTransform()->SetScale(Vector3(100, 100, 1));
 	trigger->AddComponent<Collider>(new Collider(trigger, trigger->GetTransform()));

@@ -139,6 +139,7 @@ void WizardBoss::Update(float _deltaTime)
 	if (hurtTime > 0 && hurtTime < 0.5)
 	{
 		m_dxBase->GetCurrentScene()->GetDynamicGameObjectList()->erase(std::remove(m_dxBase->GetCurrentScene()->GetDynamicGameObjectList()->begin(), m_dxBase->GetCurrentScene()->GetDynamicGameObjectList()->end(), this), m_dxBase->GetCurrentScene()->GetDynamicGameObjectList()->end());
+		m_dxBase->SwitchToScene(2);
 		delete this;
 	}
 	else if (hurtTime > 0) hurtTime -= _deltaTime;
