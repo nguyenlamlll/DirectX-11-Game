@@ -70,6 +70,10 @@ void Bullet::OnCollisionEnter(Collider * _other, Vector3 _normal)
 		Player* a = (Player*)(_other->GetAttachedGameObject());
 		a->TakeDamage();
 	}
+	else if (_other->GetAttachedGameObject()->GetTag() == "Shield" && tag == "EnemyBullet")
+	{
+		direction = Vector3(0, -400, 0);
+	}
 }
 
 void Bullet::SetTarget(Vector3 _target)

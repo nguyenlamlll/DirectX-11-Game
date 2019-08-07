@@ -140,6 +140,7 @@
     <ClCompile Include="SecondBoss.cpp" />
     <ClCompile Include="SecondBossScene.cpp" />
     <ClCompile Include="Shield.cpp" />
+    <ClCompile Include="Shooter.cpp" />
     <ClCompile Include="TestScene.cpp" />
     <ClCompile Include="WizardBoss.cpp" />
     <ClCompile Include="WizardScene.cpp" />
@@ -161,6 +162,7 @@
     <ClInclude Include="SecondBoss.h" />
     <ClInclude Include="SecondBossScene.h" />
     <ClInclude Include="Shield.h" />
+    <ClInclude Include="Shooter.h" />
     <ClInclude Include="TestScene.h" />
     <ClInclude Include="WizardBoss.h" />
     <ClInclude Include="WizardScene.h" />

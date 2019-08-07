@@ -118,8 +118,12 @@ void TestScene::LoadScene()
 	enemy->GetTransform()->SetPosition(player->GetTransform()->GetPosition() + Vector3(800, -30, 0));
 	enemy->AssignPlayer(player);
 	Jumper* jumper = new Jumper(m_dxBase);
-	jumper->GetTransform()->SetPosition(player->GetTransform()->GetPosition() + Vector3(200, -30, 0));
+	jumper->GetTransform()->SetPosition(player->GetTransform()->GetPosition() + Vector3(3500, -30, 0));
 	jumper->AssignPlayer(player);
+	Shooter* shooter = new Shooter(m_dxBase);
+	shooter->GetTransform()->SetPosition(player->GetTransform()->GetPosition() + Vector3(200, -30, 0));
+	shooter->AssignPlayer(player);
+
 	
 
 	water = new GameObject();
@@ -138,6 +142,7 @@ void TestScene::LoadScene()
 	dynamicGameObjectList->push_back(player->GetShield());
 	dynamicGameObjectList->push_back(enemy);
 	dynamicGameObjectList->push_back(jumper);
+	dynamicGameObjectList->push_back(shooter);
 }
 
 void TestScene::UnloadScene()

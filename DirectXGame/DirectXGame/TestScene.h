@@ -4,6 +4,7 @@
 #include "Enemy.h"
 #include "WizardBoss.h"
 #include "Jumper.h"
+#include "Shooter.h"
 
 class TestScene : public DirectXCore::Scene
 {

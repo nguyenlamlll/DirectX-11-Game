@@ -14,7 +14,7 @@ Shield::Shield(std::shared_ptr<DirectXCore::DxBase> _m_dxBase, GameObject * _cap
 	m_dxBase = _m_dxBase;
 	captain = _captain;
 	this->GetTransform()->SetPosition(_captain->GetTransform()->GetPosition());
-	this->GetTransform()->SetScale(Vector3(51, 60, 1));
+	this->GetTransform()->SetScale(Vector3(25, 70, 1));
 	this->GetTransform()->SetScreenScale(Vector3(3, 3, 1));
 	this->AddComponent<Renderer>(new Renderer(m_dxBase->GetDeviceResource(), L"Resources/Captain/Animations/shield_strait.png"));
 	this->AddComponent<Animator>(new Animator(this->GetComponent<Renderer>()));
@@ -48,60 +48,23 @@ void Shield::LateUpdate(float _deltaTime)
 	GameObject::LateUpdate(_deltaTime);
 	targetLeftSide = captain->GetTransform()->GetPosition();
 	targetRightside = captain->GetTransform()->GetPosition() + Vector3(300, 0, 0);
-	Vector3 offset = Vector3(0, -20, 0);
-	if (captain->GetTransform()->GetRotation().y > 120)
+	this->GetTransform()->SetRotation(Vector3(0, (captain->GetTransform()->GetRotation().y > 120) ? 360 : 0, 0));
+	startpoint = captain->GetTransform()->GetPosition() + Vector3((captain->GetTransform()->GetRotation().y > 120) ? 30 : -30, -20, 0);
+	if (Vector3::Distance(this->GetTransform()->GetPosition(), endpoint) > 10)
 	{
-		this->GetTransform()->SetRotation(Vector3(0, 360, 0));
-		offset.x = 30;
-	}
-	else
-	{
-		this->GetTransform()->SetRotation(Vector3(0, 0, 0));
-		offset.x = -30;
-	}
-	startpoint = captain->GetTransform()->GetPosition() + offset;
-
-	/*Vector3 pos = this->GetTransform()->GetPosition();
-	pos.y = captain->GetTransform()->GetPosition().y;
-	if (direction.x < 0)
-	{
-		Vector3 as = captain->GetTransform()->GetPosition() - this->GetTransform()->GetPosition();
+		Vector3 as = endpoint - this->GetTransform()->GetPosition();
 		as.Normalize();
-		this->GetTransform()->SetPosition(this->GetTransform()->GetPosition() + as * 15);
-	}
-	else
-	{
-		this->GetTransform()->SetPosition(this->GetTransform()->GetPosition() + direction);
-	}
-	if (pos.x > targetRightside.x && direction.x > 0) direction.x *= -1;
-	else if (pos.x < targetLeftSide.x && direction.x < 0) this->GetTransform()->SetPosition(captain->GetTransform()->GetPosition() + offset);*/
-	if (Vector3::Distance(this->GetTransform()->GetPosition(), endpoint) > 5)
-	{
-		/*if (endpoint == startpoint)
-		{
-			this->GetTransform()->SetPosition(endpoint);
-		}
-		else*/
-		{
-			Vector3 as = endpoint - this->GetTransform()->GetPosition();
-			as.Normalize();
-			//this->GetTransform()->SetPosition(this->GetTransform()->GetPosition() + as * 15);
-			this->GetComponent<Rigidbody>()->Move(as * 600);
-		}
+		this->GetComponent<Rigidbody>()->Move(as * 800);
 	}
 	else
 	{
 		if (endpoint != startpoint) endpoint = startpoint;
-		else
-		{
-			holded = true;
-			/*this->GetTransform()->SetPosition(startpoint);
-			this->GetComponent<Rigidbody>()->Move(Vector3(0, 0, 0));*/
-		}
+		else holded = true;
 	}
 	if (holded)
 	{
-		this->GetTransform()->SetPosition(startpoint);
+		if (!captain->GetComponent<Collider>()->GetCollisionStatus()) this->GetTransform()->SetPosition(captain->GetTransform()->GetPosition());
+		else this->GetTransform()->SetPosition(startpoint);
 		this->GetComponent<Rigidbody>()->Move(Vector3(0, 0, 0));
 	}
 }
@@ -137,15 +100,17 @@ void Shield::Addanimation()
 {
 	Animation* stillAnim = new Animation(L"Resources/Captain/Animations/shield_still.png", "Still", this->GetComponent<Renderer>(), 1, 1, 0.1f, 1.0f, true);
 	Animation* flyAnim = new Animation(L"Resources/Captain/Animations/shield_fly.png", "Fly", this->GetComponent<Renderer>(), 1, 1, 0.1f, 1.0f, true);
+	Animation* straitAnim = new Animation(L"Resources/Captain/Animations/shield_strait.png", "Strait", this->GetComponent<Renderer>(), 1, 1, 0.1f, 1.0f, true);
 	this->GetComponent<Animator>()->AddAnimation(stillAnim);
 	this->GetComponent<Animator>()->AddAnimation(flyAnim);
+	this->GetComponent<Animator>()->AddAnimation(straitAnim);
 	//this->GetComponent<Animator>()->AddTransition("Stand", "Move", true);
 	this->GetComponent<Animator>()->SetCurrentAnimation(stillAnim);
 }
 
 void Shield::ManageAnimation()
 {
-	this->GetComponent<Animator>()->SetBool("Still", Vector3::Distance(this->GetTransform()->GetPosition(), startpoint) < 10);
-	this->GetComponent<Animator>()->SetBool("Fly", Vector3::Distance(this->GetTransform()->GetPosition(), startpoint) > 10);
-
+	this->GetComponent<Animator>()->SetBool("Still", Vector3::Distance(this->GetTransform()->GetPosition(), startpoint) < 10 && captain->GetComponent<Collider>()->GetCollisionStatus());
+	this->GetComponent<Animator>()->SetBool("Fly", Vector3::Distance(this->GetTransform()->GetPosition(), startpoint) > 50);
+	this->GetComponent<Animator>()->SetBool("Strait", Vector3::Distance(this->GetTransform()->GetPosition(), startpoint) < 10 && !captain->GetComponent<Collider>()->GetCollisionStatus());
 }

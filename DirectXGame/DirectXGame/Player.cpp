@@ -45,14 +45,14 @@ void Player::PreUpdate(float _deltaTime)
 		}
 		if (m_dxBase->GetInputManager()->IsKeyDown("K"))
 		{
-			if (this->GetComponent<Rigidbody>()->GetAcceleration().y >= 0 && this->GetComponent<Collider>()->GetCollisionStatus())this->GetComponent<Rigidbody>()->AddForce(Vector3(0, -1000, 0));
+			if (this->GetComponent<Rigidbody>()->GetAcceleration().y >= 0 && this->GetComponent<Collider>()->GetCollisionStatus())this->GetComponent<Rigidbody>()->AddForce(Vector3(0, -800, 0));
 		}
 		if (this->GetComponent<Rigidbody>()->GetVelocity().x > 0) transform->SetRotation(Vector3(transform->GetRotation().x, 360, transform->GetRotation().z));
 		else if (this->GetComponent<Rigidbody>()->GetVelocity().x < 0) transform->SetRotation(Vector3(transform->GetRotation().x, 0, transform->GetRotation().z));
 
 		if (m_dxBase->GetInputManager()->IsKeyDown("L") && this->GetComponent<Collider>()->GetCollisionStatus() && Vector3::Distance(this->GetTransform()->GetPosition(), capshield->GetTransform()->GetPosition()) < 40 && weaponTimer < 0)
 		{
-			capshield->endpoint = this->GetTransform()->GetPosition() + Vector3((transform->GetRotation().y == 360) ? 300 : -300, 0, 0);
+			capshield->endpoint = this->GetTransform()->GetPosition() + Vector3((transform->GetRotation().y == 360) ? 300 : -300, -20, 0);
 			weaponTimer = 0.8f;
 			capshield->holded = false;
 		}
@@ -98,7 +98,8 @@ void Player::LateUpdate(float _deltaTime)
 
 void Player::OnCollisionEnter(Collider* _other, Vector3 _normal)
 {
-	if (_other->GetAttachedGameObject()->GetTag() == "EnemyBullet")
+	if (_other->GetAttachedGameObject()->GetTag() == "Shield");
+	else if (_other->GetAttachedGameObject()->GetTag() == "EnemyBullet")
 	{
 		TakeDamage();
 		//this->GetComponent<Collider>()->SetCollisionStatus(false);
