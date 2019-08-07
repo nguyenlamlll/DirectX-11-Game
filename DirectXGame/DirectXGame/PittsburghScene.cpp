@@ -59,7 +59,6 @@ void PittsburghScene::UpdateScene(float elapsedTime)
 void PittsburghScene::RenderScene()
 {
 	Vector3 worldToScreenShift = Vector3(camera->GetWidth() / 2 - camera->GetPosition().x, camera->GetHeight() / 2 - camera->GetPosition().y, 0);
-	if (tilemap != NULL)tilemap->Render();
 	grid->Render();
 	for (size_t i = 0; i < dynamicGameObjectList->size(); i++)
 	{
