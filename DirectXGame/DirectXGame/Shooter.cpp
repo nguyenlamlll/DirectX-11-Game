@@ -34,7 +34,7 @@ void Shooter::PreUpdate(float _deltaTime)
 void Shooter::Update(float _deltaTime)
 {
 	GameObject::Update(_deltaTime);
-
+	transform->SetRotation(Vector3(transform->GetRotation().x, (player->GetTransform()->GetPosition().x - this->transform->GetPosition().x > 0) ? 360 : 0, transform->GetRotation().z));
 	// STAGE 2
 	if (stateTimeCycle > 2.0f)
 	{
@@ -44,7 +44,6 @@ void Shooter::Update(float _deltaTime)
 		{
 			this->GetComponent<Rigidbody>()->Move(Vector3(0, 0, 0));
 			Vector3 offset = Vector3((this->GetTransform()->GetRotation().y > 120) ? 80 : -80, -50, 0);
-			transform->SetRotation(Vector3(transform->GetRotation().x, (this->GetComponent<Rigidbody>()->GetVelocity().x > 0) ? 360 : 0, transform->GetRotation().z));
 
 			//shooting code
 			float directionX = player->GetTransform()->GetPosition().x - this->GetTransform()->GetPosition().x;

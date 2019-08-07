@@ -8,7 +8,7 @@ Bullet::Bullet(std::shared_ptr<DirectXCore::DxBase> _m_dxBase, Vector3 _pos)
 {
 	m_dxBase = _m_dxBase;
 	this->GetTransform()->SetPosition(_pos);
-	this->GetTransform()->SetScale(Vector3(24, 24, 1));
+	this->GetTransform()->SetScale(Vector3(16, 16, 1));
 	this->GetTransform()->SetScreenScale(Vector3(3,3,1));
 	this->AddComponent<Renderer>(new Renderer(m_dxBase->GetDeviceResource(), L"Resources/Captain/Animations/enemy/shooter_bullet.png"));
 }

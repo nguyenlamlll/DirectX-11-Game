@@ -14,8 +14,8 @@ Shield::Shield(std::shared_ptr<DirectXCore::DxBase> _m_dxBase, GameObject * _cap
 	m_dxBase = _m_dxBase;
 	captain = _captain;
 	this->GetTransform()->SetPosition(_captain->GetTransform()->GetPosition());
-	this->GetTransform()->SetScale(Vector3(25, 70, 1));
-	this->GetTransform()->SetScreenScale(Vector3(3, 3, 1));
+	this->GetTransform()->SetScale(Vector3(25, 30, 1));
+	this->GetTransform()->SetScreenScale(Vector3(3.5f, 3.5f, 1));
 	this->AddComponent<Renderer>(new Renderer(m_dxBase->GetDeviceResource(), L"Resources/Captain/Animations/shield_strait.png"));
 	this->AddComponent<Animator>(new Animator(this->GetComponent<Renderer>()));
 	Addanimation();
@@ -63,7 +63,11 @@ void Shield::LateUpdate(float _deltaTime)
 	}
 	if (holded)
 	{
-		if (!captain->GetComponent<Collider>()->GetCollisionStatus()) this->GetTransform()->SetPosition(captain->GetTransform()->GetPosition());
+		if (!captain->GetComponent<Collider>()->GetCollisionStatus())
+		{
+			if (captain->GetComponent<Animator>()->GetCurrentAnimation()->GetAnimationName() == "SpinJump") this->GetTransform()->SetPosition(captain->GetTransform()->GetPosition());
+			else this->GetTransform()->SetPosition(captain->GetTransform()->GetPosition() + Vector3(0, -20, 0));
+		}
 		else this->GetTransform()->SetPosition(startpoint);
 		this->GetComponent<Rigidbody>()->Move(Vector3(0, 0, 0));
 	}

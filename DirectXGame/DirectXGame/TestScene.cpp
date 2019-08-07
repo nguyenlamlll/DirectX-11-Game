@@ -113,15 +113,16 @@ void TestScene::LoadScene()
 	gridTest->AddRenderTile(tilemap->GetListTileIDs(), tilemap->GetData(), tilemap->GetPositionList(), tilemap->GetTilemapScale());
 
 	player = new Player(m_dxBase);
+	player->GetTransform()->SetPosition(Vector3(100, 800, 0));
 	player->SetTag("Player");
 	Enemy* enemy = new Enemy(m_dxBase);
-	enemy->GetTransform()->SetPosition(player->GetTransform()->GetPosition() + Vector3(800, -30, 0));
+	enemy->GetTransform()->SetPosition(player->GetTransform()->GetPosition() + Vector3(200, -30, 0));
 	enemy->AssignPlayer(player);
 	Jumper* jumper = new Jumper(m_dxBase);
-	jumper->GetTransform()->SetPosition(player->GetTransform()->GetPosition() + Vector3(3500, -30, 0));
+	jumper->GetTransform()->SetPosition(player->GetTransform()->GetPosition() + Vector3(400, -30, 0));
 	jumper->AssignPlayer(player);
 	Shooter* shooter = new Shooter(m_dxBase);
-	shooter->GetTransform()->SetPosition(player->GetTransform()->GetPosition() + Vector3(200, -30, 0));
+	shooter->GetTransform()->SetPosition(player->GetTransform()->GetPosition() + Vector3(600, -30, 0));
 	shooter->AssignPlayer(player);
 
 	

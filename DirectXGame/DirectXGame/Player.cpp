@@ -8,7 +8,6 @@ Player::Player(std::shared_ptr<DirectXCore::DxBase> _m_dxBase)
 	this->SetTag("Player");
 	m_dxBase = _m_dxBase;
 
-	this->GetTransform()->SetPosition(Vector3(5000, 500, 0));
 	this->GetTransform()->SetScale(Vector3(50, 120, 1));
 	this->GetTransform()->SetScreenScale(Vector3(3, 3, 1));
 	this->AddComponent<Renderer>(new Renderer(_m_dxBase->GetDeviceResource(), L"Resources/Captain/Animations/stand.png"));
@@ -37,11 +36,11 @@ void Player::PreUpdate(float _deltaTime)
 		}
 		if (m_dxBase->GetInputManager()->IsKeyDown("D"))
 		{
-			this->GetComponent<Rigidbody>()->Move(Vector3(160, 0, 0));
+			this->GetComponent<Rigidbody>()->Move(Vector3(100, 0, 0));
 		}
 		if (m_dxBase->GetInputManager()->IsKeyDown("A"))
 		{
-			this->GetComponent<Rigidbody>()->Move(Vector3(-160, 0, 0));
+			this->GetComponent<Rigidbody>()->Move(Vector3(-100, 0, 0));
 		}
 		if (m_dxBase->GetInputManager()->IsKeyDown("K"))
 		{
