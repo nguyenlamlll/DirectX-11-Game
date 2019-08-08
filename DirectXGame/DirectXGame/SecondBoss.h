@@ -24,7 +24,7 @@ public:
 private:
 	GameObject* captain;
 	std::shared_ptr<DirectXCore::DxBase> m_dxBase;
-	Vector3 upleftPos, uprightPos, downrighPos;
+	Vector3 leftpos, rightPos;
 	int loopDirection = 1;;
 	std::vector<Vector3>* positionList;
 	int positionIndex = 0;

@@ -34,5 +34,7 @@ private:
 	TileMap* tilemap, *bossTilemap;
 	Player* player;
 	Grid* gridTest;
+	std::vector<GameObject*>* enemySpawnList;
+	int enemynumbers;
 };
 

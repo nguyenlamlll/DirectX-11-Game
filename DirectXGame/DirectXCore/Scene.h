@@ -25,6 +25,27 @@ namespace DirectXCore
 		std::vector<DirectXCore::GameObject*>* GetGameObjectList() { return gameObjectList; }
 		std::vector<DirectXCore::GameObject*>* GetDynamicGameObjectList() { return dynamicGameObjectList; }
 		QuadTree* GetQuadTree() { return sceneQuadTree; }
+		void DeleteObject(GameObject* _obj)
+		{
+			//for (size_t i = 0; i < gameObjectList->size(); i++)
+			//{
+			//	if (gameObjectList->at(i) == _obj)
+			//	{
+			//		gameObjectList->erase(std::remove(gameObjectList->begin(), gameObjectList->end(), _obj), gameObjectList->end());
+			//		//delete _obj;
+			//		//_obj = NULL;
+			//	}
+			//}
+			for (size_t i = 0; i < dynamicGameObjectList->size(); i++)
+			{
+				if (dynamicGameObjectList->at(i) == _obj)
+				{
+					dynamicGameObjectList->erase(std::remove(dynamicGameObjectList->begin(), dynamicGameObjectList->end(), _obj), dynamicGameObjectList->end());
+					_obj = NULL;
+					delete _obj;
+				}
+			}
+		}
 	protected:
 		std::vector<DirectXCore::GameObject*>* gameObjectList;
 		std::vector<DirectXCore::GameObject*>* dynamicGameObjectList;

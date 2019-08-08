@@ -85,14 +85,13 @@ void Enemy::Update(float _deltaTime)
 		*direction = player->GetTransform()->GetPosition() - this->GetTransform()->GetPosition();
 		direction->Normalize();
 	}
-	this->GetComponent<Rigidbody>()->Move(*direction * 100);
+	this->GetComponent<Rigidbody>()->Move(*direction * 90);
 
 	ManageAnimators();
 	stateTimeCycle = (stateTimeCycle > 4.0f) ? 0 : stateTimeCycle + _deltaTime;
 	if (hurtTime > 0 && hurtTime < 0.5)
 	{
-		m_dxBase->GetCurrentScene()->GetDynamicGameObjectList()->erase(std::remove(m_dxBase->GetCurrentScene()->GetDynamicGameObjectList()->begin(), m_dxBase->GetCurrentScene()->GetDynamicGameObjectList()->end(), this), m_dxBase->GetCurrentScene()->GetDynamicGameObjectList()->end());
-		delete this;
+		m_dxBase->GetCurrentScene()->DeleteObject(this);
 	}
 	else if (hurtTime > 0) hurtTime -= _deltaTime;
 }

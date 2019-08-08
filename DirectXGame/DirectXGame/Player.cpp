@@ -44,7 +44,7 @@ void Player::PreUpdate(float _deltaTime)
 		}
 		if (m_dxBase->GetInputManager()->IsKeyDown("K"))
 		{
-			if (this->GetComponent<Rigidbody>()->GetAcceleration().y >= 0 && this->GetComponent<Collider>()->GetCollisionStatus())this->GetComponent<Rigidbody>()->AddForce(Vector3(0, -800, 0));
+			if (this->GetComponent<Rigidbody>()->GetAcceleration().y >= 0 && this->GetComponent<Collider>()->GetCollisionStatus())this->GetComponent<Rigidbody>()->AddForce(Vector3(0, -950, 0));
 		}
 		if (this->GetComponent<Rigidbody>()->GetVelocity().x > 0) transform->SetRotation(Vector3(transform->GetRotation().x, 360, transform->GetRotation().z));
 		else if (this->GetComponent<Rigidbody>()->GetVelocity().x < 0) transform->SetRotation(Vector3(transform->GetRotation().x, 0, transform->GetRotation().z));
@@ -119,12 +119,20 @@ void Player::OnCollisionEnter(Collider* _other, Vector3 _normal)
 	}
 	else if (_other->GetAttachedGameObject()->GetTag() == "TriggerFirstBoss")
 	{
-		cutscene = true;
 		m_dxBase->SwitchToScene(1);
 	}
 	else if (_other->GetAttachedGameObject()->GetTag()=="TriggerSecondBoss")
 	{
 		m_dxBase->SwitchToScene(3);
+	}
+	else if (_other->GetAttachedGameObject()->GetTag() == "TriggerEnemy")
+	{
+		if (!cutscene)
+		{
+			cutscene = true;
+			//m_dxBase->GetCurrentScene()->GetDynamicGameObjectList()->erase(std::remove(m_dxBase->GetCurrentScene()->GetDynamicGameObjectList()->begin(), m_dxBase->GetCurrentScene()->GetDynamicGameObjectList()->end(), _other->GetAttachedGameObject()), m_dxBase->GetCurrentScene()->GetDynamicGameObjectList()->end());
+			//delete  _other->GetAttachedGameObject();
+		}
 	}
 	else
 	{

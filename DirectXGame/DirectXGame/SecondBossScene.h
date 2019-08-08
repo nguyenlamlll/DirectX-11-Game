@@ -2,6 +2,7 @@
 #include "DirectXCore.h"
 #include "Player.h"
 #include "Enemy.h"
+#include "SecondBoss.h"
 
 class SecondBossScene : public DirectXCore::Scene
 {
@@ -26,8 +27,8 @@ public:
 private:
 	std::shared_ptr<DirectXCore::DxBase> m_dxBase;
 	DirectXCore::Camera* camera;
-	TileMap* tilemap;
-	Player* player;
-	Grid* grid;
+	//TileMap* tilemap;
+	GameObject* background;
+	//Grid* grid;
 };
 

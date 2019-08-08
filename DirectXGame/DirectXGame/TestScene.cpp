@@ -15,6 +15,27 @@ TestScene::TestScene(DirectXCore::DxBase * dxBase)
 
 void TestScene::UpdateScene(float elapsedTime)
 {
+	if (player->cutscene && enemySpawnList == NULL)
+	{
+		player->cutscene = false;
+		enemySpawnList = new std::vector<GameObject*>();
+		for (int i = 1; i < 4; i++)
+		{
+			Enemy* enemy = new Enemy(m_dxBase);
+			enemy->GetTransform()->SetPosition(player->GetTransform()->GetPosition() + Vector3((i * -100) - 300, -20, 0));
+			enemy->AssignPlayer(player);
+			Jumper* jumper = new Jumper(m_dxBase);
+			jumper->GetTransform()->SetPosition(player->GetTransform()->GetPosition() + Vector3((i * 100) + 300, -20, 0));
+			jumper->AssignPlayer(player);
+			dynamicGameObjectList->push_back(enemy);
+			dynamicGameObjectList->push_back(jumper);
+		}
+		for (size_t i = 0; i < dynamicGameObjectList->size(); i++)
+		{
+			if (dynamicGameObjectList->at(i)->GetTag() == "TriggerEnemy") this->DeleteObject(dynamicGameObjectList->at(i));
+		}
+	}
+
 	gridTest->PreUpdate(elapsedTime);
 	gridTest->Update(elapsedTime);
 	gridTest->LateUpdate(elapsedTime);
@@ -57,7 +78,13 @@ void TestScene::UpdateScene(float elapsedTime)
 	for (size_t i = 0; i < dynamicGameObjectList->size(); i++) dynamicGameObjectList->at(i)->Update(elapsedTime);
 	for (size_t i = 0; i < dynamicGameObjectList->size(); i++) dynamicGameObjectList->at(i)->LateUpdate(elapsedTime);
 
-	camera->SetPosition(player->GetTransform()->GetPosition());
+	if(dynamicGameObjectList->size()<= enemynumbers)
+	{
+		Vector3 camPos = player->GetTransform()->GetPosition();
+		if (camPos.y > 1000) camPos.y = 1000;
+		if (camPos.x < 563) camPos.x = 563;
+		camera->SetPosition(camPos);
+	}
 }
 
 void TestScene::RenderScene()
@@ -85,6 +112,7 @@ void TestScene::RenderScene()
 
 void TestScene::LoadScene()
 {
+	enemySpawnList = NULL;
 	trigger = NULL;
 	water = NULL;
 	camera = new Camera(m_dxBase->GetDeviceResource()->GetOutputSize().right / 2, m_dxBase->GetDeviceResource()->GetOutputSize().bottom / 2);
@@ -97,35 +125,42 @@ void TestScene::LoadScene()
 	player = new Player(m_dxBase);
 	player->GetTransform()->SetPosition(Vector3(100, 800, 0));
 	player->SetTag("Player");
-	Enemy* enemy = new Enemy(m_dxBase);
+	/*Enemy* enemy = new Enemy(m_dxBase);
 	enemy->GetTransform()->SetPosition(player->GetTransform()->GetPosition() + Vector3(200, -30, 0));
-	enemy->AssignPlayer(player);
-	Jumper* jumper = new Jumper(m_dxBase);
+	enemy->AssignPlayer(player);*/
+	/*Jumper* jumper = new Jumper(m_dxBase);
 	jumper->GetTransform()->SetPosition(player->GetTransform()->GetPosition() + Vector3(400, -30, 0));
 	jumper->AssignPlayer(player);
 	Shooter* shooter = new Shooter(m_dxBase);
 	shooter->GetTransform()->SetPosition(player->GetTransform()->GetPosition() + Vector3(600, -30, 0));
-	shooter->AssignPlayer(player);
+	shooter->AssignPlayer(player);*/
 
-	
+
 
 	water = new GameObject();
 	water->SetTag("Water");
-	water->GetTransform()->SetPosition(Vector3(1032* tilemap->GetTilemapScale().x, 472* tilemap->GetTilemapScale().y-50, 0));
-	water->GetTransform()->SetScale(Vector3(2200* tilemap->GetTilemapScale().x, 16* tilemap->GetTilemapScale().y, 1));
-	water->AddComponent<Collider>(new Collider(water,water->GetTransform()));
+	water->GetTransform()->SetPosition(Vector3(1032 * tilemap->GetTilemapScale().x, 472 * tilemap->GetTilemapScale().y - 50, 0));
+	water->GetTransform()->SetScale(Vector3(2200 * tilemap->GetTilemapScale().x, 16 * tilemap->GetTilemapScale().y, 1));
+	water->AddComponent<Collider>(new Collider(water, water->GetTransform()));
 	trigger = new GameObject();
 	trigger->SetTag("TriggerFirstBoss");
 	trigger->GetTransform()->SetPosition(Vector3(5900, 1235, 0));
 	trigger->GetTransform()->SetScale(Vector3(100, 100, 1));
 	trigger->AddComponent<Collider>(new Collider(trigger, trigger->GetTransform()));
+	GameObject* enemytrigger = new GameObject();
+	enemytrigger->SetTag("TriggerEnemy");
+	enemytrigger->GetTransform()->SetPosition(Vector3(1180, 1235, 0));
+	enemytrigger->GetTransform()->SetScale(Vector3(50, 150, 1));
+	enemytrigger->AddComponent<Collider>(new Collider(trigger, trigger->GetTransform()));
 
 
 	dynamicGameObjectList->push_back(player);
 	dynamicGameObjectList->push_back(player->GetShield());
-	dynamicGameObjectList->push_back(enemy);
-	dynamicGameObjectList->push_back(jumper);
-	dynamicGameObjectList->push_back(shooter);
+	//dynamicGameObjectList->push_back(enemy);
+	//dynamicGameObjectList->push_back(jumper);
+	//dynamicGameObjectList->push_back(shooter);
+	dynamicGameObjectList->push_back(enemytrigger);
+	enemynumbers = dynamicGameObjectList->size();
 }
 
 void TestScene::UnloadScene()
