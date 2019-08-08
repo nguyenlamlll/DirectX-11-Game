@@ -69,7 +69,7 @@ void SecondBoss::Update(float _deltaTime)
 			else if (directionX < -10) directionX = -400;
 			else directionX = 0;
 			Bullet* bullet = new Bullet(L"Resources/Captain/Animations/mini_boss/bullet.png", m_dxBase, this->GetTransform()->GetPosition(), Vector3(3, 3, 1), Vector3(directionX, 0, 0));
-			bullet->SetTag("EnemyBullet");
+			bullet->SetTag("BossBullet");
 			bullet->AddComponent<Rigidbody>(new Rigidbody(bullet));
 			bullet->GetComponent<Rigidbody>()->SetKinematic(true);
 			if (captain->GetTransform()->GetPosition().x - bullet->GetTransform()->GetPosition().x > 0) bullet->GetTransform()->SetRotation(Vector3(0, 360, 0));
@@ -113,7 +113,7 @@ void SecondBoss::Update(float _deltaTime)
 			else if (directionX < -10) directionX = -400;
 			else directionX = 0;
 			Bullet* bullet = new Bullet(L"Resources/Captain/Animations/mini_boss/bullet.png", m_dxBase, this->GetTransform()->GetPosition(), Vector3(3, 3, 1), Vector3(directionX, 0, 0));
-			bullet->SetTag("EnemyBullet");
+			bullet->SetTag("BossBullet");
 			bullet->AddComponent<Rigidbody>(new Rigidbody(bullet));
 			bullet->GetComponent<Rigidbody>()->SetKinematic(true);
 			if (captain->GetTransform()->GetPosition().x - bullet->GetTransform()->GetPosition().x > 0) bullet->GetTransform()->SetRotation(Vector3(0, 360, 0));
