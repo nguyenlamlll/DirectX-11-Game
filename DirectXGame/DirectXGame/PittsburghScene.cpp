@@ -19,6 +19,30 @@ void PittsburghScene::UpdateScene(float elapsedTime)
 	grid->Update(elapsedTime);
 	grid->LateUpdate(elapsedTime);
 
+	if (player->cutscene && enemySpawnList == NULL)
+	{
+		player->cutscene = false;
+		enemySpawnList = new std::vector<GameObject*>();
+		for (int i = 1; i < 4; i++)
+		{
+			Enemy* enemy = new Enemy(m_dxBase);
+			enemy->GetTransform()->SetPosition(player->GetTransform()->GetPosition() + Vector3((i * -100) - 300, -20, 0));
+			enemy->AssignPlayer(player);
+			enemy->SetName("Enemy");
+			Jumper* jumper = new Jumper(m_dxBase);
+			jumper->GetTransform()->SetPosition(player->GetTransform()->GetPosition() + Vector3((i * 100) + 300, -20, 0));
+			jumper->AssignPlayer(player);
+			jumper->SetName("Jumper");
+			dynamicGameObjectList->push_back(enemy);
+			dynamicGameObjectList->push_back(jumper);
+		}
+		for (size_t i = 0; i < dynamicGameObjectList->size(); i++)
+		{
+			if (dynamicGameObjectList->at(i)->GetTag() == "TriggerEnemy") this->DeleteObject(dynamicGameObjectList->at(i));
+		}
+		
+	}
+
 	gameObjectList->push_back(wall);
 	for (size_t i = 0; i < grid->GetAvailableGrids()->size(); i++) gameObjectList->insert(gameObjectList->end(), grid->GetAvailableGrids()->at(i)->objects.begin(), grid->GetAvailableGrids()->at(i)->objects.end());
 	for (size_t i = 0; i < dynamicGameObjectList->size(); i++)
@@ -53,7 +77,13 @@ void PittsburghScene::UpdateScene(float elapsedTime)
 	}
 	for (size_t i = 0; i < dynamicGameObjectList->size(); i++) dynamicGameObjectList->at(i)->Update(elapsedTime);
 	for (size_t i = 0; i < dynamicGameObjectList->size(); i++) dynamicGameObjectList->at(i)->LateUpdate(elapsedTime);
-	camera->SetPosition(player->GetTransform()->GetPosition());
+	if (dynamicGameObjectList->size() <= enemynumbers)
+	{
+		Vector3 camPos = player->GetTransform()->GetPosition();
+		if (camPos.y > 2375) camPos.y = 2375;
+		//if (camPos.x < 563) camPos.x = 563;
+		camera->SetPosition(camPos);
+	}
 }
 
 void PittsburghScene::RenderScene()
@@ -81,6 +111,7 @@ void PittsburghScene::RenderScene()
 
 void PittsburghScene::LoadScene()
 {
+	enemySpawnList = NULL;
 	camera = new Camera(m_dxBase->GetDeviceResource()->GetOutputSize().right / 2, m_dxBase->GetDeviceResource()->GetOutputSize().bottom / 2);
 
 	tilemap = new TileMap(m_dxBase->GetDeviceResource(), L"Resources/00/Pittsburgh.BMP", L"Resources/00/Pittsburgh.CSV", 20, 7, 80, 60, "Pittsburgh");
@@ -92,7 +123,7 @@ void PittsburghScene::LoadScene()
 
 	player = new Player(m_dxBase);
 	player->SetTag("Player");
-	player->GetTransform()->SetPosition(Vector3(400, 200, 0));
+	player->GetTransform()->SetPosition(Vector3(1200, 200, 0));
 	dynamicGameObjectList->push_back(player);
 	dynamicGameObjectList->push_back(player->GetShield());
 
@@ -109,6 +140,15 @@ void PittsburghScene::LoadScene()
 	trigger->GetTransform()->SetScale(Vector3(100, 100, 1));
 	trigger->AddComponent<Collider>(new Collider(trigger, trigger->GetTransform()));
 	dynamicGameObjectList->push_back(trigger);
+
+
+	GameObject* enemytrigger = new GameObject();
+	enemytrigger->SetTag("TriggerEnemy");
+	enemytrigger->GetTransform()->SetPosition(Vector3(1885, 2675, 0));
+	enemytrigger->GetTransform()->SetScale(Vector3(50, 150, 1));
+	enemytrigger->AddComponent<Collider>(new Collider(trigger, trigger->GetTransform()));
+	dynamicGameObjectList->push_back(enemytrigger);
+	enemynumbers = dynamicGameObjectList->size();
 }
 
 void PittsburghScene::UnloadScene()

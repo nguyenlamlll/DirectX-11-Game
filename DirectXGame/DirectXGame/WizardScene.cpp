@@ -101,7 +101,6 @@ void WizardScene::UnloadScene()
 {
 }
 
-
 WizardScene::~WizardScene()
 {
 }

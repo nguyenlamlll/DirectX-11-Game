@@ -60,6 +60,24 @@ void SecondBoss::Update(float _deltaTime)
 			transformVector.y = 0;
 			this->GetComponent<Rigidbody>()->Move(transformVector * 100);
 		}
+
+		if (bulletTimer > 2.5f && this->GetComponent<Collider>()->GetCollisionStatus())
+		{
+			//shooting code
+			float directionX = positionList->at(positionIndex).x - this->GetTransform()->GetPosition().x;
+			if (directionX > 10) directionX = 400;
+			else if (directionX < -10) directionX = -400;
+			else directionX = 0;
+			Bullet* bullet = new Bullet(L"Resources/Captain/Animations/mini_boss/bullet.png", m_dxBase, this->GetTransform()->GetPosition(), Vector3(3, 3, 1), Vector3(directionX, 0, 0));
+			bullet->SetTag("EnemyBullet");
+			bullet->AddComponent<Rigidbody>(new Rigidbody(bullet));
+			bullet->GetComponent<Rigidbody>()->SetKinematic(true);
+			if (captain->GetTransform()->GetPosition().x - bullet->GetTransform()->GetPosition().x > 0) bullet->GetTransform()->SetRotation(Vector3(0, 360, 0));
+			else this->GetTransform()->SetRotation(Vector3(0, 0, 0));
+			m_dxBase->GetCurrentScene()->GetDynamicGameObjectList()->push_back(bullet);
+			//this->AddChild(bullet);
+			bulletTimer = 0;
+		}
 	}
 	else if (stateTimeCycle > 12.0f)
 	{
@@ -234,7 +252,7 @@ void SecondBoss::ManageAnimation()
 	else
 	{
 		if (stateTimeCycle > 14.0f)this->GetComponent<Animator>()->SetBool("MoveShoot", true);
-		else if (stateTimeCycle > 10.0f)this->GetComponent<Animator>()->SetBool("Stand", true);
+		else if (stateTimeCycle > 12.0f)this->GetComponent<Animator>()->SetBool("Stand", true);
 		else if (stateTimeCycle > 7.2f) this->GetComponent<Animator>()->SetBool("Move", true);
 		else if (stateTimeCycle > 6.0f)
 		{

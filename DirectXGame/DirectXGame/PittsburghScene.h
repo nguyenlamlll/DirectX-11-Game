@@ -30,5 +30,7 @@ private:
 	Player* player;
 	Grid* grid;
 	GameObject* wall;
+	std::vector<GameObject*>* enemySpawnList;
+	int enemynumbers;
 };
 

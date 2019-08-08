@@ -83,7 +83,7 @@ void Shield::OnCollisionEnter(Collider * _other, Vector3 _normal)
 	//GameObject::OnCollisionEnter(_other, _normal);
 	if (this->GetComponent<Rigidbody>()->GetVelocity().x != 0)
 	{
-		if (_other->GetAttachedGameObject()->GetTag() == "Boss")
+		if (_other->GetAttachedGameObject()->GetTag() == "Wizard")
 		{
 			WizardBoss* a = (WizardBoss*)(_other->GetAttachedGameObject());
 			a->TakeDamage();
