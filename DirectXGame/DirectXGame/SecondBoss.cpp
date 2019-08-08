@@ -64,6 +64,7 @@ void SecondBoss::Update(float _deltaTime)
 	else if (stateTimeCycle > 5.0f)
 	{
 		this->GetComponent<Rigidbody>()->Move(Vector3(0, 0, 0));
+		//run to another spot
 	}
 	// STAGE 1
 	else if (stateTimeCycle > 0)
