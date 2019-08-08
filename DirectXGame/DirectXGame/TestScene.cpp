@@ -24,9 +24,11 @@ void TestScene::UpdateScene(float elapsedTime)
 			Enemy* enemy = new Enemy(m_dxBase);
 			enemy->GetTransform()->SetPosition(player->GetTransform()->GetPosition() + Vector3((i * -100) - 300, -20, 0));
 			enemy->AssignPlayer(player);
+			enemy->SetName("Enemy");
 			Jumper* jumper = new Jumper(m_dxBase);
 			jumper->GetTransform()->SetPosition(player->GetTransform()->GetPosition() + Vector3((i * 100) + 300, -20, 0));
 			jumper->AssignPlayer(player);
+			jumper->SetName("Jumper");
 			dynamicGameObjectList->push_back(enemy);
 			dynamicGameObjectList->push_back(jumper);
 		}
@@ -66,8 +68,6 @@ void TestScene::UpdateScene(float elapsedTime)
 							Vector3* normalVector = new Vector3(normalX, normalY, 0);
 							gameObjectList->at(i)->OnCollisionEnter(gameObjectList->at(j)->GetComponent<Collider>(), *normalVector*-1);
 							dynamicGameObjectList->at(j)->OnCollisionEnter(gameObjectList->at(i)->GetComponent<Collider>(), *normalVector);
-							gameObjectList->at(i)->GetComponent<Collider>()->SetCollisionStatus(true);
-							dynamicGameObjectList->at(j)->GetComponent<Collider>()->SetCollisionStatus(true);
 						}
 					}
 				}
@@ -123,17 +123,18 @@ void TestScene::LoadScene()
 	gridTest->AddRenderTile(tilemap->GetListTileIDs(), tilemap->GetData(), tilemap->GetPositionList(), tilemap->GetTilemapScale());
 
 	player = new Player(m_dxBase);
-	player->GetTransform()->SetPosition(Vector3(100, 800, 0));
+	player->GetTransform()->SetPosition(Vector3(100, 1000, 0));
 	player->SetTag("Player");
 	/*Enemy* enemy = new Enemy(m_dxBase);
-	enemy->GetTransform()->SetPosition(player->GetTransform()->GetPosition() + Vector3(200, -30, 0));
+	enemy->GetTransform()->SetPosition(player->GetTransform()->GetPosition() + Vector3(600, -30, 0));
 	enemy->AssignPlayer(player);*/
 	/*Jumper* jumper = new Jumper(m_dxBase);
 	jumper->GetTransform()->SetPosition(player->GetTransform()->GetPosition() + Vector3(400, -30, 0));
-	jumper->AssignPlayer(player);
+	jumper->AssignPlayer(player);*/
 	Shooter* shooter = new Shooter(m_dxBase);
-	shooter->GetTransform()->SetPosition(player->GetTransform()->GetPosition() + Vector3(600, -30, 0));
-	shooter->AssignPlayer(player);*/
+	shooter->GetTransform()->SetPosition(player->GetTransform()->GetPosition() + Vector3(120, -30, 0));
+	shooter->AssignPlayer(player);
+	shooter->SetName("Shooter");
 
 
 
@@ -158,7 +159,7 @@ void TestScene::LoadScene()
 	dynamicGameObjectList->push_back(player->GetShield());
 	//dynamicGameObjectList->push_back(enemy);
 	//dynamicGameObjectList->push_back(jumper);
-	//dynamicGameObjectList->push_back(shooter);
+	dynamicGameObjectList->push_back(shooter);
 	dynamicGameObjectList->push_back(enemytrigger);
 	enemynumbers = dynamicGameObjectList->size();
 }

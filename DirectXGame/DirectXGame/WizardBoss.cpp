@@ -218,20 +218,25 @@ void WizardBoss::AddAnimation()
 
 void WizardBoss::ManageAnimation()
 {
-
-	this->GetComponent<Animator>()->SetBool("Jump", !this->GetComponent<Collider>()->GetCollisionStatus() && this->GetComponent<Animator>()->GetCurrentAnimation()->GetAnimationName() != "Jump");
-	if (stateTimeCycle > 5.0f && this->GetComponent<Collider>()->GetCollisionStatus())
+	if (hurtTime > 0.5f)
 	{
-		int aasdasd = 1;
-	}
-	this->GetComponent<Animator>()->SetBool("Attack", stateTimeCycle > 5.0f && this->GetComponent<Collider>()->GetCollisionStatus());
-	if (this->GetComponent<Animator>()->GetCurrentAnimation()->GetAnimationName() == "Attack")
-	{
-		this->GetComponent<Animator>()->SetBool("Attack", "Stand", stateTimeCycle < 5.0f && this->GetComponent<Collider>()->GetCollisionStatus());
+		this->GetComponent<Animator>()->SetBool("Die", true);
 	}
 	else
 	{
-		this->GetComponent<Animator>()->SetBool("Stand", this->GetComponent<Collider>()->GetCollisionStatus() && this->GetComponent<Animator>()->GetCurrentAnimation()->GetAnimationName() != "Stand");
+		this->GetComponent<Animator>()->SetBool("Jump", !this->GetComponent<Collider>()->GetCollisionStatus() && this->GetComponent<Animator>()->GetCurrentAnimation()->GetAnimationName() != "Jump");
+		if (stateTimeCycle > 5.0f && this->GetComponent<Collider>()->GetCollisionStatus())
+		{
+			int aasdasd = 1;
+		}
+		this->GetComponent<Animator>()->SetBool("Attack", stateTimeCycle > 5.0f && this->GetComponent<Collider>()->GetCollisionStatus());
+		if (this->GetComponent<Animator>()->GetCurrentAnimation()->GetAnimationName() == "Attack")
+		{
+			this->GetComponent<Animator>()->SetBool("Attack", "Stand", stateTimeCycle < 5.0f && this->GetComponent<Collider>()->GetCollisionStatus());
+		}
+		else
+		{
+			this->GetComponent<Animator>()->SetBool("Stand", this->GetComponent<Collider>()->GetCollisionStatus() && this->GetComponent<Animator>()->GetCurrentAnimation()->GetAnimationName() != "Stand");
+		}
 	}
-
 }

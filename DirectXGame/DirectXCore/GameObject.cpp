@@ -71,31 +71,34 @@ void DirectXCore::GameObject::OnCollisionEnter(Collider* _other, Vector3 _normal
 {
 	if (this->GetComponent<Rigidbody>())
 	{
-		if (!this->GetComponent<Collider>()->IsTrigger() && !_other->IsTrigger())
+		if (this->GetComponent<Collider>())
 		{
-			if (!this->GetComponent<Rigidbody>()->IsKinematic())
+			this->GetComponent<Collider>()->SetCollisionStatus(true);
+			if (!this->GetComponent<Collider>()->IsTrigger() && !_other->IsTrigger())
 			{
-				this->GetComponent<Collider>()->SetCollisionStatus(true);
-				if (_normal.y < 0)
+				if (!this->GetComponent<Rigidbody>()->IsKinematic())
 				{
-					if (this->GetComponent<Rigidbody>()->GetVelocity().y > 0)
+					if (_normal.y < 0)
+					{
+						if (this->GetComponent<Rigidbody>()->GetVelocity().y > 0)
+						{
+							Vector3 vec = this->GetComponent<Rigidbody>()->GetVelocity();
+							vec.y *= -1;
+							this->GetComponent<Rigidbody>()->SetVelocity(this->GetComponent<Rigidbody>()->GetVelocity() + vec);
+						}
+						if (this->GetComponent<Rigidbody>()->GetAcceleration().y > 0)
+						{
+							Vector3 acc = this->GetComponent<Rigidbody>()->GetAcceleration();
+							acc.y *= -1;
+							this->GetComponent<Rigidbody>()->AddForce(acc);
+						}
+					}
+					if (_normal.x != 0)
 					{
 						Vector3 vec = this->GetComponent<Rigidbody>()->GetVelocity();
-						vec.y *= -1;
-						this->GetComponent<Rigidbody>()->SetVelocity(this->GetComponent<Rigidbody>()->GetVelocity() + vec);
+						vec.x = vec.x + vec.x*-1;
+						this->GetComponent<Rigidbody>()->SetVelocity(vec);
 					}
-					if (this->GetComponent<Rigidbody>()->GetAcceleration().y > 0)
-					{
-						Vector3 acc = this->GetComponent<Rigidbody>()->GetAcceleration();
-						acc.y *= -1;
-						this->GetComponent<Rigidbody>()->AddForce(acc);
-					}
-				}
-				if (_normal.x != 0)
-				{
-					Vector3 vec = this->GetComponent<Rigidbody>()->GetVelocity();
-					vec.x = vec.x + vec.x*-1;
-					this->GetComponent<Rigidbody>()->SetVelocity(vec);
 				}
 			}
 		}

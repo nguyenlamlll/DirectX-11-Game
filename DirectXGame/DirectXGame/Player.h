@@ -8,6 +8,9 @@
 #include "State.h"
 #include "Bullet.h"
 #include "Shield.h"
+#include "Enemy.h"
+#include "Jumper.h"
+#include "Shooter.h"
 
 
 using namespace DirectXCore;
