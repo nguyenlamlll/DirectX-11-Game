@@ -68,6 +68,21 @@ DirectXCore::TileMap::TileMap(DirectXCore::DeviceResources *_deviceResource, con
 		ObjectMarkedTilesetDataNUmber.push_back(86);
 		ObjectMarkedTilesetDataNUmber.push_back(87);
 		ObjectMarkedTilesetDataNUmber.push_back(88);
+
+	/*	ObjectMarkedTilesetDataNUmber.push_back(0);
+		ObjectMarkedTilesetDataNUmber.push_back(1);
+		ObjectMarkedTilesetDataNUmber.push_back(2);
+		ObjectMarkedTilesetDataNUmber.push_back(6);
+		ObjectMarkedTilesetDataNUmber.push_back(7);
+		ObjectMarkedTilesetDataNUmber.push_back(12);
+		ObjectMarkedTilesetDataNUmber.push_back(13);
+		ObjectMarkedTilesetDataNUmber.push_back(94);
+		ObjectMarkedTilesetDataNUmber.push_back(95);
+		ObjectMarkedTilesetDataNUmber.push_back(96);
+		ObjectMarkedTilesetDataNUmber.push_back(97);
+		ObjectMarkedTilesetDataNUmber.push_back(98);
+		ObjectMarkedTilesetDataNUmber.push_back(137);
+		ObjectMarkedTilesetDataNUmber.push_back(136);*/
 	}
 
 	worldToScreenPosition = position;
@@ -84,12 +99,12 @@ DirectXCore::TileMap::TileMap(DirectXCore::DeviceResources *_deviceResource, con
 		{
 			i++;
 			int x = atoi(curData.c_str());
-			//
 			if (_name == "Pittsburgh")
 			{
 				if (x != 0) data->push_back(x);
 			}
-			else data->push_back(x);
+			else
+				data->push_back(x);
 		}
 		file.close();
 	}

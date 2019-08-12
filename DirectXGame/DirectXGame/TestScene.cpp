@@ -78,13 +78,10 @@ void TestScene::UpdateScene(float elapsedTime)
 	for (size_t i = 0; i < dynamicGameObjectList->size(); i++) dynamicGameObjectList->at(i)->Update(elapsedTime);
 	for (size_t i = 0; i < dynamicGameObjectList->size(); i++) dynamicGameObjectList->at(i)->LateUpdate(elapsedTime);
 
-	if(dynamicGameObjectList->size()<= enemynumbers)
-	{
-		Vector3 camPos = player->GetTransform()->GetPosition();
-		if (camPos.y > 1000) camPos.y = 1000;
-		if (camPos.x < 563) camPos.x = 563;
-		camera->SetPosition(camPos);
-	}
+	Vector3 camPos = player->GetTransform()->GetPosition();
+	if (camPos.y > 1000) camPos.y = 1000;
+	if (camPos.x < 563) camPos.x = 563;
+	camera->SetPosition(camPos);
 }
 
 void TestScene::RenderScene()
@@ -125,14 +122,14 @@ void TestScene::LoadScene()
 	player = new Player(m_dxBase);
 	player->GetTransform()->SetPosition(Vector3(100, 1000, 0));
 	player->SetTag("Player");
-	/*Enemy* enemy = new Enemy(m_dxBase);
-	enemy->GetTransform()->SetPosition(player->GetTransform()->GetPosition() + Vector3(600, -30, 0));
-	enemy->AssignPlayer(player);*/
-	/*Jumper* jumper = new Jumper(m_dxBase);
-	jumper->GetTransform()->SetPosition(player->GetTransform()->GetPosition() + Vector3(400, -30, 0));
-	jumper->AssignPlayer(player);*/
+	Enemy* enemy = new Enemy(m_dxBase);
+	enemy->GetTransform()->SetPosition(Vector3(3000, 1200, 0));
+	enemy->AssignPlayer(player);
+	Jumper* jumper = new Jumper(m_dxBase);
+	jumper->GetTransform()->SetPosition(Vector3(4500, 1200, 0));
+	jumper->AssignPlayer(player);
 	Shooter* shooter = new Shooter(m_dxBase);
-	shooter->GetTransform()->SetPosition(player->GetTransform()->GetPosition() + Vector3(120, -30, 0));
+	shooter->GetTransform()->SetPosition(Vector3(4094, 800, 0));
 	shooter->AssignPlayer(player);
 	shooter->SetName("Shooter");
 
@@ -157,8 +154,8 @@ void TestScene::LoadScene()
 
 	dynamicGameObjectList->push_back(player);
 	dynamicGameObjectList->push_back(player->GetShield());
-	//dynamicGameObjectList->push_back(enemy);
-	//dynamicGameObjectList->push_back(jumper);
+	dynamicGameObjectList->push_back(enemy);
+	dynamicGameObjectList->push_back(jumper);
 	dynamicGameObjectList->push_back(shooter);
 	dynamicGameObjectList->push_back(enemytrigger);
 	enemynumbers = dynamicGameObjectList->size();

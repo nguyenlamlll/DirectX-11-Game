@@ -10,6 +10,7 @@ Jumper::Jumper()
 
 Jumper::Jumper(std::shared_ptr<DirectXCore::DxBase> _m_dxBase)
 {
+	firstTime = true;
 	hurtTime = 0;
 	stateTimeCycle = 0;
 	player = NULL;
@@ -66,8 +67,11 @@ void Jumper::Update(float _deltaTime)
 	if (stateTimeCycle > 0)
 	{
 		//JUMP
-		if (this->GetComponent<Collider>()->GetCollisionStatus() && this->GetComponent<Rigidbody>()->GetVelocity().y >= 0 && Vector3::Distance(player->GetTransform()->GetPosition(),this->GetTransform()->GetPosition())<300)
+		if (firstTime && this->GetComponent<Collider>()->GetCollisionStatus() && this->GetComponent<Rigidbody>()->GetVelocity().y >= 0 && Vector3::Distance(player->GetTransform()->GetPosition(), this->GetTransform()->GetPosition()) < 300)
+		{
 			this->GetComponent<Rigidbody>()->AddForce(Vector3(0, -300, 0));
+			firstTime = false;
+		}
 		Vector3 dir = player->GetTransform()->GetPosition() - this->GetTransform()->GetPosition();
 		dir.Normalize();
 		dir.y = 0;

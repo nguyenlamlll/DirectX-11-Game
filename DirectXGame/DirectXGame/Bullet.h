@@ -15,6 +15,7 @@ class Bullet : public GameObject
 public:
 	Bullet();
 	Bullet(std::shared_ptr<DirectXCore::DxBase> _m_dxBase, Vector3 _pos);
+	Bullet(const wchar_t* _path, std::shared_ptr<DirectXCore::DxBase> _m_dxBase, Vector3 _pos, Vector3 _scl, GameObject* _player);
 	Bullet(const wchar_t* _path, std::shared_ptr<DirectXCore::DxBase> _m_dxBase, Vector3 _pos, Vector3 _scl, Vector3 _dir);
 	void PreUpdate(float _deltaTime) override;
 	void Update(float _deltaTime) override;
@@ -26,6 +27,7 @@ public:
 private:
 	std::shared_ptr<DirectXCore::DxBase> m_dxBase;
 	Vector3 direction, target;
+	GameObject* player;
 	float alivetime = 3.0f;
 };
 

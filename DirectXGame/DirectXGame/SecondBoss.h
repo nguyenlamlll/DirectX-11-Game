@@ -36,5 +36,6 @@ private:
 	void AddAnimation();
 	void ManageAnimation();
 	bool triggered;
+	bool spin;
 };
 

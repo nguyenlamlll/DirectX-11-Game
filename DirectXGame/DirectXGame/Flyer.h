@@ -7,6 +7,7 @@
 #include "Animation.h"
 #include "State.h"
 #include "Bullet.h"
+#include "PittsburghScene.h"
 
 using namespace DirectXCore;
 class Flyer : public DirectXCore::GameObject
@@ -26,7 +27,7 @@ private:
 	void AddAnimators();
 	void ManageAnimators();
 	std::shared_ptr<DirectXCore::DxBase> m_dxBase;
-	float bulletTimer;
+	float shootTime;
 	bool death;
 	GameObject* player;
 	Vector3* direction;

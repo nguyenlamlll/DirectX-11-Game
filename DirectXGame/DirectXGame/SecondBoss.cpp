@@ -8,6 +8,7 @@ SecondBoss::SecondBoss()
 
 SecondBoss::SecondBoss(std::shared_ptr<DirectXCore::DxBase> _m_dxBase, GameObject * _captain)
 {
+	spin = true;
 	triggered = false;
 	health = 4;
 	m_dxBase = _m_dxBase;
@@ -248,7 +249,12 @@ void SecondBoss::AddAnimation()
 
 void SecondBoss::ManageAnimation()
 {
-	if (hurtTime > 0.5f) this->GetComponent<Animator>()->SetBool("Die", true);
+	if (hurtTime > 0.5f)
+	{
+		spin = !spin;
+		this->GetTransform()->SetRotation(Vector3(0, spin ? 360 : 0, 0));
+		this->GetComponent<Animator>()->SetBool("Die", true);
+	}
 	else
 	{
 		if (stateTimeCycle > 14.0f)this->GetComponent<Animator>()->SetBool("MoveShoot", true);

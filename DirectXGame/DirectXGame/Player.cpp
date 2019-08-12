@@ -95,6 +95,8 @@ void Player::Update(float _deltaTime)
 			this->GetTransform()->SetScale(Vector3(50, 120, 0));
 		}
 	}
+	if (this->GetComponent<Animator>()->GetCurrentAnimation()->GetAnimationName() == "Kick" || this->GetComponent<Animator>()->GetCurrentAnimation()->GetAnimationName() == "SpinJump") capshield->SetActive(false);
+	else capshield->SetActive(true);
 }
 
 void Player::LateUpdate(float _deltaTime)
@@ -142,7 +144,7 @@ void Player::OnCollisionEnter(Collider* _other, Vector3 _normal)
 	{
 		m_dxBase->SwitchToScene(1);
 	}
-	else if (_other->GetAttachedGameObject()->GetTag()=="TriggerSecondBoss")
+	else if (_other->GetAttachedGameObject()->GetTag() == "TriggerSecondBoss")
 	{
 		m_dxBase->SwitchToScene(3);
 	}

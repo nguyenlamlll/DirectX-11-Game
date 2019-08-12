@@ -115,6 +115,7 @@ void PittsburghScene::LoadScene()
 	camera = new Camera(m_dxBase->GetDeviceResource()->GetOutputSize().right / 2, m_dxBase->GetDeviceResource()->GetOutputSize().bottom / 2);
 
 	tilemap = new TileMap(m_dxBase->GetDeviceResource(), L"Resources/00/Pittsburgh.BMP", L"Resources/00/Pittsburgh.CSV", 20, 7, 80, 60, "Pittsburgh");
+	//tilemap = new TileMap(m_dxBase->GetDeviceResource(), L"Resources/00/NewMap/Pittsburgh.BMP", L"Resources/00/NewMap/Pittsburgh.txt", 20, 12, 64, 59, "Pittsburgh");
 	tilemap->SetCamera(camera);
 
 	grid = new Grid(tilemap->GetMapSize(), 20, 20, tilemap->GetListGameObjects(), camera);
@@ -148,6 +149,14 @@ void PittsburghScene::LoadScene()
 	enemytrigger->GetTransform()->SetScale(Vector3(50, 150, 1));
 	enemytrigger->AddComponent<Collider>(new Collider(trigger, trigger->GetTransform()));
 	dynamicGameObjectList->push_back(enemytrigger);
+
+	Flyer* flyer = new Flyer(m_dxBase);
+	flyer->GetTransform()->SetPosition(Vector3(1117, 2375, 0));
+	flyer->AssignPlayer(player);
+	flyer->SetTag("Flyer");
+	dynamicGameObjectList->push_back(flyer);
+
+
 	enemynumbers = dynamicGameObjectList->size();
 }
 

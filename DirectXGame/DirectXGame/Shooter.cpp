@@ -35,7 +35,7 @@ void Shooter::Update(float _deltaTime)
 {
 	GameObject::Update(_deltaTime);
 	transform->SetRotation(Vector3(transform->GetRotation().x, (player->GetTransform()->GetPosition().x - this->transform->GetPosition().x > 0) ? 360 : 0, transform->GetRotation().z));
-	
+
 	if (this->GetComponent<Animator>()->GetCurrentAnimation()->GetAnimationName() == "Sit")
 	{
 		if (this->GetTransform()->GetScale().y != 70)
@@ -58,7 +58,7 @@ void Shooter::Update(float _deltaTime)
 	{
 		this->GetComponent<Rigidbody>()->Move(Vector3(0, 0, 0));
 		//SHOOT
-		if (bulletTimer > 1.5f && this->GetComponent<Collider>()->GetCollisionStatus())
+		if (Vector3::Distance(player->GetTransform()->GetPosition(), this->GetTransform()->GetPosition()) < 600 && bulletTimer > 1.5f && this->GetComponent<Collider>()->GetCollisionStatus())
 		{
 			this->GetComponent<Rigidbody>()->Move(Vector3(0, 0, 0));
 			Vector3 offset = Vector3((this->GetTransform()->GetRotation().y > 120) ? 80 : -80, -50, 0);

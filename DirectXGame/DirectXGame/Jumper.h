@@ -30,5 +30,6 @@ private:
 	float bulletTimer, deathTimer, attackTimer, stateTimeCycle, hurtTime;
 	bool death;
 	GameObject* player;
+	bool firstTime;
 };
 

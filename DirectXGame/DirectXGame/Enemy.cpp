@@ -38,55 +38,58 @@ void Enemy::Update(float _deltaTime)
 {
 	GameObject::Update(_deltaTime);
 	
-	//// STAGE 2
-	//if (stateTimeCycle > 2.0f)
-	//{
-	//	this->GetComponent<Rigidbody>()->Move(Vector3(0, 0, 0));
-	//	//SHOOT
-	//	if (bulletTimer > 1.5f && this->GetComponent<Collider>()->GetCollisionStatus())
-	//	{
-	//		this->GetComponent<Rigidbody>()->Move(Vector3(0, 0, 0));
-	//		Vector3 offset = Vector3(0, -50, 0);
-	//		if (this->GetTransform()->GetRotation().y > 120)
-	//		{
-	//			this->GetTransform()->SetRotation(Vector3(0, 360, 0));
-	//			offset.x = 80;
-	//		}
-	//		else
-	//		{
-	//			this->GetTransform()->SetRotation(Vector3(0, 0, 0));
-	//			offset.x = -80;
-	//		}
-	//		//shooting code
-	//		float directionX = player->GetTransform()->GetPosition().x - this->GetTransform()->GetPosition().x;
-	//		if (directionX > 10) directionX = 400;
-	//		else if (directionX < -10) directionX = -400;
-	//		else directionX = 0;
-	//		Vector3 dir = player->GetTransform()->GetPosition() - this->transform->GetPosition();
-	//		dir.Normalize();
-	//		Bullet* bullet = new Bullet(L"Resources/Captain/Animations/enemy/shooter_bullet.png", m_dxBase, this->GetTransform()->GetPosition() + offset, Vector3(3, 3, 1), Vector3(directionX, 0, 0));
-	//		bullet->SetTag("EnemyBullet");
-	//		bullet->AddComponent<Rigidbody>(new Rigidbody(bullet));
-	//		bullet->GetComponent<Rigidbody>()->SetKinematic(true);
-	//		m_dxBase->GetCurrentScene()->GetDynamicGameObjectList()->push_back(bullet);
-	//		//this->AddChild(bullet);
-	//		bulletTimer = 0;
-	//	}
-	//	bulletTimer += _deltaTime;
-	//}
-	//// STAGE 1
-	//else if (stateTimeCycle > 0)
-	//{
-	//	
-	//}
+	// STAGE 2
+	if (stateTimeCycle > 2.0f)
+	{
+		if (Vector3::Distance(this->GetTransform()->GetPosition(), player->GetTransform()->GetPosition()) < 700)
+		{
+			this->GetComponent<Rigidbody>()->Move(Vector3(0, 0, 0));
+			//SHOOT
+			if (bulletTimer > 1.5f && this->GetComponent<Collider>()->GetCollisionStatus())
+			{
+				this->GetComponent<Rigidbody>()->Move(Vector3(0, 0, 0));
+				Vector3 offset = Vector3(0, -50, 0);
+				if (this->GetTransform()->GetRotation().y > 120)
+				{
+					this->GetTransform()->SetRotation(Vector3(0, 360, 0));
+					offset.x = 80;
+				}
+				else
+				{
+					this->GetTransform()->SetRotation(Vector3(0, 0, 0));
+					offset.x = -80;
+				}
+				//shooting code
+				//float directionX = player->GetTransform()->GetPosition().x - this->GetTransform()->GetPosition().x;
+				float directionX = direction->x;
+				if (directionX > 0.1f) directionX = 400;
+				else if (directionX < -0.1f) directionX = -400;
+				else directionX = 0;
+				Vector3 dir = player->GetTransform()->GetPosition() - this->transform->GetPosition();
+				dir.Normalize();
+				Bullet* bullet = new Bullet(L"Resources/Captain/Animations/enemy/shooter_bullet.png", m_dxBase, this->GetTransform()->GetPosition() + offset, Vector3(3, 3, 1), Vector3(directionX, 0, 0));
+				bullet->SetTag("EnemyBullet");
+				bullet->AddComponent<Rigidbody>(new Rigidbody(bullet));
+				bullet->GetComponent<Rigidbody>()->SetKinematic(true);
+				m_dxBase->GetCurrentScene()->GetDynamicGameObjectList()->push_back(bullet);
+				//this->AddChild(bullet);
+				bulletTimer = 0;
+			}
+			bulletTimer += _deltaTime;
+		}
+		else this->GetComponent<Rigidbody>()->Move(*direction * 90);
+	}
+	// STAGE 1
+	else if (stateTimeCycle > 0)
+	{
+		this->GetComponent<Rigidbody>()->Move(*direction * 90);
+	}
 	if (direction == NULL)
 	{
 		direction = new Vector3();
 		*direction = player->GetTransform()->GetPosition() - this->GetTransform()->GetPosition();
 		direction->Normalize();
 	}
-	this->GetComponent<Rigidbody>()->Move(*direction * 90);
-
 	ManageAnimators();
 	stateTimeCycle = (stateTimeCycle > 4.0f) ? 0 : stateTimeCycle + _deltaTime;
 	if (hurtTime > 0 && hurtTime < 0.5)

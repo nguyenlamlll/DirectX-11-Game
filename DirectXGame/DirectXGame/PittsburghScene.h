@@ -2,6 +2,7 @@
 #include "DirectXCore.h"
 #include "Player.h"
 #include "Enemy.h"
+#include "Flyer.h"
 
 class PittsburghScene : public DirectXCore::Scene
 {
@@ -22,6 +23,7 @@ public:
 
 	void OnKeyUp(KeyCode) override { }
 	void OnKeyDown(KeyCode) override { }
+	int enemynumbers;
 	~PittsburghScene();
 private:
 	std::shared_ptr<DirectXCore::DxBase> m_dxBase;
@@ -31,6 +33,5 @@ private:
 	Grid* grid;
 	GameObject* wall;
 	std::vector<GameObject*>* enemySpawnList;
-	int enemynumbers;
 };
 

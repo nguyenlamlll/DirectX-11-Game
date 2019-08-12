@@ -75,7 +75,7 @@ void Shield::LateUpdate(float _deltaTime)
 
 void Shield::Render()
 {
-	GameObject::Render();
+	if(this->IsActive()) GameObject::Render();
 }
 
 void Shield::OnCollisionEnter(Collider * _other, Vector3 _normal)
